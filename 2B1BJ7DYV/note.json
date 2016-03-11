@@ -1,0 +1,209 @@
+{
+  "paragraphs": [
+    {
+      "text": "sc.getConf.getAll",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1445293349193_-980019263",
+      "id": "20151019-152229_1324575466",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Too many open files"
+      },
+      "dateCreated": "Oct 19, 2015 3:22:29 PM",
+      "dateStarted": "Oct 19, 2015 3:22:36 PM",
+      "dateFinished": "Oct 19, 2015 3:22:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "sc.getConf.getAll",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1445293356272_-1070804679",
+      "id": "20151019-152236_1704489716",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res0: Array[(String, String)] \u003d Array((spark.submit.pyArchives,pyspark.zip:py4j-0.8.2.1-src.zip), (spark.home,/data/cluster-local/software/spark), (spark.executor.memory,512m), (spark.files,file:/data/cluster-local/software/spark/python/lib/pyspark.zip,file:/data/cluster-local/software/spark/python/lib/py4j-0.8.2.1-src.zip), (args,\"\"), (master,local[*]), (zeppelin.spark.concurrentSQL,false), (zeppelin.pyspark.python,python), (spark.scheduler.mode,FAIR), (zeppelin.spark.maxResult,1000), (spark.executor.id,driver), (zeppelin.dep.localrepo,local-repo), (spark.repl.class.uri,http://128.149.112.134:42840), (spark.driver.port,52952), (spark.driver.extraClassPath,:/data/cluster-local/software/zeppelin-0.5.0-incubating-bin-spark-1.4.0_hadoop-2.3/zeppelin-0.5.0-incubating/interpreter/spark/*:/da..."
+      },
+      "dateCreated": "Oct 19, 2015 3:22:36 PM",
+      "dateStarted": "Oct 19, 2015 3:29:07 PM",
+      "dateFinished": "Oct 19, 2015 3:29:23 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "sc.parallelize(1 to 100).reduce(_ + _)",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1445293747532_-553952278",
+      "id": "20151019-152907_616889521",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res2: Int \u003d 5050\n"
+      },
+      "dateCreated": "Oct 19, 2015 3:29:07 PM",
+      "dateStarted": "Oct 19, 2015 3:29:56 PM",
+      "dateFinished": "Oct 19, 2015 3:29:58 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "sc.parallelize(50 to 100).reduce(_ + _)",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1445293796494_876052115",
+      "id": "20151019-152956_96408106",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res4: Int \u003d 3825\n"
+      },
+      "dateCreated": "Oct 19, 2015 3:29:56 PM",
+      "dateStarted": "Oct 19, 2015 3:35:53 PM",
+      "dateFinished": "Oct 19, 2015 3:35:53 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "sc.parallelize(12 to 56).reduce(_ + _)",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1445294153099_-944288521",
+      "id": "20151019-153553_896261888",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res0: Int \u003d 1530\n"
+      },
+      "dateCreated": "Oct 19, 2015 3:35:53 PM",
+      "dateStarted": "Oct 19, 2015 3:37:57 PM",
+      "dateFinished": "Oct 19, 2015 3:38:15 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "sc.parallelize(14 to 36).reduce(_ + _)",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1445294277316_673165730",
+      "id": "20151019-153757_1587579644",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res0: Int \u003d 575\n"
+      },
+      "dateCreated": "Oct 19, 2015 3:37:57 PM",
+      "dateStarted": "Oct 19, 2015 4:40:53 PM",
+      "dateFinished": "Oct 19, 2015 4:41:11 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1445298053452_1104876422",
+      "id": "20151019-164053_860302193",
+      "dateCreated": "Oct 19, 2015 4:40:53 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Spark Local",
+  "id": "2B1BJ7DYV",
+  "angularObjects": {},
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

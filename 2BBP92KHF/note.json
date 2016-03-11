@@ -1,0 +1,91 @@
+{
+  "paragraphs": [
+    {
+      "text": "import java.io.{File, PrintWriter}\nimport java.text.SimpleDateFormat\nimport org.slf4j.Logger\nimport scala.collection.mutable\nimport scala.io.Source\nimport scala.language.implicitConversions\nimport org.dia.Parsers\nimport org.dia.core.{SciSparkContext, SciTensor}\nimport org.dia.algorithms.mcc.MCCOps",
+      "dateUpdated": "Mar 8, 2016 12:30:07 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1456529331892_-390263004",
+      "id": "20160226-152851_1490706252",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.{File, PrintWriter}\nimport java.text.SimpleDateFormat\nimport org.slf4j.Logger\nimport scala.collection.mutable\nimport scala.io.Source\nimport scala.language.implicitConversions\nimport org.dia.Parsers\nimport org.dia.core.{SciSparkContext, SciTensor}\nimport org.dia.algorithms.mcc.MCCOps\n"
+      },
+      "dateCreated": "Feb 26, 2016 3:28:51 PM",
+      "dateStarted": "Mar 8, 2016 12:30:07 PM",
+      "dateFinished": "Mar 8, 2016 12:30:09 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nprint SparkConf().getAll()",
+      "dateUpdated": "Mar 11, 2016 9:39:04 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1457635102806_1225045045",
+      "id": "20160310-103822_2140429207",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "[(u\u0027spark.local.dir\u0027, u\u0027/data/cluster-local/SPARK_TMP\u0027), (u\u0027spark.eventLog.enabled\u0027, u\u0027true\u0027), (u\u0027spark.master\u0027, u\u0027mesos://scispark1.jpl.nasa.gov:5050\u0027), (u\u0027spark.app.name\u0027, u\u0027org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer\u0027), (u\u0027spark.executor.uri\u0027, u\u0027hdfs://scispark1.jpl.nasa.gov:8090/spark/spark-1.6.0-bin-hadoop2.4.tgz\u0027), (u\u0027spark.driver.extraClassPath\u0027, u\u0027::/usr/share/java:/data/cluster-local/ant/ant-nodeps-1.7.1.jar:/data/cluster-local/thredds/cdm/target/netcdf-4.3.18.jar:/usr/share/java:/data/cluster-local/ant/ant-nodeps-1.7.1.jar:/data/cluster-local/thredds/cdm/target/netcdf-4.3.18.jar:/data/cluster-local/software/zeppelin/lib/*:/data/cluster-local/software/zeppelin/*::/data/cluster-local/software/zeppelin/conf:/data/cluster-local/software/zeppelin/interpreter/spark/zeppelin-spark-0.5.6-incubating.jar\u0027), (u\u0027spark.driver.extraJavaOptions\u0027, u\u0027 -Dspark.jars\u003d/data/cluster-local/whitehal/SciSpark/target/scala-2.10/OrgDia.jar -Dfile.encoding\u003dUTF-8 -Dspark.jars\u003d/data/cluster-local/whitehal/SciSpark/target/scala-2.10/OrgDia.jar -Dfile.encoding\u003dUTF-8 -Dzeppelin.log.file\u003d/data/cluster-local/software/zeppelin/logs/zeppelin-interpreter-spark-sdeploy-scispark1.jpl.nasa.gov.log\u0027), (u\u0027spark.jars\u0027, u\u0027file:/data/cluster-local/software/zeppelin/local-repo/OrgDia.jar,file:/data/cluster-local/software/zeppelin/interpreter/spark/zeppelin-spark-0.5.6-incubating.jar\u0027), (u\u0027spark.executor.extraJavaOptions\u0027, u\u0027-XX:MaxTenuringThreshold\u003d0\u0027), (u\u0027spark.externalBlockStore.baseDir\u0027, u\u0027/data/cluster-local/SPARK_TMP\u0027), (u\u0027spark.submit.deployMode\u0027, u\u0027client\u0027), (u\u0027spark.mesos.coarse\u0027, u\u0027false\u0027), (u\u0027spark.eventLog.dir\u0027, u\u0027hdfs://scispark1.jpl.nasa.gov:8090/directory\u0027)]\n"
+      },
+      "dateCreated": "Mar 10, 2016 10:38:22 AM",
+      "dateStarted": "Mar 11, 2016 9:39:04 AM",
+      "dateFinished": "Mar 11, 2016 9:39:04 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1457717883890_1099626190",
+      "id": "20160311-093803_1062757677",
+      "dateCreated": "Mar 11, 2016 9:38:03 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Mazi Test",
+  "id": "2BBP92KHF",
+  "angularObjects": {
+    "2BBAYHPQT": []
+  },
+  "config": {},
+  "info": {}
+}
