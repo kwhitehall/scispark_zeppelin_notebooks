@@ -1,0 +1,72 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n#SciSpark sRDD\nThe purpose of this notebook is to introduce the user to the concept of the scientific RDD that is the crux of SciSpark. \n\n## What is the sRDD\nThe scientific Resilient Distributed Dataset (sRDD), exploits Apache Spark\u0027s concept of RDDs for multi-dimensional data representing a scientific measurement that can be subset by time, or by space. The RDD notion directly enables the reuse of array data across multi-stage operations and it ensures data can be replicated, distributed and easily reconstructed in different storage tiers, e.g., memory for fast interactivity, SSDs for near real time, and spinning disk for later operations.\n\nThe sRDD supports multidimensional data and processing of scientific algorithms in the MapReduce paradigm within a distributed environment. \nThe core of the sRDD is a self-documented array class called the **sciTensor** that defines the data in the self describing, multidimensional \u0026 multivariable data formats that scientists are accustomed to e.g. netCDF and HDF files.\n\n\u003c!--\u003cimg src\u003d\"hdfs://hdfs_url/tmp/sRDD.png\" width\u003d\"300\" /\u003e--\u003e\n![sciTensor](hdfs://hdfs_url/tmp/sRDD.png)\n\nSciSpark currently provides methods to create sRDDs that (1) loads data from network Common Data Form (netCDF) and Hierarchical Data Format (HDF) files into the Hadoop Distributed File System (HDFS); (2) preserve the logical representation of structured and dimensional data in ; and (3) create a partition function that divides the multidimensional array by time (to be expanded to space as well). sRDDs are cached (in-memory) in the SciSpark engine support data reuse between multi-staged analytics. ",
+      "dateUpdated": "May 18, 2016 1:14:59 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463593122693_-1409996500",
+      "id": "20160518-103842_1427553478",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch1\u003eSciSpark sRDD\u003c/h1\u003e\n\u003cp\u003eThe purpose of this notebook is to introduce the user to the concept of the scientific RDD that is the crux of SciSpark.\u003c/p\u003e\n\u003ch2\u003eWhat is the sRDD\u003c/h2\u003e\n\u003cp\u003eThe scientific Resilient Distributed Dataset (sRDD), exploits Apache Spark\u0027s concept of RDDs for multi-dimensional data representing a scientific measurement that can be subset by time, or by space. The RDD notion directly enables the reuse of array data across multi-stage operations and it ensures data can be replicated, distributed and easily reconstructed in different storage tiers, e.g., memory for fast interactivity, SSDs for near real time, and spinning disk for later operations.\u003c/p\u003e\n\u003cp\u003eThe sRDD supports multidimensional data and processing of scientific algorithms in the MapReduce paradigm within a distributed environment.\n\u003cbr  /\u003eThe core of the sRDD is a self-documented array class called the \u003cstrong\u003esciTensor\u003c/strong\u003e that defines the data in the self describing, multidimensional \u0026amp; multivariable data formats that scientists are accustomed to e.g. netCDF and HDF files.\u003c/p\u003e\n\u003c!--\u003cimg src\u003d\"hdfs://hdfs_url/tmp/sRDD.png\" width\u003d\"300\" /\u003e--\u003e\n\u003cp\u003e\u003cimg src\u003d\"hdfs://hdfs_url/tmp/sRDD.png\" alt\u003d\"sciTensor\" /\u003e\u003c/p\u003e\n\u003cp\u003eSciSpark currently provides methods to create sRDDs that (1) loads data from network Common Data Form (netCDF) and Hierarchical Data Format (HDF) files into the Hadoop Distributed File System (HDFS); (2) preserve the logical representation of structured and dimensional data in ; and (3) create a partition function that divides the multidimensional array by time (to be expanded to space as well). sRDDs are cached (in-memory) in the SciSpark engine support data reuse between multi-staged analytics.\u003c/p\u003e\n"
+      },
+      "dateCreated": "May 18, 2016 10:38:42 AM",
+      "dateStarted": "May 18, 2016 1:14:59 PM",
+      "dateFinished": "May 18, 2016 1:14:59 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463593206767_-1904293212",
+      "id": "20160518-104006_1103717591",
+      "dateCreated": "May 18, 2016 10:40:06 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "201-1-SciSparksRDD",
+  "id": "2BMFZNQPD",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": [],
+    "2BBAYHPQT": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}
