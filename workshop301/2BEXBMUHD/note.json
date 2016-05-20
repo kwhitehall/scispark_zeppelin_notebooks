@@ -1,0 +1,765 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md The purpose of this notebook is to demonstrate these scalablity of SciSpark. \rThe idea is to benchmark the processes of:\r* reading in data:  Random 2D array of data that contain values between 180K and 330K to emulate brightness data from satellites will be used. The random data will be given time stamps.\r* masking data: given a criteria for minimum temperature, identify areas of interests in each array read\r* build a graph object: the graph contains nodes - those unmasked areas; and edges which define overlapping between the nodes in consecutive timestamps. Given the nature of how this graph is formed, it will be highly disconnected, there should will be no cycles, and the graph object itself will contain multiple subgraphs. \r* Traversing the graph object to identify the subgraphs. ",
+      "dateUpdated": "May 2, 2016 11:20:53 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458850072403_1750287276",
+      "id": "20160324-130752_29809295",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eThe purpose of this notebook is to demonstrate these scalablity of SciSpark.\n\u003cbr  /\u003eThe idea is to benchmark the processes of:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ereading in data:  Random 2D array of data that contain values between 180K and 330K to emulate brightness data from satellites will be used. The random data will be given time stamps.\u003c/li\u003e\n\u003cli\u003emasking data: given a criteria for minimum temperature, identify areas of interests in each array read\u003c/li\u003e\n\u003cli\u003ebuild a graph object: the graph contains nodes - those unmasked areas; and edges which define overlapping between the nodes in consecutive timestamps. Given the nature of how this graph is formed, it will be highly disconnected, there should will be no cycles, and the graph object itself will contain multiple subgraphs.\u003c/li\u003e\n\u003cli\u003eTraversing the graph object to identify the subgraphs.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Mar 24, 2016 1:07:52 PM",
+      "dateStarted": "May 2, 2016 11:20:53 AM",
+      "dateFinished": "May 2, 2016 11:20:53 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%dep\nz.load(\"/SciSpark_base/target/scala-2.10/SciSpark.jar\")",
+      "dateUpdated": "May 5, 2016 12:33:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462311417952_177046923",
+      "id": "20160503-143657_1575972142",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res0: org.apache.zeppelin.spark.dep.Dependency \u003d org.apache.zeppelin.spark.dep.Dependency@391ae96c\n"
+      },
+      "dateCreated": "May 3, 2016 2:36:57 PM",
+      "dateStarted": "May 5, 2016 12:33:27 PM",
+      "dateFinished": "May 5, 2016 12:33:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.io.{ File, PrintWriter }\nimport java.text.SimpleDateFormat\nimport org.slf4j.Logger\nimport scala.collection.mutable\nimport scala.io.Source\nimport scala.language.implicitConversions\nimport org.nd4j.linalg.factory.Nd4j\n\nimport org.dia.Parsers\nimport org.dia.core.{SciSparkContext, SciTensor}\nimport org.dia.algorithms.mcc.MCCOps\nimport org.dia.urlgenerators.{RandomDatesGenerator}\n",
+      "dateUpdated": "May 5, 2016 12:33:44 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458851368356_-1284388764",
+      "id": "20160324-132928_1012275174",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.{File, PrintWriter}\nimport java.text.SimpleDateFormat\nimport org.slf4j.Logger\nimport scala.collection.mutable\nimport scala.io.Source\nimport scala.language.implicitConversions\nimport org.nd4j.linalg.factory.Nd4j\nimport org.dia.Parsers\nimport org.dia.core.{SciSparkContext, SciTensor}\nimport org.dia.algorithms.mcc.MCCOps\nimport org.dia.urlgenerators.RandomDatesGenerator\n"
+      },
+      "dateCreated": "Mar 24, 2016 1:29:28 PM",
+      "dateStarted": "May 5, 2016 12:33:44 PM",
+      "dateFinished": "May 5, 2016 12:34:09 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \n## Step 1: Read in some parameters\n* the variable to call the random data\n* number of random times (in hours) to generate\n* the dimension for the 2D array\n* the number of paritions to use\n",
+      "dateUpdated": "May 4, 2016 6:45:10 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462408428385_-1594480747",
+      "id": "20160504-173348_1178483311",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eStep 1: Read in some parameters\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003ethe variable to call the random data\u003c/li\u003e\n\u003cli\u003enumber of random times (in hours) to generate\u003c/li\u003e\n\u003cli\u003ethe dimension for the 2D array\u003c/li\u003e\n\u003cli\u003ethe number of paritions to use\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "May 4, 2016 5:33:48 PM",
+      "dateStarted": "May 4, 2016 6:45:09 PM",
+      "dateFinished": "May 4, 2016 6:45:09 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// val sArgs \u003d Array(\"Random_BT\",\"72\",\"5712\",\"24\")\nval sArgs \u003d Array(\"Random_BT\",\"24\",\"20\",\"2\")\nval varName \u003d if (sArgs.length \u003c\u003d 1) \"Random_BT\" else sArgs(0)\nval numDates \u003d if (sArgs.length \u003c\u003d 2) 24 else sArgs(1).toInt \nval dimensions \u003d if (sArgs.length \u003c\u003d 3) (20,20) else (sArgs(2).toInt, sArgs(2).toInt)\nval partCount \u003d if (sArgs.length \u003c\u003d 4) sArgs(3).toInt else 2\n// val maxAreaOverlapThreshold \u003d 0.66\n// val minAreaOverlapThreshold \u003d 0.50\n// val minArea \u003d 10000",
+      "dateUpdated": "May 5, 2016 12:34:12 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462408454421_-257216164",
+      "id": "20160504-173414_149105515",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "sArgs: Array[String] \u003d Array(Random_BT, 24, 20, 2)\nvarName: String \u003d Random_BT\nnumDates: Int \u003d 24\ndimensions: (Int, Int) \u003d (20,20)\npartCount: Int \u003d 2\n"
+      },
+      "dateCreated": "May 4, 2016 5:34:14 PM",
+      "dateStarted": "May 5, 2016 12:34:12 PM",
+      "dateFinished": "May 5, 2016 12:34:15 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \n## STEP 2: Generating the fake times\nTo generate the fake data, at least one argument is needed to indicate how many times to generated.\nThe steps taken here are:\n* remove any file that existed before (otherwise we will simply append!)\n* copy the file over to hdfs for use when using the cluster (remove file if it was there before)\n\n**Data is generated in the file /tmp/dates**",
+      "dateUpdated": "May 4, 2016 6:10:40 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458851221230_1944444787",
+      "id": "20160324-132701_810277973",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eSTEP 2: Generating the fake times\u003c/h2\u003e\n\u003cp\u003eTo generate the fake data, at least one argument is needed to indicate how many times to generated.\n\u003cbr  /\u003eThe steps taken here are:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eremove any file that existed before (otherwise we will simply append!)\u003c/li\u003e\n\u003cli\u003ecopy the file over to hdfs for use when using the cluster (remove file if it was there before)\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003cstrong\u003eData is generated in the file /tmp/dates\u003c/strong\u003e\u003c/p\u003e\n"
+      },
+      "dateCreated": "Mar 24, 2016 1:27:01 PM",
+      "dateStarted": "May 4, 2016 6:10:38 PM",
+      "dateFinished": "May 4, 2016 6:10:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sh\nrm /tmp/dates",
+      "dateUpdated": "May 5, 2016 12:34:23 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/sh"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462316399741_-1569991684",
+      "id": "20160503-155959_239510480",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "May 3, 2016 3:59:59 PM",
+      "dateStarted": "May 5, 2016 12:34:23 PM",
+      "dateFinished": "May 5, 2016 12:34:23 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//the default location is /tmp/data\nval randArgs \u003d Array(numDates.toString) \nRandomDatesGenerator.main(randArgs)",
+      "dateUpdated": "May 5, 2016 12:34:24 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458851916180_-1593360744",
+      "id": "20160324-133836_170878967",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "randArgs: Array[String] \u003d Array(24)\nGenerating dates . . .\nWriting file . . . \nDONE!\n"
+      },
+      "dateCreated": "Mar 24, 2016 1:38:36 PM",
+      "dateStarted": "May 5, 2016 12:34:24 PM",
+      "dateFinished": "May 5, 2016 12:34:25 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \n### Move file to hdfs for cluster to see\n* remove file if it was there before",
+      "dateUpdated": "May 4, 2016 8:11:02 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462314333932_1484018679",
+      "id": "20160503-152533_1502886139",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eMove file to hdfs for cluster to see\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eremove file if it was there before\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "May 3, 2016 3:25:33 PM",
+      "dateStarted": "May 4, 2016 8:11:02 PM",
+      "dateFinished": "May 4, 2016 8:11:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sh\nif hadoop fs -test -e /tmp/dates.txt ; then\nhadoop fs -rm /tmp/dates.txt\nfi\nhadoop fs -copyFromLocal /tmp/dates /tmp/dates.txt",
+      "dateUpdated": "May 5, 2016 12:34:29 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/sh"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462314350237_-1591832594",
+      "id": "20160503-152550_1825223903",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+	"msg": "ok"
+      },
+      "dateCreated": "May 3, 2016 3:25:50 PM",
+      "dateStarted": "May 5, 2016 12:34:29 PM",
+      "dateFinished": "May 5, 2016 12:34:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##STEP 3: Generate random arrays and load into the sRDD\n### Inputs for the random data generator file\n* path to the file holding the \u0027fake\u0027 time on hdfs\n* variable to use\n* the dimensions to use to generate the random SQUARE matrix\n* number of partitions to use",
+      "dateUpdated": "May 4, 2016 6:25:37 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458851952146_1920813116",
+      "id": "20160324-133912_593609467",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eSTEP 3: Generate random arrays and load into the sRDD\u003c/h2\u003e\n\u003ch3\u003eInputs for the random data generator file\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003epath to the file holding the \u0027fake\u0027 time on hdfs\u003c/li\u003e\n\u003cli\u003evariable to use\u003c/li\u003e\n\u003cli\u003ethe dimensions to use to generate the random SQUARE matrix\u003c/li\u003e\n\u003cli\u003enumber of partitions to use\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Mar 24, 2016 1:39:12 PM",
+      "dateStarted": "May 4, 2016 6:25:37 PM",
+      "dateFinished": "May 4, 2016 6:25:37 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462466123015_1726377394",
+      "id": "20160505-093523_1306008751",
+      "dateCreated": "May 5, 2016 9:35:23 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val randomTimesPath \u003d \"hdfs://location/dates.txt\"\n// Initialize the Scispark context \nval dsscR1 \u003d new SciSparkContext(sc)  \n\nval sRDDscale \u003d dsscR1.randomMatricesA(randomTimesPath, List(varName), dimensions, partCount)\nval labeledR1 \u003d sRDDscale.map(pR1 \u003d\u003e {\n    val sourceR1 \u003d  pR1.metaData(\"SOURCE\").replace(\"-\",\"\")\n    pR1.insertDictionary((\"FRAME\", sourceR1))\n    pR1\n})\n\nval cR \u003d sRDDscale.collect()\nprint(cR)\n",
+      "dateUpdated": "May 5, 2016 12:35:05 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458851646968_-1093554954",
+      "id": "20160324-133406_1404127272",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "randomTimesPath: String \u003d hdfs://location/tmp/dates.txt\ndsscR1: org.dia.core.SciSparkContext \u003d org.dia.core.SciSparkContext@6385dc2b\nsRDDscale: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[3] at map at SciSparkContext.scala:136\nlabeledR1: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[4] at map at \u003cconsole\u003e:54\ncR: Array[org.dia.core.SciTensor] \u003d \nArray(Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-01)\n, Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-02)\n, Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-03)\n, Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-04)\n, Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-05)\n, Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-06)\n, Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-07)\n, Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-08)\n, Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-09)\n, Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-10)\n, Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-11)\n, Variab...[Lorg.dia.core.SciTensor;@492f7841"
+      },
+      "dateCreated": "Mar 24, 2016 1:34:06 PM",
+      "dateStarted": "May 5, 2016 12:35:05 PM",
+      "dateFinished": "May 5, 2016 12:35:29 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "print(cR(0).variables)",
+      "dateUpdated": "May 5, 2016 3:12:50 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462486354432_-1518822442",
+      "id": "20160505-151234_1439078629",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "\u003cconsole\u003e:29: error: not found: value cR\n              print(cR(0).variables)\n                    ^\n"
+      },
+      "dateCreated": "May 5, 2016 3:12:34 PM",
+      "dateStarted": "May 5, 2016 3:12:50 PM",
+      "dateFinished": "May 5, 2016 3:12:50 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462486349318_2026253924",
+      "id": "20160505-151229_910024090",
+      "dateCreated": "May 5, 2016 3:12:29 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##STEP 3: Mask the data and maintain the time order",
+      "dateUpdated": "May 4, 2016 6:25:22 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458941460249_1422037344",
+      "id": "20160325-143100_726976985",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eSTEP 3: Mask the data and maintain the time order\u003c/h2\u003e\n"
+      },
+      "dateCreated": "Mar 25, 2016 2:31:00 PM",
+      "dateStarted": "May 4, 2016 6:25:22 PM",
+      "dateFinished": "May 4, 2016 6:25:22 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val filteredRR1 \u003d labeledR1.map(pR1 \u003d\u003e pR1(\"Random_BT\") \u003c\u003d 241.0)\n\nval consecFramesR1 \u003d filteredRR1.flatMap(pR1 \u003d\u003e {\n    List((pR1.metaData(\"FRAME\").toInt, pR1), (pR1.metaData(\"FRAME\").toInt + 1, pR1))\n}).groupBy(_._1)\n    .map(pR1 \u003d\u003e pR1._2.map(eR1 \u003d\u003e eR1._2).toList)\n    .filter(pR1 \u003d\u003e pR1.size \u003e 1)\n    .map(pR1 \u003d\u003e pR1.sortBy(_.metaData(\"FRAME\").toInt))\n    .map(pR1 \u003d\u003e (pR1(0), pR1(1)))\n\nval dR \u003d  consecFramesR1.collect()\nprint(dR)",
+      "dateUpdated": "May 5, 2016 12:35:36 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458941888615_1285660565",
+      "id": "20160325-143808_755550567",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "filteredRR1: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[5] at map at \u003cconsole\u003e:56\nconsecFramesR1: org.apache.spark.rdd.RDD[(org.dia.core.SciTensor, org.dia.core.SciTensor)] \u003d MapPartitionsRDD[12] at map at \u003cconsole\u003e:65\ndR: Array[(org.dia.core.SciTensor, org.dia.core.SciTensor)] \u003d \nArray((Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-19)\n(FRAME,0001010119)\n,Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-20)\n(FRAME,0001010120)\n), (Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-05)\n(FRAME,0001010105)\n,Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-06)\n(FRAME,0001010106)\n), (Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-17)\n(FRAME,0001010117)\n,Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-18)\n(FRAME,0001010118)\n), (Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-03)\n(FRAME,0001010103)\n,Variable in use \u003d Random_BT\nSet(Random_BT)\n(SOURCE,0001-01-01-04)\n(FRAME,0001010104)\n), (Variable in use \u003d Random_BT...[Lscala.Tuple2;@40a9d786"
+      },
+      "dateCreated": "Mar 25, 2016 2:38:08 PM",
+      "dateStarted": "May 5, 2016 12:35:36 PM",
+      "dateFinished": "May 5, 2016 12:35:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##STEP 5: Make a graph",
+      "dateUpdated": "May 4, 2016 6:25:52 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458942044311_-453222218",
+      "id": "20160325-144044_1152342327",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eSTEP 5: Make a graph\u003c/h2\u003e\n"
+      },
+      "dateCreated": "Mar 25, 2016 2:40:44 PM",
+      "dateStarted": "May 4, 2016 6:25:51 PM",
+      "dateFinished": "May 4, 2016 6:25:51 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val maxAreaOverlapThreshold \u003d 0.66\nval minAreaOverlapThreshold \u003d 0.50\nval minArea \u003d 625 // as number of boxes\n\nval componentFrameRDDR1 \u003d consecFramesR1.flatMap({\n    case (tR1, tR2) \u003d\u003e {\n        val (componentsR1, _) \u003d MCCOps.labelConnectedComponents(tR1.tensor)\n        val (componentsR2, _) \u003d MCCOps.labelConnectedComponents(tR2.tensor)\n        val productR1 \u003d componentsR1 * componentsR2\n        var overlappedPairsListR1 \u003d mutable.MutableList[(Double, Double)]()\n        //var overlappedPairsListR1 \u003d mutable.MutableList[((Double, Double))]()\n        var areaMaxMinTableR1 \u003d new mutable.HashMap[String, (Double, Double, Double)]\n\n    def updateComponent(labelR: Double, frameR: String, valueR: Double): Unit \u003d {\n        if (labelR !\u003d 0.0) {\n            var areaR \u003d 0.0\n            var maxR \u003d Double.MinValue\n            var minR \u003d Double.MaxValue\n            val currentPropertiesR1 \u003d areaMaxMinTableR1.get(frameR + \":\" + labelR)\n            if (currentPropertiesR1 !\u003d null \u0026\u0026 currentPropertiesR1.isDefined) {\n              areaR \u003d currentPropertiesR1.get._1\n              maxR \u003d currentPropertiesR1.get._2\n              minR \u003d currentPropertiesR1.get._3\n              if (valueR \u003c minR) minR \u003d valueR\n              if (valueR \u003e maxR) maxR \u003d valueR\n            } else {\n              minR \u003d valueR\n              maxR \u003d valueR\n            }\n            areaR +\u003d 1\n            areaMaxMinTableR1 +\u003d ((frameR + \":\" + labelR, (areaR, maxR, minR)))\n          }\n        }\n\n        for (row \u003c- 0 to productR1.rows - 1) {\n          for (col \u003c- 0 to productR1.cols - 1) {\n            if (productR1(row, col) !\u003d 0.0) {\n              val valueR1 \u003d componentsR1(row, col)\n              val valueR2 \u003d componentsR2(row, col)\n              overlappedPairsListR1 +\u003d ((valueR1, valueR2))\n            }\n            updateComponent(componentsR1(row, col), tR1.metaData(\"FRAME\"), tR1.tensor(row, col))\n            updateComponent(componentsR2(row, col), tR2.metaData(\"FRAME\"), tR2.tensor(row, col))\n          }\n        }\n        var overlappedMapR1 \u003d overlappedPairsListR1.groupBy(identity).mapValues(_.size)\n  \n        val edgesSetR1 \u003d overlappedPairsListR1.toSet\n        \n        val edgesR1 \u003d edgesSetR1.map({ case (cR1, cR2) \u003d\u003e ((tR1.metaData(\"FRAME\"), cR1), (tR2.metaData(\"FRAME\"), cR2)) })\n\n        val filteredR1 \u003d edgesR1.filter({\n          case ((frameIdR1, compIdR1), (frameIdR2, compIdR2)) \u003d\u003e {\n            val (areaR1, maxR1, minR1) \u003d areaMaxMinTableR1(frameIdR1 + \":\" + compIdR1)\n            val isCloudR1 \u003d ((areaR1 \u003e\u003d 150.0) || ((areaR1 \u003c 150.0) \u0026\u0026 ((minR1/maxR1) \u003c 0.9)))\n            val (areaR2, maxR2, minR2) \u003d areaMaxMinTableR1(frameIdR2 + \":\" + compIdR2)\n            val isCloudR2 \u003d ((areaR2 \u003e\u003d 150.0) || ((areaR2 \u003c 150.0) \u0026\u0026 ((minR2/maxR2) \u003c 0.9)))\n            var meetsCriteria \u003d true\n              \n            if(isCloudR1 \u0026\u0026 isCloudR2) {\n              val areaOverlapR \u003d (overlappedMapR1.get(compIdR1, compIdR2).get)//.toInt*4.0\n              val percentAreaOverlapR \u003d math.max((areaOverlapR / areaR1), (areaOverlapR / areaR2))\n              var edgeWeight \u003d 0\n        \n              if ((!percentAreaOverlapR.isInfinite) \u0026\u0026 (percentAreaOverlapR \u003e\u003d 0.66)) {\n                edgeWeight \u003d 1\n              }\n              else if ((!percentAreaOverlapR.isInfinite) \u0026\u0026 (percentAreaOverlapR \u003c 0.66 \u0026\u0026\n                percentAreaOverlapR \u003e\u003d 0.5)) {\n                edgeWeight \u003d 2\n              }\n              else if (areaOverlapR \u003e\u003d 625) {\n                edgeWeight \u003d 3\n              }\n              else {\n                meetsCriteria \u003d false\n              }\n              overlappedMapR1 +\u003d (((compIdR1, compIdR2), edgeWeight))\n            }\n            isCloudR1 \u0026\u0026 isCloudR2 \u0026\u0026 meetsCriteria\n          }\n        })\n\n        val edgeListR1 \u003d new mutable.HashSet[((String, Double), (String, Double), Int)]()\n        filteredR1.foreach(edge \u003d\u003e {\n          val ekey \u003d (edge._1._2, edge._2._2)\n          if(overlappedMapR1.contains(ekey)){\n            edgeListR1 +\u003d ((edge._1, edge._2, overlappedMapR1.get(ekey).get))\n          }\n        })\n        edgeListR1\n      }\n\n     \n    // val edgesSetR1 \u003d overlappedPairsListR1.toSet\n    // val edgesR1 \u003d edgesSetR1.map({ case (cR1, cR2) \u003d\u003e ((tR1.metaData(\"FRAME\"),cR1), (tR2.metaData(\"FRAME\"), cR2)) })\n\n    // val filteredR1 \u003d edgesR1.filter({\n    //       case ((frameIdR1, compIdR1), (frameIdR2, compIdR2)) \u003d\u003e {\n    //         val (areaR1, maxR1, minR1) \u003d areaMaxMinTableR1(frameIdR1 + \":\" + compIdR1)\n    //         val isCloudR1 \u003d ((areaR1 \u003e\u003d 2400.0) || ((areaR1 \u003c 2400.0) \u0026\u0026 ((minR1/maxR1) \u003c 0.9)))\n    //         val (areaR2, maxR2, minR2) \u003d areaMaxMinTableR1(frameIdR2 + \":\" + compIdR2)\n    //         val isCloudR2 \u003d ((areaR2 \u003e\u003d 2400.0) || ((areaR2 \u003c 2400.0) \u0026\u0026 ((minR2/maxR2) \u003c 0.9)))\n    //         isCloudR1 \u0026\u0026 isCloudR2\n    //       }\n    //     })\n       \n    // val addareaR \u003d filteredR1.map({ \n    //     case (mR1 , mR2) \u003d\u003e ((mR1._1, mR1._2, areaMaxMinTableR1(mR1._1 + \":\" + mR1._2)._1), (mR2._1, mR2._2, areaMaxMinTableR1(mR2._1 + \":\" + mR2._2)._1)) \n    // })\n    //     addareaR\n    //   }\n    })",
+      "dateUpdated": "May 5, 2016 12:48:17 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1458942076443_1579668377",
+      "id": "20160325-144116_1102369003",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "maxAreaOverlapThreshold: Double \u003d 0.66\nminAreaOverlapThreshold: Double \u003d 0.5\nminArea: Int \u003d 625\ncomponentFrameRDDR1: org.apache.spark.rdd.RDD[((String, Double), (String, Double), Int)] \u003d MapPartitionsRDD[15] at flatMap at \u003cconsole\u003e:61\n"
+      },
+      "dateCreated": "Mar 25, 2016 2:41:16 PM",
+      "dateStarted": "May 5, 2016 12:48:17 PM",
+      "dateFinished": "May 5, 2016 12:48:19 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n## Step 6: Print the graph edges and vertices a file.",
+      "dateUpdated": "May 4, 2016 6:26:39 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462411563365_-1887782600",
+      "id": "20160504-182603_775817717",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eStep 6: Print the graph edges and vertices a file.\u003c/h2\u003e\n"
+      },
+      "dateCreated": "May 4, 2016 6:26:03 PM",
+      "dateStarted": "May 4, 2016 6:26:39 PM",
+      "dateFinished": "May 4, 2016 6:26:39 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val collectedEdgesR1 \u003d componentFrameRDDR1.collect()\nval collectedVerticesR1 \u003d collectedEdgesR1.flatMap({ case (nR1, nR2, nR3) \u003d\u003e List(nR1, nR2) }).toSet\n\nval outverticesR1 \u003d new PrintWriter(new File(\"VertexList.txt\"))\noutverticesR1.write(collectedVerticesR1.toList.sortBy(_._1) + \"\\n\")\noutverticesR1.close()\n\nval outedgesR1 \u003d new PrintWriter(new File(\"EdgeList.txt\"))\noutedgesR1.write(collectedEdgesR1.toList.sorted + \"\\n\")\noutedgesR1.close()\n\nprintln(\"NUM VERTICES : \" + collectedVerticesR1.size + \"\\n\")\nprintln(\"NUM EDGES : \" + collectedEdgesR1.length + \"\\n\")",
+      "dateUpdated": "May 5, 2016 12:55:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459180908034_-518328021",
+      "id": "20160328-090148_317520531",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "collectedEdgesR1: Array[((String, Double), (String, Double), Int)] \u003d Array(((0001010119,17.0),(0001010120,17.0),1), ((0001010119,2.0),(0001010120,2.0),1), ((0001010119,5.0),(0001010120,5.0),1), ((0001010119,8.0),(0001010120,8.0),1), ((0001010119,18.0),(0001010120,18.0),1), ((0001010119,14.0),(0001010120,14.0),1), ((0001010119,13.0),(0001010120,13.0),1), ((0001010119,16.0),(0001010120,16.0),1), ((0001010119,12.0),(0001010120,12.0),1), ((0001010119,3.0),(0001010120,3.0),1), ((0001010105,5.0),(0001010106,5.0),1), ((0001010105,2.0),(0001010106,2.0),1), ((0001010105,16.0),(0001010106,16.0),1), ((0001010105,18.0),(0001010106,18.0),1), ((0001010105,12.0),(0001010106,12.0),1), ((0001010105,8.0),(0001010106,8.0),1), ((0001010105,17.0),(0001010106,17.0),1), ((0001010105,14.0),(0001010106,14.0),1)...collectedVerticesR1: scala.collection.immutable.Set[(String, Double)] \u003d Set((0001010113,12.0), (0001010106,18.0), (0001010122,16.0), (0001010104,8.0), (0001010111,3.0), (0001010107,5.0), (0001010120,2.0), (0001010104,16.0), (0001010123,14.0), (0001010107,18.0), (0001010121,2.0), (0001010101,3.0), (0001010120,17.0), (0001010108,16.0), (0001010101,12.0), (0001010115,16.0), (0001010102,16.0), (0001010108,8.0), (0001010106,2.0), (0001010105,17.0), (0001010121,17.0), (0001010106,17.0), (0001010118,14.0), (0001010109,16.0), (0001010103,13.0), (0001010122,3.0), (0001010101,8.0), (0001010118,3.0), (0001010116,14.0), (0001010110,17.0), (0001010119,5.0), (0001010119,2.0), (0001010117,16.0), (0001010118,16.0), (0001010114,5.0), (0001010104,17.0), (0001010105,2.0), (0001010103,5.0), (0001010106,14....outverticesR1: java.io.PrintWriter \u003d java.io.PrintWriter@29e600e\noutedgesR1: java.io.PrintWriter \u003d java.io.PrintWriter@4d5d0e05\nNUM VERTICES : 230\n\nNUM EDGES : 220\n\n"
+      },
+      "dateCreated": "Mar 28, 2016 9:01:48 AM",
+      "dateStarted": "May 5, 2016 12:55:27 PM",
+      "dateFinished": "May 5, 2016 12:55:29 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//viewing the random data in the sRDD after a collect\nprint(d(3).variables)\nprint(d(3))\n\n// val e \u003d filteredR1.collect()\n// print(e)\n// val d \u003d labeledR1.collect()\n// print(d)\n// val c \u003d consecFramesR1.collect()\n// print(c)",
+      "dateUpdated": "May 4, 2016 6:27:52 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1462317368092_971071177",
+      "id": "20160503-161608_318676711",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "Map(Random_BT -\u003e [[234.00,282.00,193.00,165.00,226.00,183.00,170.00,174.00,172.00,216.00,186.00,197.00,267.00,208.00,199.00,243.00,261.00,172.00,252.00,265.00]\n [215.00,249.00,258.00,222.00,247.00,220.00,284.00,219.00,280.00,217.00,218.00,195.00,282.00,165.00,299.00,182.00,171.00,232.00,270.00,197.00]\n [182.00,283.00,280.00,216.00,281.00,276.00,190.00,206.00,252.00,212.00,233.00,266.00,300.00,173.00,284.00,182.00,269.00,269.00,245.00,160.00]\n [236.00,295.00,177.00,186.00,198.00,172.00,234.00,223.00,242.00,236.00,256.00,170.00,228.00,189.00,210.00,190.00,202.00,160.00,291.00,229.00]\n [178.00,300.00,226.00,213.00,162.00,281.00,226.00,213.00,212.00,168.00,284.00,246.00,256.00,152.00,258.00,216.00,186.00,261.00,176.00,298.00]\n [296.00,202.00,257.00,280.00,197.00,296.00,257.00,262.00,284.00,261.00,161.00,189.00,248.00,209.00,242.00,224.00,236.00,205.00,227.00,289.00]\n [170.00,300.00,255.00,179.00,176.00,213.00,216.00,245.00,217.00,188.00,243.00,210.00,263.00,154.00,295.00,269.00,174.00,179.00,188.00,223.00]\n [220.00,239.00,297.00,243.00,274.00,155.00,220.00,213.00,247.00,182.00,203.00,257.00,214.00,214.00,165.00,283.00,276.00,215.00,280.00,285.00]\n [286.00,223.00,293.00,180.00,237.00,198.00,208.00,171.00,196.00,280.00,256.00,213.00,185.00,166.00,256.00,170.00,214.00,284.00,253.00,196.00]\n [219.00,177.00,275.00,294.00,274.00,227.00,228.00,290.00,221.00,272.00,169.00,158.00,210.00,205.00,294.00,250.00,150.00,240.00,174.00,227.00]\n [175.00,161.00,222.00,227.00,239.00,174.00,190.00,162.00,153.00,270.00,233.00,154.00,180.00,258.00,182.00,277.00,284.00,298.00,258.00,189.00]\n [209.00,221.00,178.00,160.00,299.00,156.00,200.00,228.00,170.00,154.00,270.00,227.00,297.00,292.00,180.00,224.00,250.00,284.00,291.00,190.00]\n [210.00,217.00,278.00,283.00,260.00,280.00,260.00,228.00,267.00,245.00,156.00,242.00,270.00,248.00,214.00,243.00,216.00,174.00,228.00,237.00]\n [219.00,218.00,173.00,152.00,226.00,300.00,172.00,237.00,293.00,227.00,234.00,260.00,177.00,188.00,151.00,196.00,253.00,204.00,203.00,273.00]\n [220.00,277.00,186.00,177.00,150.00,260.00,151.00,280.00,208.00,209.00,178.00,152.00,236.00,172.00,194.00,264.00,291.00,155.00,238.00,193.00]\n [170.00,209.00,157.00,274.00,292.00,262.00,193.00,154.00,174.00,203.00,278.00,281.00,225.00,159.00,250.00,281.00,193.00,262.00,254.00,214.00]\n [235.00,165.00,231.00,219.00,286.00,219.00,157.00,190.00,289.00,210.00,162.00,201.00,207.00,172.00,272.00,186.00,250.00,272.00,186.00,210.00]\n [268.00,171.00,189.00,271.00,225.00,178.00,286.00,293.00,243.00,200.00,178.00,220.00,271.00,210.00,175.00,298.00,233.00,179.00,237.00,207.00]\n [258.00,274.00,266.00,222.00,251.00,268.00,205.00,218.00,240.00,254.00,210.00,165.00,206.00,238.00,240.00,166.00,190.00,150.00,288.00,209.00]\n [155.00,214.00,182.00,282.00,283.00,184.00,255.00,253.00,150.00,157.00,231.00,295.00,215.00,248.00,233.00,212.00,227.00,164.00,297.00,296.00]])Variable in use \u003d Random_BT\nSet(Random_BT)\n(FRAME,00010105)\n(SOURCE,0001-01-05)\n"
+      },
+      "dateCreated": "May 3, 2016 4:16:08 PM",
+      "dateStarted": "May 4, 2016 3:01:17 PM",
+      "dateFinished": "May 4, 2016 3:01:17 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Mar 28, 2016 9:16:31 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1459181065827_1586262142",
+      "id": "20160328-090425_1575637966",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT"
+      },
+      "dateCreated": "Mar 28, 2016 9:04:25 AM",
+      "dateStarted": "Mar 28, 2016 9:16:35 AM",
+      "dateFinished": "Mar 28, 2016 9:16:36 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "scalingNotebook",
+  "id": "2BEXBMUHD",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": [],
+    "2BBAYHPQT": []
+  },
+  "config": {},
+  "info": {}
+}
