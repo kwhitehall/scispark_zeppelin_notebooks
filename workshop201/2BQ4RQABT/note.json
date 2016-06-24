@@ -1,0 +1,604 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n##TODOs\nUsing the sRDD: Lazy evaluation \nMd cell: explain what that is with cells of examples in different languages\nMd cell: commands that allow for evaluation to be done\nCell: Perform 2-3 chained task in memory, then print results\nMd: visualizing results - see issue #48 for transfering data so we don\u0027t have to write data\nCell: viz\nMd cell: debugging with lazy evaluation\nExercises: converting to functional programming and being as lazy a possible\n",
+      "dateUpdated": "Jun 8, 2016 2:19:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1465415321779_-764857036",
+      "id": "20160608-124841_1972249733",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eUsing the sRDD: Lazy evaluation\n\u003cbr  /\u003eMd cell: explain what that is with cells of examples in different languages\n\u003cbr  /\u003eMd cell: commands that allow for evaluation to be done\n\u003cbr  /\u003eCell: Perform 2-3 chained task in memory, then print results\n\u003cbr  /\u003eMd: visualizing results - see issue #48 for transfering data so we don\u0027t have to write data\n\u003cbr  /\u003eCell: viz\n\u003cbr  /\u003eMd cell: debugging with lazy evaluation\n\u003cbr  /\u003eExercises: converting to functional programming and being as lazy a possible\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 8, 2016 12:48:41 PM",
+      "dateStarted": "Jun 8, 2016 12:50:05 PM",
+      "dateFinished": "Jun 8, 2016 12:50:05 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##SciSpark: Lazy evaluation, pipelines and efficiency\nThe purpose of this notebook is to introduce the user to the concept of lazy evaluation in SciSpark inorder to maximize the scientific Resilient Distributed Dataset (sRDD).\n\nThe data used in this notebook is the [Tropical Rainfall Measuring Mission (TRMM) 0.25° x 0.25°degree 3-hourly dataset](http://disc.sci.gsfc.nasa.gov/precipitation/documentation/TRMM_README/TRMM_3B42_readme.shtml) acquired from the [GES DIS Mirador site] (http://mirador.gsfc.nasa.gov/). \nPossible example: The example will address the following scenario. \nMost crop insurance companies usually settle claims based on the amount of acreage (coverage) impacted by a weather or climatic phenomenon. Here we examine the rainfall totals within an area for a given time that could drive a claim.\n\nInformation on crop insurance taken from [Rain and Hail Insurance Society](http://www.rainhail.com/pdf_files/MKTG/MKTG_0123.pdf)",
+      "dateUpdated": "Jun 23, 2016 2:15:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1465415405253_-77993761",
+      "id": "20160608-125005_1817777981",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eSciSpark: Lazy evaluation, pipelines and efficiency\u003c/h2\u003e\n\u003cp\u003eThe purpose of this notebook is to introduce the user to the concept of lazy evaluation in SciSpark inorder to maximize the scientific Resilient Distributed Dataset (sRDD).\u003c/p\u003e\n\u003cp\u003eThe data used in this notebook is the \u003ca href\u003d\"http://disc.sci.gsfc.nasa.gov/precipitation/documentation/TRMM_README/TRMM_3B42_readme.shtml\"\u003eTropical Rainfall Measuring Mission (TRMM) 0.25° x 0.25°degree 3-hourly dataset\u003c/a\u003e acquired from the \u003ca href\u003d\"http://mirador.gsfc.nasa.gov/\"\u003eGES DIS Mirador site\u003c/a\u003e.\n\u003cbr  /\u003ePossible example: The example will address the following scenario.\n\u003cbr  /\u003eMost crop insurance companies usually settle claims based on the amount of acreage (coverage) impacted by a weather or climatic phenomenon. Here we examine the rainfall totals within an area for a given time that could drive a claim.\u003c/p\u003e\n\u003cp\u003eInformation on crop insurance taken from \u003ca href\u003d\"http://www.rainhail.com/pdf_files/MKTG/MKTG_0123.pdf\"\u003eRain and Hail Insurance Society\u003c/a\u003e\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 8, 2016 12:50:05 PM",
+      "dateStarted": "Jun 23, 2016 2:15:28 PM",
+      "dateFinished": "Jun 23, 2016 2:15:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###What is lazy evaluation?\nLazy evaluation, also known as *delayed evaluation* or *call-by-need* is a common evaluation technique in functional programming languages. In this evaluation, a variable is not evaluated when it is assigned to a variable, but rather when the variable (evaluator) is forced to produce the expression\u0027s result.  \nFor example, let\u0027s define a function for finding the square. \n\n```\ndef square (x:Int): Int \u003d{\n    x*x\n}\n\nval y \u003d { println(square(1)); println (square(3+3+3)); \"here\" + \u0027 \u0027 + square(1).toString+ \u0027 \u0027+ square(3+3+3).toString }\nprintln(\"now\")\nprintln(y)\n```\nOutput:\n```\n1 \n81 \nnow \nhere! 1 81\n```\nIn this example, the function **square** is defined. The variable y is a function that prints the evaluation **square** of 1, prints the evaluatuation of **square** of a computation, and the string \"Here\" appeneded to the evaluations of **square**. Note the expressiveness of the 2nd function call. The ``println`` in the variable assignment of *y* triggers the execution of the **square** function. As such, the control flow for execution is: the first print statement evaluates, followed by the second print statement (for the function), then the *now* prints followed by *y*.\n",
+      "dateUpdated": "Jun 20, 2016 2:41:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1465422284424_477620803",
+      "id": "20160608-144444_1134806013",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eWhat is lazy evaluation?\u003c/h3\u003e\n\u003cp\u003eLazy evaluation, also known as \u003cem\u003edelayed evaluation\u003c/em\u003e or \u003cem\u003ecall-by-need\u003c/em\u003e is a common evaluation technique in functional programming languages. In this evaluation, a variable is not evaluated when it is assigned to a variable, but rather when the variable (evaluator) is forced to produce the expression\u0027s result.\n\u003cbr  /\u003eFor example, let\u0027s define a function for finding the square.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003edef square (x:Int): Int \u003d{\n    x*x\n}\n\nval y \u003d { println(square(1)); println (square(3+3+3)); \"here\" + \u0027 \u0027 + square(1).toString+ \u0027 \u0027+ square(3+3+3).toString }\nprintln(\"now\")\nprintln(y)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eOutput:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e1 \n81 \nnow \nhere! 1 81\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eIn this example, the function \u003cstrong\u003esquare\u003c/strong\u003e is defined. The variable y is a function that prints the evaluation \u003cstrong\u003esquare\u003c/strong\u003e of 1, prints the evaluatuation of \u003cstrong\u003esquare\u003c/strong\u003e of a computation, and the string \u0026ldquo;Here\u0026rdquo; appeneded to the evaluations of \u003cstrong\u003esquare\u003c/strong\u003e. Note the expressiveness of the 2nd function call. The \u003ccode\u003eprintln\u003c/code\u003e in the variable assignment of \u003cem\u003ey\u003c/em\u003e triggers the execution of the \u003cstrong\u003esquare\u003c/strong\u003e function. As such, the control flow for execution is: the first print statement evaluates, followed by the second print statement (for the function), then the \u003cem\u003enow\u003c/em\u003e prints followed by \u003cem\u003ey\u003c/em\u003e.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 8, 2016 2:44:44 PM",
+      "dateStarted": "Jun 20, 2016 2:41:11 PM",
+      "dateFinished": "Jun 20, 2016 2:41:11 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Lazy evaluation by-name verses by-need and memorization \nLazy evaluation can be made futher efficeint through memorization. This introduces the concepts of (1) lazy evaluation by-name where the computation of a variable is delayed until necessary and repeated each time the variable is used; and Lazy evaluation by-need where the computation of a variable is delayed until necessary and cached. To achieve this in Scala, the ``lazy`` keyword/ modifier is used.\n\n```\ndef square (x:Int): Int \u003d{\n    x*x\n}\n\nlazy val y \u003d {println(square(1)); println (square(3+3+3)); \"here!\" + \u0027 \u0027 + square(1).toString+ \u0027 \u0027+ square(3+3+3).toString }\nprintln(\"now\")\nprintln(y)\n```\nOutputs:\n```\nnow \n1 \n81 \nhere! 1 18\n```\n\nNotice by using the ``lazy`` modifer here, the execution of the ``println`` function in y is delayed until **println(y)** is actually called.\nFor computations with large arrays, this can be an especially useful tool to address memory usage and program efficiency. ",
+      "dateUpdated": "Jun 20, 2016 4:43:50 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466447208769_1298805995",
+      "id": "20160620-112648_1141875874",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eLazy evaluation by-name verses by-need and memorization\u003c/h3\u003e\n\u003cp\u003eLazy evaluation can be made futher efficeint through memorization. This introduces the concepts of (1) lazy evaluation by-name where the computation of a variable is delayed until necessary and repeated each time the variable is used; and Lazy evaluation by-need where the computation of a variable is delayed until necessary and cached. To achieve this in Scala, the \u003ccode\u003elazy\u003c/code\u003e keyword/ modifier is used.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003edef square (x:Int): Int \u003d{\n    x*x\n}\n\nlazy val y \u003d {println(square(1)); println (square(3+3+3)); \"here!\" + \u0027 \u0027 + square(1).toString+ \u0027 \u0027+ square(3+3+3).toString }\nprintln(\"now\")\nprintln(y)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eOutputs:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003enow \n1 \n81 \nhere! 1 18\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNotice by using the \u003ccode\u003elazy\u003c/code\u003e modifer here, the execution of the \u003ccode\u003eprintln\u003c/code\u003e function in y is delayed until \u003cstrong\u003eprintln(y)\u003c/strong\u003e is actually called.\n\u003cbr  /\u003eFor computations with large arrays, this can be an especially useful tool to address memory usage and program efficiency.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 20, 2016 11:26:48 AM",
+      "dateStarted": "Jun 20, 2016 4:43:46 PM",
+      "dateFinished": "Jun 20, 2016 4:43:46 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nExample with real data deomstarting the lazy evaluation. Let\u0027s convert the files to reflect the units so we can compute a sliding window.(This will grow the size of the array from 16 files - 48hrs every 3 hrs; to 48hrs - hryly.",
+      "dateUpdated": "Jun 20, 2016 4:58:54 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466457106313_211652717",
+      "id": "20160620-141146_1124446239",
+      "dateCreated": "Jun 20, 2016 2:11:46 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//generic imports\nimport java.io.{ File, PrintWriter }\n//SciSpark imports\nimport org.dia.Parsers\nimport org.dia.core.{ SciSparkContext, SciTensor }\nimport org.dia.utils.NetCDFUtils\n\n// Initialize the SciSpark context \nval dssc4 \u003d new SciSparkContext(sc)",
+      "dateUpdated": "Jun 20, 2016 4:52:11 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466466369259_461989778",
+      "id": "20160620-164609_265714354",
+      "dateCreated": "Jun 20, 2016 4:46:09 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \nLoad data from OPeNDAP\nIn SciSpark, this a two-step process. First the user needs to identify the dates for retrieval. Currently, we can access TRMM data at the [NASA OPeNDAP URL](http://disc2.nascom.nasa.gov/opendap/TRMM_L3/TRMM_3B42_daily/). The paths for each file between the dates are generated and stored into a file. In the second step, the file is identified for loading the netCDF files. This leads to the parellel retrieval of the URLs from the OPeNDAP server. Of course, this can lead to server throttling, hence, the user should exercise caution and consideration using this feature. ",
+      "dateUpdated": "Jun 21, 2016 9:36:48 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466466731371_319785927",
+      "id": "20160620-165211_1020277328",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eLoad data from OPeNDAP\n\u003cbr  /\u003eIn SciSpark, this a two-step process. First the user needs to identify the dates for retrieval. Currently, we can access TRMM data at the \u003ca href\u003d\"http://disc2.nascom.nasa.gov/opendap/TRMM_L3/TRMM_3B42_daily/\"\u003eNASA OPeNDAP URL\u003c/a\u003e. The paths for each file between the dates are generated and stored into a file. In the second step, the file is identified for loading the netCDF files. This leads to the parellel retrieval of the URLs from the OPeNDAP server. Of course, this can lead to server throttling, hence, the user should exercise caution and consideration using this feature.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 20, 2016 4:52:11 PM",
+      "dateStarted": "Jun 21, 2016 9:36:35 AM",
+      "dateFinished": "Jun 21, 2016 9:36:35 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Lazy evaluation and pipelines in Spark\nDuring manipulation of data, the is customary to create intermediate data objects. This can quickly lead to memory leaks, and reduced runtimes for large datasets as memory access is expensive. The idea behind pipelines is to avoid creating intermediary arrays during the chain execution. Instead, perform all operations on a single element in place. \n\n\n###Pipelines and deferred execution\nAs if one couldn\u0027t get lazier, the Spark and SciSpark environment allow for deferred execution whereby the pipeline/chain of computations is not evaluated until ```.value()``` is called on the RDD or sRDD respectively. \n\n####Example with real data\nTODO: example time the two cells for evaluating the same code. Also show mem usage (how? Mesos? Yarn? if it were local, could leverage python mem and/ or bash)\n\n",
+      "dateUpdated": "Jun 20, 2016 1:43:10 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466453083703_-1748604581",
+      "id": "20160620-130443_1827673449",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eLazy evaluation and pipelines in Spark\u003c/h3\u003e\n\u003cp\u003eDuring manipulation of data, the is customary to create intermediate data objects. This can quickly lead to memory leaks, and reduced runtimes for large datasets as memory access is expensive. The idea behind pipelines is to avoid creating intermediary arrays during the chain execution. Instead, perform all operations on a single element in place.\u003c/p\u003e\n\u003ch3\u003ePipelines and deferred execution\u003c/h3\u003e\n\u003cp\u003eAs if one couldn\u0027t get lazier, the Spark and SciSpark environment allow for deferred execution whereby the pipeline/chain of computations is not evaluated until \u003ccode\u003e`.value()\u003c/code\u003e` is called on the RDD or sRDD respectively.\u003c/p\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eTODO: example time the two cells for evaluating the same code. Also show mem usage (how? Mesos? Yarn? if it were local, could leverage python mem and/ or bash)\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 20, 2016 1:04:43 PM",
+      "dateStarted": "Jun 20, 2016 1:43:10 PM",
+      "dateFinished": "Jun 20, 2016 1:43:10 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Summary:\nLazy evaluation is quite handy for:\n1. stringing multiple calculations/ evaluations to create calculable streams (infinite length lists) without infinite loops - for example gathering data from an instrument in real-time;  \n2. addressing memory concerns during computation;\n3. improving the performance by avoiding needless calculations\n4. controlling the program flow outside of the primitive types\n\nLazy evaluations can reduce runtimes for certain (functions) implementations exponentially, and is both efficient and expressive.\n\nOf course, the key to acheiving the core runtime benefit performance and optimal memory utilization is in the implementation of the problem.",
+      "dateUpdated": "Jun 20, 2016 2:41:11 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466455948870_641527273",
+      "id": "20160620-135228_1005918920",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eLazy evaluation is quite handy for:\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003estringing multiple calculations/ evaluations to create calculable streams (infinite length lists) without infinite loops - for example gathering data from an instrument in real-time;\u003c/li\u003e\n\u003cli\u003eaddressing memory concerns during computation;\u003c/li\u003e\n\u003cli\u003eimproving the performance by avoiding needless calculations\u003c/li\u003e\n\u003cli\u003econtrolling the program flow outside of the primitive types\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003eLazy evaluations can reduce runtimes for certain (functions) implementations exponentially, and is both efficient and expressive.\u003c/p\u003e\n\u003cp\u003eOf course, the key to acheiving the core runtime benefit performance and optimal memory utilization is in the implementation of the problem.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 20, 2016 1:52:28 PM",
+      "dateStarted": "Jun 20, 2016 2:40:46 PM",
+      "dateFinished": "Jun 20, 2016 2:40:46 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//generic imports\nimport java.io.{ File, PrintWriter }\n//SciSpark imports\nimport org.dia.Parsers\nimport org.dia.urlgenerators.OpenDapTRMMURLGenerator\nimport org.dia.core.{ SciSparkContext, SciTensor }\nimport org.dia.utils.NetCDFUtils\n\nval dssc4 \u003d new SciSparkContext(sc)\n\n//generate the 3hrly URLs to get from openDap for TRMM\nOpenDapTRMMURLGenerator.run(false, \"/tmp/TRMM3hrly2010.txt\", \"201006150000\", \"201006161500\", 2)//\"201001010000\", \"201001030000\", 2)// ",
+      "dateUpdated": "Jun 23, 2016 2:24:29 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466696714308_-242393185",
+      "id": "20160623-084514_2045673641",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.{File, PrintWriter}\nimport org.dia.Parsers\nimport org.dia.urlgenerators.OpenDapTRMMURLGenerator\nimport org.dia.core.{SciSparkContext, SciTensor}\nimport org.dia.utils.NetCDFUtils\ndssc4: org.dia.core.SciSparkContext \u003d org.dia.core.SciSparkContext@2fee740d\njava.io.PrintWriter@65c42a86\n"
+      },
+      "dateCreated": "Jun 23, 2016 8:45:14 AM",
+      "dateStarted": "Jun 23, 2016 2:24:29 PM",
+      "dateFinished": "Jun 23, 2016 2:24:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// read the data into the sRDD\n// val sRDD4 \u003d dssc4.NetcdfFile( \"/tmp/TRMM3hrly2014.txt\", List(\"precipitation\",\"latitude\",\"longitude\"), 3)\nval sRDD4 \u003d dssc4.NetcdfFile( \"/tmp/TRMM3hrly2010.txt\", List(\"pcp\"), 3)\n",
+      "dateUpdated": "Jun 23, 2016 2:24:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466697373229_-1434815393",
+      "id": "20160623-085613_265119461",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "sRDD4: org.dia.core.SRDD[org.dia.core.SciTensor] \u003d SRDD[8] at RDD at SRDD.scala:39\n"
+      },
+      "dateCreated": "Jun 23, 2016 8:56:13 AM",
+      "dateStarted": "Jun 23, 2016 2:24:32 PM",
+      "dateFinished": "Jun 23, 2016 2:24:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// parse the date out from the openDap URL\nval labeled4 \u003d sRDD4.map(p1 \u003d\u003e {\n    val filename \u003d p1.metaData(\"SOURCE\").split(\"/\").last.split(\"\\\\.\")\n    val fileDate \u003d (filename(1) + filename(2)).toInt\n    p1.insertDictionary((\"Date\", fileDate.toString))\n    p1\n})",
+      "dateUpdated": "Jun 23, 2016 2:24:37 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466698132370_-1504484840",
+      "id": "20160623-090852_631476293",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "labeled4: org.dia.core.SRDD[org.dia.core.SciTensor] \u003d SMapPartitionsRDD[9] at RDD at SRDD.scala:39\n"
+      },
+      "dateCreated": "Jun 23, 2016 9:08:52 AM",
+      "dateStarted": "Jun 23, 2016 2:24:37 PM",
+      "dateFinished": "Jun 23, 2016 2:24:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// val ee4 \u003d sRDD4.map(p \u003d\u003e p(\"precipitation\").data)\n// val ee5 \u003d sRDD5.map(p \u003d\u003e p(\"pcp\").data)\nlabeled4.collect().toList\n// val xx4 \u003d labeled4.map(p \u003d\u003e p(\"pcp\").data)\n// xx4.collect().toList",
+      "dateUpdated": "Jun 23, 2016 2:24:40 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466698860100_617643429",
+      "id": "20160623-092100_700396053",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 4.0 failed 4 times, most recent failure: Lost task 0.3 in stage 4.0 (TID 53, scispark3.jpl.nasa.gov): scala.MatchError: null\n\tat org.dia.tensors.TensorFactory$.getTensor(TensorFactory.scala:35)\n\tat org.dia.core.SRDD$$anon$1$$anonfun$2.apply(SRDD.scala:110)\n\tat org.dia.core.SRDD$$anon$1$$anonfun$2.apply(SRDD.scala:106)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.immutable.List.foreach(List.scala:318)\n\tat scala.collection.TraversableLike$class.map(TraversableLike.scala:244)\n\tat scala.collection.AbstractTraversable.map(Traversable.scala:105)\n\tat org.dia.core.SRDD$$anon$1.next(SRDD.scala:106)\n\tat scala.collection.Iterator$$anon$11.next(Iterator.scala:328)\n\tat scala.collection.Iterator$class.foreach(Iterator.scala:727)\n\tat scala.collection.AbstractIterator.foreach(Iterator.scala:1157)\n\tat scala.collection.generic.Growable$class.$plus$plus$eq(Growable.scala:48)\n\tat scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:103)\n\tat scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:47)\n\tat scala.collection.TraversableOnce$class.to(TraversableOnce.scala:273)\n\tat scala.collection.AbstractIterator.to(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.toBuffer(TraversableOnce.scala:265)\n\tat scala.collection.AbstractIterator.toBuffer(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.toArray(TraversableOnce.scala:252)\n\tat scala.collection.AbstractIterator.toArray(Iterator.scala:1157)\n\tat org.dia.core.SRDD$$anonfun$1.apply(SRDD.scala:78)\n\tat org.dia.core.SRDD$$anonfun$1.apply(SRDD.scala:78)\n\tat org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1858)\n\tat org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1858)\n\tat org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:66)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:89)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:213)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)\n\tat java.lang.Thread.run(Thread.java:745)\n\nDriver stacktrace:\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1419)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1418)\n\tat scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)\n\tat scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:47)\n\tat org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:1418)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat scala.Option.foreach(Option.scala:236)\n\tat org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1640)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1845)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1858)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1929)\n\tat org.dia.core.SRDD.collect(SRDD.scala:78)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:55)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:60)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:62)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:64)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:66)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:68)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:70)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:72)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:74)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:76)\n\tat \u003cinit\u003e(\u003cconsole\u003e:78)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:82)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:709)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:674)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:667)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:300)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:169)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:134)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\nCaused by: scala.MatchError: null\n\tat org.dia.tensors.TensorFactory$.getTensor(TensorFactory.scala:35)\n\tat org.dia.core.SRDD$$anon$1$$anonfun$2.apply(SRDD.scala:110)\n\tat org.dia.core.SRDD$$anon$1$$anonfun$2.apply(SRDD.scala:106)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)\n\tat scala.collection.immutable.List.foreach(List.scala:318)\n\tat scala.collection.TraversableLike$class.map(TraversableLike.scala:244)\n\tat scala.collection.AbstractTraversable.map(Traversable.scala:105)\n\tat org.dia.core.SRDD$$anon$1.next(SRDD.scala:106)\n\tat scala.collection.Iterator$$anon$11.next(Iterator.scala:328)\n\tat scala.collection.Iterator$class.foreach(Iterator.scala:727)\n\tat scala.collection.AbstractIterator.foreach(Iterator.scala:1157)\n\tat scala.collection.generic.Growable$class.$plus$plus$eq(Growable.scala:48)\n\tat scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:103)\n\tat scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:47)\n\tat scala.collection.TraversableOnce$class.to(TraversableOnce.scala:273)\n\tat scala.collection.AbstractIterator.to(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.toBuffer(TraversableOnce.scala:265)\n\tat scala.collection.AbstractIterator.toBuffer(Iterator.scala:1157)\n\tat scala.collection.TraversableOnce$class.toArray(TraversableOnce.scala:252)\n\tat scala.collection.AbstractIterator.toArray(Iterator.scala:1157)\n\tat org.dia.core.SRDD$$anonfun$1.apply(SRDD.scala:78)\n\tat org.dia.core.SRDD$$anonfun$1.apply(SRDD.scala:78)\n\tat org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1858)\n\tat org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1858)\n\tat org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:66)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:89)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:213)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)\n\t... 1 more\n\n"
+      },
+      "dateCreated": "Jun 23, 2016 9:21:00 AM",
+      "dateStarted": "Jun 23, 2016 2:24:40 PM",
+      "dateFinished": "Jun 23, 2016 2:24:43 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " val masked4 \u003d labeled4.map(p \u003d\u003e p(\"pcp\") \u003e\u003d  0.1 )\n val accu3hrly4 \u003d labeled4.map(p \u003d\u003e p(\"pcp\") *  3.0 )\n val consecTRMM4 \u003d accu3hrly4.flatMap(p \u003d\u003e {\n    List((p.metaData(\"Date\").toInt, p), (p.metaData(\"Date\").toInt + 3, p))\n}).groupBy(_._1)\n    .map(p \u003d\u003e p._2.map(e \u003d\u003e e._2).toList)\n    .filter(p \u003d\u003e p.size \u003e 1)\n    .map(p \u003d\u003e p.sortBy(_.metaData(\"Date\").toInt))\n    .map(p \u003d\u003e (p(0), p(1)))\nval sliding6hrly4 \u003d consecTRMM4.map(p \u003d\u003e p._1(\"pcp\") + p._2(\"pcp\"))\n\nimport java.nio\n\nval sliding6hrlyArrays4 \u003d sliding6hrly4.map(p \u003d\u003e {\n    val listData \u003d new java.util.ArrayList[Any]()\n    val scalaBytebuffer \u003d java.nio.ByteBuffer.allocate(8*p(\"pcp\").data.length)\n    scalaBytebuffer.asDoubleBuffer.put(java.nio.DoubleBuffer.wrap(p(\"pcp\").data))\n    listData.add(scalaBytebuffer.array)\n    listData.add(p(\"pcp\").shape)\n    listData.add(java.lang.Integer.valueOf(p.metaData(\"Date\").toInt))\n    listData //listData is a Java List containing a Java arrayBuffer and a Scala array\n})\nz.put(\"sliding6hrlyList4\", sliding6hrlyArrays4)",
+      "dateUpdated": "Jun 23, 2016 9:16:22 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466698411194_-1604521198",
+      "id": "20160623-091331_1713341286",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "masked4: org.dia.core.SRDD[org.dia.core.SciTensor] \u003d SMapPartitionsRDD[4] at RDD at SRDD.scala:39\naccu3hrly4: org.dia.core.SRDD[org.dia.core.SciTensor] \u003d SMapPartitionsRDD[5] at RDD at SRDD.scala:39\nconsecTRMM4: org.apache.spark.rdd.RDD[(org.dia.core.SciTensor, org.dia.core.SciTensor)] \u003d MapPartitionsRDD[12] at map at \u003cconsole\u003e:60\nsliding6hrly4: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[13] at map at \u003cconsole\u003e:56\nimport java.nio\nsliding6hrlyArrays4: org.apache.spark.rdd.RDD[java.util.ArrayList[Any]] \u003d MapPartitionsRDD[14] at map at \u003cconsole\u003e:60\nres38: Object \u003d null\n"
+      },
+      "dateCreated": "Jun 23, 2016 9:13:31 AM",
+      "dateStarted": "Jun 23, 2016 9:16:22 AM",
+      "dateFinished": "Jun 23, 2016 9:16:24 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val ss4 \u003d sliding6hrly4.map(p \u003d\u003e p(\"pcp\").data.length)\n// sliding6hrly4.collect().toList\nss4.collect().toList",
+      "dateUpdated": "Jun 23, 2016 9:20:45 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466698627488_1225782011",
+      "id": "20160623-091707_2025865355",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "ss4: org.apache.spark.rdd.RDD[Int] \u003d MapPartitionsRDD[19] at map at \u003cconsole\u003e:59\nres48: List[Int] \u003d List(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)\n"
+      },
+      "dateCreated": "Jun 23, 2016 9:17:07 AM",
+      "dateStarted": "Jun 23, 2016 9:20:45 AM",
+      "dateFinished": "Jun 23, 2016 9:20:46 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nfrom pyspark.mllib.common import _java2py\nimport numpy\n\nsliding6hrly4 \u003d z.get(\"sliding6hrlyList4\")\n\npythonRDD4 \u003d _java2py(sc, sliding6hrly4)\n\ndef convert_to_numpy(aList):\n    \u0027\u0027\u0027\n        aList is  [javaDataBuffer, p(\"pcp\").shape, dtime] in the sRDD\n    \u0027\u0027\u0027\n    dt \u003d numpy.dtype(\u0027d\u0027)\n    dt \u003d dt.newbyteorder(\u0027\u003e\u0027)\n    da \u003d numpy.frombuffer(aList[0], dtype\u003ddt)\n    da.shape \u003d (aList[1][0], aList[1][1])\n    return (da, aList[2])\n    \nlistOfNumpy4 \u003d pythonRDD4.map(lambda t: convert_to_numpy(t))\n\nprint len(listOfNumpy4.collect()), sorted(listOfNumpy4.collect(), key\u003dlambda x:x[1])[0], listOfNumpy4.collect()[0][0].shape\n",
+      "dateUpdated": "Jun 23, 2016 9:18:27 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466698534897_316346170",
+      "id": "20160623-091534_204059016",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "14 (array([[-89991.]]), 2010010100) (1, 1)\n"
+      },
+      "dateCreated": "Jun 23, 2016 9:15:34 AM",
+      "dateStarted": "Jun 23, 2016 9:18:28 AM",
+      "dateFinished": "Jun 23, 2016 9:18:32 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "labeled4.collect().toList",
+      "dateUpdated": "Jun 23, 2016 9:13:12 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466455857760_-1850445380",
+      "id": "20160620-135057_1972288332",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "res34: List[org.dia.core.SciTensor] \u003d \nList(Variable in use \u003d pcp\nSet(pcp, latitude, longitude)\n(Date,2010010100)\n(SOURCE,http://disc2.nascom.nasa.gov:80/opendap/TRMM_L3/TRMM_3B42/2010/000/3B42.20100101.00.7A.HDF.Z.nc)\n, Variable in use \u003d pcp\nSet(pcp, latitude, longitude)\n(Date,2010010103)\n(SOURCE,http://disc2.nascom.nasa.gov:80/opendap/TRMM_L3/TRMM_3B42/2010/001/3B42.20100101.03.7A.HDF.Z.nc)\n, Variable in use \u003d pcp\nSet(pcp, latitude, longitude)\n(Date,2010010106)\n(SOURCE,http://disc2.nascom.nasa.gov:80/opendap/TRMM_L3/TRMM_3B42/2010/001/3B42.20100101.06.7A.HDF.Z.nc)\n, Variable in use \u003d pcp\nSet(pcp, latitude, longitude)\n(Date,2010010109)\n(SOURCE,http://disc2.nascom.nasa.gov:80/opendap/TRMM_L3/TRMM_3B42/2010/001/3B42.20100101.09.7A.HDF.Z.nc)\n, Variable in use \u003d pcp\nSet(pcp, latitude, long..."
+      },
+      "dateCreated": "Jun 20, 2016 1:50:57 PM",
+      "dateStarted": "Jun 23, 2016 9:13:12 AM",
+      "dateFinished": "Jun 23, 2016 9:14:00 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466697976730_323274939",
+      "id": "20160623-090616_1638699114",
+      "dateCreated": "Jun 23, 2016 9:06:16 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "201-LazyEvaluation",
+  "id": "2BQ4RQABT",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": [],
+    "2BBAYHPQT": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -1,0 +1,465 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\nDistributed Systems and Parallel Computing with Apache Spark and SciSpark\n\u003d\u003d\u003d\n\n##Introduction\n* SciSpark is a lightning fast big data technology, which extends the functionality of [Apache Spark](http://spark.apache.org/) for scientific use cases. It allows for interactive model evaluation and for the rapid development of climate metrics and analysis to address the pain points in the current model evaluation process.",
+      "dateUpdated": "Jun 22, 2016 9:07:04 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1465233837440_-1086439487",
+      "id": "20160606-102357_1771743844",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch1\u003eDistributed Systems and Parallel Computing with Apache Spark and SciSpark\u003c/h1\u003e\n\u003ch2\u003eIntroduction\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eSciSpark is a lightning fast big data technology, which extends the functionality of \u003ca href\u003d\"http://spark.apache.org/\"\u003eApache Spark\u003c/a\u003e for scientific use cases. It allows for interactive model evaluation and for the rapid development of climate metrics and analysis to address the pain points in the current model evaluation process.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jun 6, 2016 10:23:57 AM",
+      "dateStarted": "Jun 20, 2016 9:35:29 AM",
+      "dateFinished": "Jun 20, 2016 9:35:29 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Overview\n\n* Like the Apache Hadoop MapReduce framework, Apache Spark is used to distribute your data across a cluster and process that data in parallel. Apache Spark allows for up to 100x faster processing than MapReduce, which operates with key-value pairs like a dictionary setup, because most operations are done by keeping data in memory instead of by reading/writing from disk much more often.\n* Apache Spark uses resilient distributed datasets (RDDs) which are split into multiple partitions and can contain [Scala](http://www.scala-lang.org/), [Java](https://java.com/en/) and [Python](https://www.python.org/) objects. With RDDs, our data can be automatically reconstructed if a partition is lost.\n* It should be noted that SciSpark uses Scala version 2.10 and is based on Apache Spark version 1.6.",
+      "dateUpdated": "Jun 22, 2016 9:07:04 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466120247515_36833000",
+      "id": "20160616-163727_410402607",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eOverview\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eLike the Apache Hadoop MapReduce framework, Apache Spark is used to distribute your data across a cluster and process that data in parallel. Apache Spark allows for up to 100x faster processing than MapReduce, which operates with key-value pairs like a dictionary setup, because most operations are done by keeping data in memory instead of by reading/writing from disk much more often.\u003c/li\u003e\n\u003cli\u003eApache Spark uses resilient distributed datasets (RDDs) which are split into multiple partitions and can contain \u003ca href\u003d\"http://www.scala-lang.org/\"\u003eScala\u003c/a\u003e, \u003ca href\u003d\"https://java.com/en/\"\u003eJava\u003c/a\u003e and \u003ca href\u003d\"https://www.python.org/\"\u003ePython\u003c/a\u003e objects. With RDDs, our data can be automatically reconstructed if a partition is lost.\u003c/li\u003e\n\u003cli\u003eIt should be noted that SciSpark uses Scala version 2.10 and is based on Apache Spark version 1.6.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jun 16, 2016 4:37:27 PM",
+      "dateStarted": "Jun 21, 2016 8:18:48 AM",
+      "dateFinished": "Jun 21, 2016 8:18:48 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\n![SRDD image](https://scispark.jpl.nasa.gov/images/workshop_images/srdd1.jpg)",
+      "dateUpdated": "Jun 22, 2016 12:28:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": false,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466120390097_-1299602433",
+      "id": "20160616-163950_979295430",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003e\u003cimg src\u003d\"https://scispark.jpl.nasa.gov/images/workshop_images/srdd1.jpg\" alt\u003d\"SRDD image\" /\u003e\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 16, 2016 4:39:50 PM",
+      "dateStarted": "Jun 22, 2016 12:28:31 PM",
+      "dateFinished": "Jun 22, 2016 12:28:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Parallelizing\n\n* If you want operate on a collection of data in parallel, you have to first call the ``parallelize()`` method on the collection:\n    Example in Scala:\n    ```\n    val data \u003d Array(10, 20, 30, 40, 50)\n    val distData \u003d sc.parallelize(data)\n    ```\n    Example in Python:\n    ```\n    data \u003d [10, 20, 30, 40, 50]\n    distData \u003d sc.parallelize(data)\n    ```\n* This allows us to operate on ``distData`` in parallel later on. For instance, if we called ``distData.reduce((a, b) \u003d\u003e a + b)`` later, we would not necessarily be constricted by adding just one value at a time.",
+      "dateUpdated": "Jun 22, 2016 9:07:04 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "tableHide": false,
+        "editorHide": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466026603449_-1263098021",
+      "id": "20160615-143643_1203106788",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eParallelizing\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eIf you want operate on a collection of data in parallel, you have to first call the \u003ccode\u003eparallelize()\u003c/code\u003e method on the collection:\n\u003cbr  /\u003eExample in Scala:\u003cpre\u003e\u003ccode\u003eval data \u003d Array(10, 20, 30, 40, 50)\nval distData \u003d sc.parallelize(data)\n\u003c/code\u003e\u003c/pre\u003e\nExample in Python:\u003cpre\u003e\u003ccode\u003edata \u003d [10, 20, 30, 40, 50]\ndistData \u003d sc.parallelize(data)\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003cli\u003eThis allows us to operate on \u003ccode\u003edistData\u003c/code\u003e in parallel later on. For instance, if we called \u003ccode\u003edistData.reduce((a, b) \u003d\u0026gt; a + b)\u003c/code\u003e later, we would not necessarily be constricted by adding just one value at a time.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jun 15, 2016 2:36:43 PM",
+      "dateStarted": "Jun 20, 2016 4:29:20 PM",
+      "dateFinished": "Jun 20, 2016 4:29:20 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Transformations and Actions\n\n* There are two ways to operate on data in SciSpark/Apache Spark.\n    * **Transformations**: Since RDDs (and SciSpark\u0027s SRDDs) are immutable, we cannot simply modify them. Instead, we have to transform them into another RDD. An example of a function that \"transforms\" an RDD in this way is map.\n    * **Actions**: Actions return a value to our driver program. For instance, reduce aggregates each value in our dataset and returns a single value instead of another entire RDD.",
+      "dateUpdated": "Jun 22, 2016 9:07:04 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "tableHide": false,
+        "editorHide": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466027064242_1446043975",
+      "id": "20160615-144424_1622585038",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eTransformations and Actions\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eThere are two ways to operate on data in SciSpark/Apache Spark.\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003eTransformations\u003c/strong\u003e: Since RDDs (and SciSpark\u0027s SRDDs) are immutable, we cannot simply modify them. Instead, we have to transform them into another RDD. An example of a function that \u0026ldquo;transforms\u0026rdquo; an RDD in this way is map.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eActions\u003c/strong\u003e: Actions return a value to our driver program. For instance, reduce aggregates each value in our dataset and returns a single value instead of another entire RDD.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jun 15, 2016 2:44:24 PM",
+      "dateStarted": "Jun 20, 2016 9:37:27 AM",
+      "dateFinished": "Jun 20, 2016 9:37:27 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Lazy Evaluation\n* Apache Spark uses **lazy evaluation** for its transformations, meaning that it will keep track of the operations you have asked it to perform on your data but not evaluate any until an action is actually called on the RDD. This type of evaluation allows us to better manage our memory resources.\n* This is because we will not necessarily need to return an entirely new transformed RDD each time we call a transforming operation. For instance, if we first called ``map()`` and then ``reduce()``, we would ultimately only have to return a single value which we can obtain without mapping so there is no point in creating a computationally expensive RDD.",
+      "dateUpdated": "Jun 22, 2016 9:07:04 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "tableHide": false,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466029583072_738675161",
+      "id": "20160615-152623_1813302274",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eLazy Evaluation\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eApache Spark uses \u003cstrong\u003elazy evaluation\u003c/strong\u003e for its transformations, meaning that it will keep track of the operations you have asked it to perform on your data but not evaluate any until an action is actually called on the RDD. This type of evaluation allows us to better manage our memory resources.\u003c/li\u003e\n\u003cli\u003eThis is because we will not necessarily need to return an entirely new transformed RDD each time we call a transforming operation. For instance, if we first called \u003ccode\u003emap()\u003c/code\u003e and then \u003ccode\u003ereduce()\u003c/code\u003e, we would ultimately only have to return a single value which we can obtain without mapping so there is no point in creating a computationally expensive RDD.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jun 15, 2016 3:26:23 PM",
+      "dateStarted": "Jun 20, 2016 9:40:17 AM",
+      "dateFinished": "Jun 20, 2016 9:40:17 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Closure\n* Apache Spark takes a large job that it is asked to perform on an RDD and breaks it into smaller units of execution called **tasks**. These tasks each need to be able to see certain methods and variables to execute. For this to be possible these methods and variables are passed as copies to an **executor**, which is the process that executes a task. These collections of methods and variables are called **closures**.\n* The executors are passed closures from the **driver**, which is a program that runs the user’s main function and executes the parallel operations done on a cluster. The closure is passed to the executors as copies, however, so it is important to note that they will not be updated in the driver program.\n* The fact that closures are passed as copies can be problematic for some computations, such as keeping a count ([source](http://spark.apache.org/docs/latest/programming-guide.html) for example):\n    * Example in Scala:\n      ```\n      var count \u003d 0\n      var rdd \u003d sc.parallelize(data)\n    \n      // Wrong: Don\u0027t do this!!\n      rdd.foreach(x \u003d\u003e counter +\u003d x)\n    \n      println(\"Counter value: \" + counter)\n      ```\n    * Example in Python:\n      ```\n      counter \u003d 0\n      rdd \u003d sc.parallelize(data)\n\n      # Wrong: Don\u0027t do this!!\n      def increment_counter(x):\n          global counter\n          counter +\u003d x\n      rdd.foreach(increment_counter)\n\n      print(\"Counter value: \", counter)\n      ```\n* In this example, the counter\u0027s value will be printed as 0.\n* We can use an **accumulator** instead to get the desired result. Accumulators are designed to update variables even if they are being accessed in different tasks. This works because accumulators work with **associative operations**. When a variable is updated in an associative operation, the result is **broadcast** to every other cell where the variable also resides, so we do not lose our updates to these variables when we later try to access them in the driver program.\n* Here is an example of using an accumulator to add up the values in an array ([source](http://spark.apache.org/docs/latest/programming-guide.html)):\n    * In Scala:\n      ```\n      scala\u003e val accum \u003d sc.accumulator(0, \"My Accumulator\")\n      accum: spark.Accumulator[Int] \u003d 0\n\n      scala\u003e sc.parallelize(Array(1, 2, 3, 4)).foreach(x \u003d\u003e accum +\u003d x)\n      ...\n      10/09/29 18:41:08 INFO SparkContext: Tasks finished in 0.317106 s\n\n      scala\u003e accum.value\n      res2: Int \u003d 10\n      ```\n    * In Python:\n      ```\n      \u003e\u003e\u003e accum \u003d sc.accumulator(0)\n      Accumulator\u003cid\u003d0, value\u003d0\u003e\n\n      \u003e\u003e\u003e sc.parallelize([1, 2, 3, 4]).foreach(lambda x: accum.add(x))\n      ...\n      10/09/29 18:41:08 INFO SparkContext: Tasks finished in 0.317106 s\n\n      scala\u003e accum.value\n      10\n      ```",
+      "dateUpdated": "Jun 22, 2016 9:26:34 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "tableHide": false,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466035801026_1848595231",
+      "id": "20160615-171001_1660178943",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eClosure\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eApache Spark takes a large job that it is asked to perform on an RDD and breaks it into smaller units of execution called \u003cstrong\u003etasks\u003c/strong\u003e. These tasks each need to be able to see certain methods and variables to execute. For this to be possible these methods and variables are passed as copies to an \u003cstrong\u003eexecutor\u003c/strong\u003e, which is the process that executes a task. These collections of methods and variables are called \u003cstrong\u003eclosures\u003c/strong\u003e.\u003c/li\u003e\n\u003cli\u003eThe executors are passed closures from the \u003cstrong\u003edriver\u003c/strong\u003e, which is a program that runs the user’s main function and executes the parallel operations done on a cluster. The closure is passed to the executors as copies, however, so it is important to note that they will not be updated in the driver program.\u003c/li\u003e\n\u003cli\u003eThe fact that closures are passed as copies can be problematic for some computations, such as keeping a count (\u003ca href\u003d\"http://spark.apache.org/docs/latest/programming-guide.html\"\u003esource\u003c/a\u003e for example):\u003cul\u003e\n\u003cli\u003eExample in Scala:\u003cpre\u003e\u003ccode\u003evar count \u003d 0\nvar rdd \u003d sc.parallelize(data)\n\n// Wrong: Don\u0027t do this!!\nrdd.foreach(x \u003d\u0026gt; counter +\u003d x)\n\nprintln(\"Counter value: \" + counter)\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003cli\u003eExample in Python:\u003cpre\u003e\u003ccode\u003ecounter \u003d 0\nrdd \u003d sc.parallelize(data)\n\n# Wrong: Don\u0027t do this!!\ndef increment_counter(x):\n  global counter\n  counter +\u003d x\nrdd.foreach(increment_counter)\n\nprint(\"Counter value: \", counter)\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eIn this example, the counter\u0027s value will be printed as 0.\u003c/li\u003e\n\u003cli\u003eWe can use an \u003cstrong\u003eaccumulator\u003c/strong\u003e instead to get the desired result. Accumulators are designed to update variables even if they are being accessed in different tasks. This works because accumulators work with \u003cstrong\u003eassociative operations\u003c/strong\u003e. When a variable is updated in an associative operation, the result is \u003cstrong\u003ebroadcast\u003c/strong\u003e to every other cell where the variable also resides, so we do not lose our updates to these variables when we later try to access them in the driver program.\u003c/li\u003e\n\u003cli\u003eHere is an example of using an accumulator to add up the values in an array (\u003ca href\u003d\"http://spark.apache.org/docs/latest/programming-guide.html\"\u003esource\u003c/a\u003e):\u003cul\u003e\n\u003cli\u003eIn Scala:\u003cpre\u003e\u003ccode\u003escala\u0026gt; val accum \u003d sc.accumulator(0, \"My Accumulator\")\naccum: spark.Accumulator[Int] \u003d 0\n\nscala\u0026gt; sc.parallelize(Array(1, 2, 3, 4)).foreach(x \u003d\u0026gt; accum +\u003d x)\n...\n10/09/29 18:41:08 INFO SparkContext: Tasks finished in 0.317106 s\n\nscala\u0026gt; accum.value\nres2: Int \u003d 10\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003cli\u003eIn Python:\u003cpre\u003e\u003ccode\u003e\u0026gt;\u0026gt;\u0026gt; accum \u003d sc.accumulator(0)\nAccumulator\u0026lt;id\u003d0, value\u003d0\u0026gt;\n\n\u0026gt;\u0026gt;\u0026gt; sc.parallelize([1, 2, 3, 4]).foreach(lambda x: accum.add(x))\n...\n10/09/29 18:41:08 INFO SparkContext: Tasks finished in 0.317106 s\n\nscala\u0026gt; accum.value\n10\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jun 15, 2016 5:10:01 PM",
+      "dateStarted": "Jun 22, 2016 9:26:32 AM",
+      "dateFinished": "Jun 22, 2016 9:26:32 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Key-Value Pairs and Shuffle Operations\n* Certain operations can only be used on RDDs of key-value pairs. Some of the most commonly used operations of this kind are called **shuffle** operations. These operations are used to **redistribute** data across nodes, which is computationally expensive because it can require I/O to disk, data serialization, and I/O across the network.\n    * **Disk I/O**: This is when you read/write data that is on disk. It is computationally expensive, because it involves many more steps than just reading directly from memory.\n    * **Data serialization**: This involves converting an arbitrary data structure to a string such that the string created can later be converted back to the original data structure.\n    * **I/O across network**: This is when you read/write data that is stored across servers in a network. Like disk I/O, this is also computationally expensive because it involves many more steps than reading directly from memory.\n    * In general, it should be understood that it is easier to access data that is geographically local (as opposed to data in the cloud).\n* An example of a shuffle operation is ``reduceByKey()`` which returns a new RDD where each key and all of its associated values are organized as a tuple.\n* Here is an example of using ``reduceByKey()`` taken from an [Apache Spark tutorial](http://spark.apache.org/docs/latest/programming-guide.html):\n    * In Scala:\n      ```\n      val lines \u003d sc.textFile(\"data.txt\")\n      val pairs \u003d lines.map(s \u003d\u003e (s, 1))\n      val counts \u003d pairs.reduceByKey((a, b) \u003d\u003e a + b)\n      ```\n    * In Python:\n      ```\n      lines \u003d sc.textFile(\"data.txt\")\n      pairs \u003d lines.map(lambda s: (s, 1))\n      counts \u003d pairs.reduceByKey(lambda a, b: a + b)\n      ```",
+      "dateUpdated": "Jun 22, 2016 9:29:59 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "tableHide": false,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466036778203_-1718068112",
+      "id": "20160615-172618_1978593904",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eKey-Value Pairs and Shuffle Operations\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eCertain operations can only be used on RDDs of key-value pairs. Some of the most commonly used operations of this kind are called \u003cstrong\u003eshuffle\u003c/strong\u003e operations. These operations are used to \u003cstrong\u003eredistribute\u003c/strong\u003e data across nodes, which is computationally expensive because it can require I/O to disk, data serialization, and I/O across the network.\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003eDisk I/O\u003c/strong\u003e: This is when you read/write data that is on disk. It is computationally expensive, because it involves many more steps than just reading directly from memory.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eData serialization\u003c/strong\u003e: This involves converting an arbitrary data structure to a string such that the string created can later be converted back to the original data structure.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eI/O across network\u003c/strong\u003e: This is when you read/write data that is stored across servers in a network. Like disk I/O, this is also computationally expensive because it involves many more steps than reading directly from memory.\u003c/li\u003e\n\u003cli\u003eIn general, it should be understood that it is easier to access data that is geographically local (as opposed to data in the cloud).\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eAn example of a shuffle operation is \u003ccode\u003ereduceByKey()\u003c/code\u003e which returns a new RDD where each key and all of its associated values are organized as a tuple.\u003c/li\u003e\n\u003cli\u003eHere is an example of using \u003ccode\u003ereduceByKey()\u003c/code\u003e taken from an \u003ca href\u003d\"http://spark.apache.org/docs/latest/programming-guide.html\"\u003eApache Spark tutorial\u003c/a\u003e:\u003cul\u003e\n\u003cli\u003eIn Scala:\u003cpre\u003e\u003ccode\u003eval lines \u003d sc.textFile(\"data.txt\")\nval pairs \u003d lines.map(s \u003d\u0026gt; (s, 1))\nval counts \u003d pairs.reduceByKey((a, b) \u003d\u0026gt; a + b)\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003cli\u003eIn Python:\u003cpre\u003e\u003ccode\u003elines \u003d sc.textFile(\"data.txt\")\npairs \u003d lines.map(lambda s: (s, 1))\ncounts \u003d pairs.reduceByKey(lambda a, b: a + b)\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jun 15, 2016 5:26:18 PM",
+      "dateStarted": "Jun 22, 2016 9:29:57 AM",
+      "dateFinished": "Jun 22, 2016 9:29:58 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Persisting Data\n* Apache Spark is capable of **persisting data**, which means caching the results of operations performed on an RDD so that these cached RDDs can be reused when those operations that would generate the same datasets are requested again. When this is done, it can make future performance more than ten times faster.\n* To do this, use the ``persist()`` or ``cache()`` method. The cache method will cache your data in memory, and not serialize it. Alternatively, you can use the ``persist()`` method and set your own ``StorageLevel`` by passing it values such as ``DISK_ONLY`` and ``MEMORY_ONLY_SER``.",
+      "dateUpdated": "Jun 22, 2016 12:23:54 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "tableHide": false,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466036810149_-2051013828",
+      "id": "20160615-172650_98725712",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003ePersisting Data\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eApache Spark is capable of \u003cstrong\u003epersisting data\u003c/strong\u003e, which means caching the results of operations performed on an RDD so that these cached RDDs can be reused when those operations that would generate the same datasets are requested again. When this is done, it can make future performance more than ten times faster.\u003c/li\u003e\n\u003cli\u003eTo do this, use the \u003ccode\u003epersist()\u003c/code\u003e or \u003ccode\u003ecache()\u003c/code\u003e method. The cache method will cache your data in memory, and not serialize it. Alternatively, you can use the \u003ccode\u003epersist()\u003c/code\u003e method and set your own \u003ccode\u003eStorageLevel\u003c/code\u003e by passing it values such as \u003ccode\u003eDISK_ONLY\u003c/code\u003e and \u003ccode\u003eMEMORY_ONLY_SER\u003c/code\u003e.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jun 15, 2016 5:26:50 PM",
+      "dateStarted": "Jun 21, 2016 8:33:58 AM",
+      "dateFinished": "Jun 21, 2016 8:33:58 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\n##Summary\n* ",
+      "dateUpdated": "Jun 22, 2016 12:28:19 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466091481095_-178705476",
+      "id": "20160616-083801_2046782683",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eSummary\u003c/h2\u003e\n\u003cp\u003e*\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 16, 2016 8:38:01 AM",
+      "dateStarted": "Jun 22, 2016 12:28:19 PM",
+      "dateFinished": "Jun 22, 2016 12:28:19 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Helpful links\nMore information can be found at:\n* http://spark.apache.org/docs/latest/programming-guide.html",
+      "dateUpdated": "Jun 22, 2016 9:33:11 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466092344871_-760031536",
+      "id": "20160616-085224_863835211",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eHelpful links\u003c/h2\u003e\n\u003cp\u003eMore information can be found at:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ehttp://spark.apache.org/docs/latest/programming-guide.html\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jun 16, 2016 8:52:24 AM",
+      "dateStarted": "Jun 16, 2016 4:39:50 PM",
+      "dateFinished": "Jun 16, 2016 4:39:50 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\n##To Do\n* Summarize content on this page.\n* Simple example that wraps these concepts up: Do a wordcount of various weather related words from the National Hurricane Center. We will report which types of weather are frequently discussed, and compare this to the actual weather observed to see if certain events are over-discussed.\n* Explain what an RDD is, explain mapping and reducing are, describe what a SparkContext is\n* Persisting cell: Give a use case to say why you\u0027d cache and elaborate\n* Figure out why SRDD image is not showing up (it worked yesterday)",
+      "dateUpdated": "Jun 22, 2016 12:29:17 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": false,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466461646055_2017511860",
+      "id": "20160620-152726_1284123512",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eTo Do\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eSummarize content on this page.\u003c/li\u003e\n\u003cli\u003eSimple example that wraps these concepts up: Do a wordcount of various weather related words from the National Hurricane Center. We will report which types of weather are frequently discussed, and compare this to the actual weather observed to see if certain events are over-discussed.\u003c/li\u003e\n\u003cli\u003eExplain what an RDD is, explain mapping and reducing are, describe what a SparkContext is\u003c/li\u003e\n\u003cli\u003ePersisting cell: Give a use case to say why you\u0027d cache and elaborate\u003c/li\u003e\n\u003cli\u003eFigure out why SRDD image is not showing up (it worked yesterday)\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jun 20, 2016 3:27:26 PM",
+      "dateStarted": "Jun 22, 2016 12:29:17 PM",
+      "dateFinished": "Jun 22, 2016 12:29:17 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466613184425_-1592048604",
+      "id": "20160622-093304_233133037",
+      "dateCreated": "Jun 22, 2016 9:33:04 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "101 Distributed",
+  "id": "2BQCQR54M",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": [],
+    "2BBAYHPQT": []
+  },
+  "config": {},
+  "info": {}
+}

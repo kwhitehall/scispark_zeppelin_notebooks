@@ -1,0 +1,1208 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n#TODOs\n* reading the images in parallel \n\n##Completed SciSpark Issues:\n43 \u0026 44, 50 \u0026 51",
+      "dateUpdated": "Jun 23, 2016 1:27:15 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1465415067210_1004266024",
+      "id": "20160608-124427_1791860696",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch1\u003eTODOs\u003c/h1\u003e\n\u003cul\u003e\n\u003cli\u003ereading the images in parallel\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003eCompleted SciSpark Issues:\u003c/h2\u003e\n\u003cp\u003e43 \u0026amp; 44, 50 \u0026amp; 51\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 8, 2016 12:44:27 PM",
+      "dateStarted": "Jun 23, 2016 1:27:15 PM",
+      "dateFinished": "Jun 23, 2016 1:27:15 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n#SciSpark\u0027s sRDD\nThe purpose of this notebook is to introduce the user to the concept of the scientific Resilient Distributed Dataset (sRDD) that is the core of SciSpark.\nThe data used in this notebook is the [Tropical Rainfall Measuring Mission (TRMM) 0.25° x 0.25°degree 3-hourly dataset](http://disc.sci.gsfc.nasa.gov/precipitation/documentation/TRMM_README/TRMM_3B42_readme.shtml) acquired from the [GES DIS Mirador site] (http://mirador.gsfc.nasa.gov/). \n\u003cbr\u003e Firstly, let\u0027s set up the SciSpark environment. \nThis is achieved by importing some libraries from the SciSpark jar (automatically loaded in this environment) and by creating the SciSpark context. ",
+      "dateUpdated": "Jun 23, 2016 1:27:33 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464108884496_2006748941",
+      "id": "20160524-095444_404551943",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch1\u003eSciSpark\u0027s sRDD\u003c/h1\u003e\n\u003cp\u003eThe purpose of this notebook is to introduce the user to the concept of the scientific Resilient Distributed Dataset (sRDD) that is the core of SciSpark.\n\u003cbr  /\u003eThe data used in this notebook is the \u003ca href\u003d\"http://disc.sci.gsfc.nasa.gov/precipitation/documentation/TRMM_README/TRMM_3B42_readme.shtml\"\u003eTropical Rainfall Measuring Mission (TRMM) 0.25° x 0.25°degree 3-hourly dataset\u003c/a\u003e acquired from the \u003ca href\u003d\"http://mirador.gsfc.nasa.gov/\"\u003eGES DIS Mirador site\u003c/a\u003e.\n\u003cbr  /\u003e\u003cbr\u003e Firstly, let\u0027s set up the SciSpark environment.\n\u003cbr  /\u003eThis is achieved by importing some libraries from the SciSpark jar (automatically loaded in this environment) and by creating the SciSpark context.\u003c/p\u003e\n"
+      },
+      "dateCreated": "May 24, 2016 9:54:44 AM",
+      "dateStarted": "Jun 23, 2016 1:27:34 PM",
+      "dateFinished": "Jun 23, 2016 1:27:34 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//generic imports\nimport java.io.{ File, PrintWriter }\n//SciSpark imports\nimport org.dia.Parsers\nimport org.dia.core.{ SciSparkContext, SciTensor }\nimport org.dia.utils.NetCDFUtils",
+      "dateUpdated": "Jun 23, 2016 2:37:24 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "lineNumbers": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464108960890_-1148283985",
+      "id": "20160524-095600_346085518",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.{File, PrintWriter}\nimport org.dia.Parsers\nimport org.dia.core.{SciSparkContext, SciTensor}\nimport org.dia.utils.NetCDFUtils\n"
+      },
+      "dateCreated": "May 24, 2016 9:56:00 AM",
+      "dateStarted": "Jun 23, 2016 2:37:31 PM",
+      "dateFinished": "Jun 23, 2016 2:37:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \n## The SciSpark Context\nThe ***SciSpark context*** is analogous to the ***sparkcontext***, in that it provides the connection to the Spark cluster. The ***SciSpark context*** extends all the functionalities of a ***sparkcontext*** to create RDDs, create variables and perform computations within the cluster, to operate on common scientific formats. \n\u003cbr\u003eMost scientific formats are self describing, multidimensional, multivariable, portable, scalable, appendable, sharable, archivable. Common formats include [Network Common Data Form (netCDF)](http://www.unidata.ucar.edu/software/netcdf/) and [Hierarchical Data Format (HDF)](https://www.hdfgroup.org/) which both offer extensive APIs in various languages. \n\u003cbr\u003eThe implementation of the ***SciSpark context*** is a wrapper function around the ***sparkcontext***.",
+      "dateUpdated": "Jun 22, 2016 3:18:29 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false,
+        "lineNumbers": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464109076071_-451318192",
+      "id": "20160524-095756_1374413376",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eThe SciSpark Context\u003c/h2\u003e\n\u003cp\u003eThe \u003cstrong\u003e\u003cem\u003eSciSpark context\u003c/em\u003e\u003c/strong\u003e is analogous to the \u003cstrong\u003e\u003cem\u003esparkcontext\u003c/em\u003e\u003c/strong\u003e, in that it provides the connection to the Spark cluster. The \u003cstrong\u003e\u003cem\u003eSciSpark context\u003c/em\u003e\u003c/strong\u003e extends all the functionalities of a \u003cstrong\u003e\u003cem\u003esparkcontext\u003c/em\u003e\u003c/strong\u003e to create RDDs, create variables and perform computations within the cluster, to operate on common scientific formats.\n\u003cbr  /\u003e\u003cbr\u003eMost scientific formats are self describing, multidimensional, multivariable, portable, scalable, appendable, sharable, archivable. Common formats include \u003ca href\u003d\"http://www.unidata.ucar.edu/software/netcdf/\"\u003eNetwork Common Data Form (netCDF)\u003c/a\u003e and \u003ca href\u003d\"https://www.hdfgroup.org/\"\u003eHierarchical Data Format (HDF)\u003c/a\u003e which both offer extensive APIs in various languages.\n\u003cbr  /\u003e\u003cbr\u003eThe implementation of the \u003cstrong\u003e\u003cem\u003eSciSpark context\u003c/em\u003e\u003c/strong\u003e is a wrapper function around the \u003cstrong\u003e\u003cem\u003esparkcontext\u003c/em\u003e\u003c/strong\u003e.\u003c/p\u003e\n"
+      },
+      "dateCreated": "May 24, 2016 9:57:56 AM",
+      "dateStarted": "Jun 22, 2016 3:18:30 PM",
+      "dateFinished": "Jun 22, 2016 3:18:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Initialize the SciSpark context \nval dssc3 \u003d new SciSparkContext(sc)",
+      "dateUpdated": "Jun 23, 2016 2:47:45 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "lineNumbers": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464109177578_323671717",
+      "id": "20160524-095937_759881250",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "dssc3: org.dia.core.SciSparkContext \u003d org.dia.core.SciSparkContext@7a791ab2\n"
+      },
+      "dateCreated": "May 24, 2016 9:59:37 AM",
+      "dateStarted": "Jun 23, 2016 2:47:53 PM",
+      "dateFinished": "Jun 23, 2016 2:47:53 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n## What is the sRDD\nThe scientific Resilient Distributed Dataset (sRDD), exploits Apache Spark\u0027s concept of RDDs for multi-dimensional data representing a scientific measurement that can be subset by time, or by space. The RDD notion directly enables the reuse of array data across multi-stage operations and it ensures data can be replicated, distributed and easily reconstructed in different storage tiers, e.g., memory for fast interactivity, SSDs for near real time, and spinning disk for later operations.\n\u003cbr\u003eThe sRDD supports multidimensional data and processing of scientific algorithms in the MapReduce paradigm within a distributed environment. \nThe core of the sRDD is a self-documented array class called the ***sciTensor*** that allows for scientific formats to be read into an equivalent datatype thus creating the sRDD.\n![loading data into sciTensor](https://scispark.jpl.nasa.gov/images/workshop_images/srdd1.jpg)                          \n               Figure 1: Illustration of the sRDD manifestation in memory\n\u003cbr\u003eSciSpark currently provides methods to create sRDDs that:\n(1) loads data from network Common Data Form (netCDF) files into the Hadoop Distributed File System (HDFS) in a parallelized manner; \n(2) preserve the logical representation of structured and dimensional data in via the ***sciTensor*** datatype; and \n(3) create a partition function that divides the multidimensional array by time (to be expanded to space as well). ***sRDDs*** are cached (in-memory) in the SciSpark engine support data reuse between multi-staged analytics. \n\nEach of these methods require their own set of input parameters, usually including a path to the data on HDFS, the variable(s) to be placed in the ***sciTensor***, the number of paritions (chunks to make that will be operated on in parallel) to be used, and/ or a list of the files. Please view the SciSpark ScalaDocs for more on the loader methods available and their usage.\n\nThe paritioning is currently determined according to the number of files to read data from and the number of paritions to use.\n\u003cbr\u003e \n#### Example with real data\nLet\u0027s consider netCDF data from the HDFS into the sRDD. The required parameters for this call are the location of the data on HDFS, the variable(s) in the file to be extracted, and the number of paritions to use. ",
+      "dateUpdated": "Jun 22, 2016 3:18:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464109220976_285658197",
+      "id": "20160524-100020_951981209",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eWhat is the sRDD\u003c/h2\u003e\n\u003cp\u003eThe scientific Resilient Distributed Dataset (sRDD), exploits Apache Spark\u0027s concept of RDDs for multi-dimensional data representing a scientific measurement that can be subset by time, or by space. The RDD notion directly enables the reuse of array data across multi-stage operations and it ensures data can be replicated, distributed and easily reconstructed in different storage tiers, e.g., memory for fast interactivity, SSDs for near real time, and spinning disk for later operations.\n\u003cbr  /\u003e\u003cbr\u003eThe sRDD supports multidimensional data and processing of scientific algorithms in the MapReduce paradigm within a distributed environment.\n\u003cbr  /\u003eThe core of the sRDD is a self-documented array class called the \u003cstrong\u003e\u003cem\u003esciTensor\u003c/em\u003e\u003c/strong\u003e that allows for scientific formats to be read into an equivalent datatype thus creating the sRDD.\n\u003cbr  /\u003e\u003cimg src\u003d\"https://scispark.jpl.nasa.gov/images/workshop_images/srdd1.jpg\" alt\u003d\"loading data into sciTensor\" /\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e           Figure 1: Illustration of the sRDD manifestation in memory\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cbr\u003eSciSpark currently provides methods to create sRDDs that:\n\u003cbr  /\u003e(1) loads data from network Common Data Form (netCDF) files into the Hadoop Distributed File System (HDFS) in a parallelized manner;\n\u003cbr  /\u003e(2) preserve the logical representation of structured and dimensional data in via the \u003cstrong\u003e\u003cem\u003esciTensor\u003c/em\u003e\u003c/strong\u003e datatype; and\n\u003cbr  /\u003e(3) create a partition function that divides the multidimensional array by time (to be expanded to space as well). \u003cstrong\u003e\u003cem\u003esRDDs\u003c/em\u003e\u003c/strong\u003e are cached (in-memory) in the SciSpark engine support data reuse between multi-staged analytics.\u003c/p\u003e\n\u003cp\u003eEach of these methods require their own set of input parameters, usually including a path to the data on HDFS, the variable(s) to be placed in the \u003cstrong\u003e\u003cem\u003esciTensor\u003c/em\u003e\u003c/strong\u003e, the number of paritions (chunks to make that will be operated on in parallel) to be used, and/ or a list of the files. Please view the SciSpark ScalaDocs for more on the loader methods available and their usage.\u003c/p\u003e\n\u003cp\u003eThe paritioning is currently determined according to the number of files to read data from and the number of paritions to use.\n\u003cbr  /\u003e\u003cbr\u003e\u003c/p\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eLet\u0027s consider netCDF data from the HDFS into the sRDD. The required parameters for this call are the location of the data on HDFS, the variable(s) in the file to be extracted, and the number of paritions to use.\u003c/p\u003e\n"
+      },
+      "dateCreated": "May 24, 2016 10:00:20 AM",
+      "dateStarted": "Jun 22, 2016 3:18:30 PM",
+      "dateFinished": "Jun 22, 2016 3:18:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val sRDD3 \u003d dssc3.NetcdfDFSFile( \"hdfs://128.149.112.134:8090/data/TRMM48hrs\", List(\"pcp\",\"latitude\",\"longitude\"), 3)",
+      "dateUpdated": "Jun 23, 2016 2:48:20 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464109397932_1171379169",
+      "id": "20160524-100317_801907825",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "sRDD3: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[11] at map at SciSparkContext.scala:104\n"
+      },
+      "dateCreated": "May 24, 2016 10:03:17 AM",
+      "dateStarted": "Jun 23, 2016 2:48:21 PM",
+      "dateFinished": "Jun 23, 2016 2:48:21 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n## The sciTensor\nThe data are loaded into sciTensors (as illustrated in Figure 1). The data are now in the sciTensors datatypes in the distributed memory of the Spark cluster. \nThe sciTensor datatype is a self-documented array that keeps a list of arrays for a variable arrays and maintains associated metadata in a hashmap. Users can query the hashmap via the [SciSpark API](https://scispark.jpl.nasa.gov/api/), perform matrix operations on the arrays, and add data to the sciTensor. \n\n\u003cbr\u003eThe following components can be accessed within the ***sciTensor***:\n*.varInUse*: a String representing the current variable the sciTensor is referencing\n*.variables*: an array representing the actual data associated with the variable\n*.metaData*: a tuple (String, String) representing any metadata from the original file to be associated with the variable.\n\u003cbr\u003e\nMetadata can be added to the ***sciTensor*** using the *insertDictionary* method. This method expects a key-value String pair. \n\n```\nsciTensor.insertDictionary((\"key\",\"value\"))\n```\n\u003cbr\u003e\n#### Example with real data\nIn this example, we wil add the *Date* as a metadata field to the sciTensors associated with the TRMM data that were read into the sRDD in the previous step. Here the *Date* is determined from parsing the filename. The 3B42 3hrly TRMM filenames typically have the format ***3B42.YYYYMMDD.HH.vv.nc***. To parse the date from this filename the below line is used:\n```\nval filename \u003d p1.metaData(\"SOURCE\").split(\"/\").last.split(\"\\\\.\")(1) + p1.metaData(\"SOURCE\").split(\"/\").last.split(\"\\\\.\")(2)\n```\n",
+      "dateUpdated": "Jun 22, 2016 3:18:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464109449906_-1795526869",
+      "id": "20160524-100409_742414611",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eThe sciTensor\u003c/h2\u003e\n\u003cp\u003eThe data are loaded into sciTensors (as illustrated in Figure 1). The data are now in the sciTensors datatypes in the distributed memory of the Spark cluster.\n\u003cbr  /\u003eThe sciTensor datatype is a self-documented array that keeps a list of arrays for a variable arrays and maintains associated metadata in a hashmap. Users can query the hashmap via the \u003ca href\u003d\"https://scispark.jpl.nasa.gov/api/\"\u003eSciSpark API\u003c/a\u003e, perform matrix operations on the arrays, and add data to the sciTensor.\u003c/p\u003e\n\u003cp\u003e\u003cbr\u003eThe following components can be accessed within the \u003cstrong\u003e\u003cem\u003esciTensor\u003c/em\u003e\u003c/strong\u003e:\n\u003cbr  /\u003e\u003cem\u003e.varInUse\u003c/em\u003e: a String representing the current variable the sciTensor is referencing\n\u003cbr  /\u003e\u003cem\u003e.variables\u003c/em\u003e: an array representing the actual data associated with the variable\n\u003cbr  /\u003e\u003cem\u003e.metaData\u003c/em\u003e: a tuple (String, String) representing any metadata from the original file to be associated with the variable.\n\u003cbr  /\u003e\u003cbr\u003e\n\u003cbr  /\u003eMetadata can be added to the \u003cstrong\u003e\u003cem\u003esciTensor\u003c/em\u003e\u003c/strong\u003e using the \u003cem\u003einsertDictionary\u003c/em\u003e method. This method expects a key-value String pair.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003esciTensor.insertDictionary((\"key\",\"value\"))\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cbr\u003e\u003c/p\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eIn this example, we wil add the \u003cem\u003eDate\u003c/em\u003e as a metadata field to the sciTensors associated with the TRMM data that were read into the sRDD in the previous step. Here the \u003cem\u003eDate\u003c/em\u003e is determined from parsing the filename. The 3B42 3hrly TRMM filenames typically have the format \u003cstrong\u003e\u003cem\u003e3B42.YYYYMMDD.HH.vv.nc\u003c/em\u003e\u003c/strong\u003e. To parse the date from this filename the below line is used:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eval filename \u003d p1.metaData(\"SOURCE\").split(\"/\").last.split(\"\\\\.\")(1) + p1.metaData(\"SOURCE\").split(\"/\").last.split(\"\\\\.\")(2)\n\u003c/code\u003e\u003c/pre\u003e\n"
+      },
+      "dateCreated": "May 24, 2016 10:04:09 AM",
+      "dateStarted": "Jun 22, 2016 3:18:30 PM",
+      "dateFinished": "Jun 22, 2016 3:18:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val labeled3 \u003d sRDD3.map(p1 \u003d\u003e {\n    val filename \u003d p1.metaData(\"SOURCE\").split(\"/\").last.split(\"\\\\.\")(1) + p1.metaData(\"SOURCE\").split(\"/\").last.split(\"\\\\.\")(2)\n    val fileDate\u003d filename.toInt\n    p1.insertDictionary((\"Date\", fileDate.toString))\n    p1\n})",
+      "dateUpdated": "Jun 23, 2016 2:48:25 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464109515387_1867206039",
+      "id": "20160524-100515_1703356882",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "labeled3: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[12] at map at \u003cconsole\u003e:55\n"
+      },
+      "dateCreated": "May 24, 2016 10:05:15 AM",
+      "dateStarted": "Jun 23, 2016 2:48:26 PM",
+      "dateFinished": "Jun 23, 2016 2:48:26 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nThe sciTensors can be further operated on in the parallel enviroment of the sRDD via the typical [Spark Transformations](http://spark.apache.org/docs/latest/programming-guide.html#transformations) e.g. map, filter, and mapParitions. The operations that can be performed include: (1) relational operations (for masking data); (2) arithmetic operations; and (3) linear algebra operations. \n\n**(1) Relational operators** \nRelational operators are commonly used to mask data. The end user can determine which variable in the sciTensor (i.e. the data associated with that variable) to perform the operation on. If no variable in the sciTensor is explicitly identified to use in the operation, the operation will occur on the *varInUse* by default.\n\nThe valid relational operators for sciTensors are given in the table below. \n\u003cbr\u003e\n\u003ctable width\u003d\"100%\"\u003e\n  \u003ctbody\u003e\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003cb\u003eRelational Operator\u003c/b\u003e\u003c/td\u003e\n\n      \u003ctd\u003e\u003cb\u003eDescription\u003c/b\u003e\u003c/td\u003e\n    \u003c/tr\u003e\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003c\u003c/td\u003e\n\n      \u003ctd\u003eless than a user-defined value\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003c\u003d\u003c/td\u003e\n\n      \u003ctd\u003eless than or equals to a user-defined value\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003e\u003c/td\u003e\n\n      \u003ctd\u003egreater than than a user-defined value\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003e\u003d\u003c/td\u003e\n\n      \u003ctd\u003egreater than of equals a user-defined value\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e:\u003d\u003c/td\u003e\n\n      \u003ctd\u003e\n        \u003cp\u003eequals to a user-defined value\u003c/p\u003e\n      \u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e!\u003d\u003c/td\u003e\n\n      \u003ctd\u003enot equals to a user-defined value\u003c/td\u003e\n    \u003c/tr\u003e\n  \u003c/tbody\u003e\n\u003c/table\u003e\n\u003cbr\u003e\nAn example of the syntax using the \"equals to\" operator is given as:\n```\nval wins \u003d 3.0\nval x \u003d sRDD.map(p \u003d\u003e p(\"metaDataOption\" :\u003d wins) \n```\n\u003cbr\u003e\n#### Example with real data\nOur data is TRMM 3hrly rate data. Let\u0027s assume we are interested in rates greater than 0.1mm/hr. Then, we can mask out the data accordingly for further calcuations, by implementing the ***\u003e\u003d*** operator, which is used to change the values less than 0.1 to 0.0. \nOther operators available in SciSpark for masking given in the table below. Note that by masking the data, the values that do not meet the critera are converted to 0.0\n",
+      "dateUpdated": "Jun 22, 2016 3:18:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464109633209_-917485551",
+      "id": "20160524-100713_503701357",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eThe sciTensors can be further operated on in the parallel enviroment of the sRDD via the typical \u003ca href\u003d\"http://spark.apache.org/docs/latest/programming-guide.html#transformations\"\u003eSpark Transformations\u003c/a\u003e e.g. map, filter, and mapParitions. The operations that can be performed include: (1) relational operations (for masking data); (2) arithmetic operations; and (3) linear algebra operations.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e(1) Relational operators\u003c/strong\u003e\n\u003cbr  /\u003eRelational operators are commonly used to mask data. The end user can determine which variable in the sciTensor (i.e. the data associated with that variable) to perform the operation on. If no variable in the sciTensor is explicitly identified to use in the operation, the operation will occur on the \u003cem\u003evarInUse\u003c/em\u003e by default.\u003c/p\u003e\n\u003cp\u003eThe valid relational operators for sciTensors are given in the table below.\n\u003cbr  /\u003e\u003cbr\u003e\u003c/p\u003e\n\u003ctable width\u003d\"100%\"\u003e\n  \u003ctbody\u003e\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003cb\u003eRelational Operator\u003c/b\u003e\u003c/td\u003e\n\n      \u003ctd\u003e\u003cb\u003eDescription\u003c/b\u003e\u003c/td\u003e\n    \u003c/tr\u003e\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003c\u003c/td\u003e\n\n      \u003ctd\u003eless than a user-defined value\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003c\u003d\u003c/td\u003e\n\n      \u003ctd\u003eless than or equals to a user-defined value\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003e\u003c/td\u003e\n\n      \u003ctd\u003egreater than than a user-defined value\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003e\u003d\u003c/td\u003e\n\n      \u003ctd\u003egreater than of equals a user-defined value\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e:\u003d\u003c/td\u003e\n\n      \u003ctd\u003e\n        \u003cp\u003eequals to a user-defined value\u003c/p\u003e\n      \u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e!\u003d\u003c/td\u003e\n\n      \u003ctd\u003enot equals to a user-defined value\u003c/td\u003e\n    \u003c/tr\u003e\n  \u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003e\u003cbr\u003e\n\u003cbr  /\u003eAn example of the syntax using the \u0026ldquo;equals to\u0026rdquo; operator is given as:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eval wins \u003d 3.0\nval x \u003d sRDD.map(p \u003d\u0026gt; p(\"metaDataOption\" :\u003d wins) \n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cbr\u003e\u003c/p\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eOur data is TRMM 3hrly rate data. Let\u0027s assume we are interested in rates greater than 0.1mm/hr. Then, we can mask out the data accordingly for further calcuations, by implementing the \u003cstrong\u003e\u003cem\u003e\u003e\u003d\u003c/em\u003e\u003c/strong\u003e operator, which is used to change the values less than 0.1 to 0.0.\n\u003cbr  /\u003eOther operators available in SciSpark for masking given in the table below. Note that by masking the data, the values that do not meet the critera are converted to 0.0\u003c/p\u003e\n"
+      },
+      "dateCreated": "May 24, 2016 10:07:13 AM",
+      "dateStarted": "Jun 22, 2016 3:18:30 PM",
+      "dateFinished": "Jun 22, 2016 3:18:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": " val masked3 \u003d labeled3.map(p \u003d\u003e p(\"pcp\") \u003e\u003d  0.1 )",
+      "dateUpdated": "Jun 23, 2016 2:48:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464195187845_897581867",
+      "id": "20160525-095307_238496410",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "masked3: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[13] at map at \u003cconsole\u003e:57\n"
+      },
+      "dateCreated": "May 25, 2016 9:53:07 AM",
+      "dateStarted": "Jun 23, 2016 2:48:30 PM",
+      "dateFinished": "Jun 23, 2016 2:48:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n**(2) Arithmetic operations**\nArithmetic operators maybe useful for tasks such as converting units, determining totals within time periods or finding averages. To perform such tasks in SciSpark, the sciTensor is operated on. The end user can determine which variable in the sciTensor (i.e. the data associated with that variable) to perform the operation on. If no variable in the sciTensor is explicitly identified to use in the operation, the operation will occur on the *varInUse* by default. Operators are provided for both in-place operators (i.e. the original sciTensor is changed) and copy operators (i.e. a copy of the sciTensor is created). For scalar operations, the scalar must be represented as a Double.\n\nThe table of available arithmetic operators are provided in the table below.\n\u003cbr\u003e\n\u003ctable width\u003d\"100%\"\u003e\n  \u003ctbody\u003e\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003cb\u003eArithmetic Operator\u003c/b\u003e\u003c/td\u003e\n\n      \u003ctd\u003e\u003cb\u003eDescription\u003c/b\u003e\u003c/td\u003e\n    \u003c/tr\u003e\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e+\u003c/td\u003e\n\n      \u003ctd\u003eIn-place scalar or matrix element-wise addition.\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e-\u003c/td\u003e\n\n      \u003ctd\u003eIn-place scalar or matrix element-wise subtraction.\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e*\u003c/td\u003e\n\n      \u003ctd\u003eIn-place scalar or matrix element-wise multiplication.\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e/\u003c/td\u003e\n\n      \u003ctd\u003eIn-place scalar or matrix element-wise division.\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e:+\u003c/td\u003e\n\n      \u003ctd\u003e\n        \u003cp\u003eScalar or matrix addition element-wise copy operation.\u003c/p\u003e\n      \u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e:-\u003c/td\u003e\n\n      \u003ctd\u003eScalar or matrix element-wise subtraction copy operation.\u003c/td\u003e\n    \u003c/tr\u003e\n    \n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e:*\u003c/td\u003e\n\n      \u003ctd\u003eScalar or matrix element-wise multiplication copy operation.\u003c/td\u003e\n    \u003c/tr\u003e\n    \n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e:/\u003c/td\u003e\n\n      \u003ctd\u003eScalar or matrix element-wise division copy operation.\u003c/td\u003e\n    \u003c/tr\u003e\n  \u003c/tbody\u003e\n\u003c/table\u003e\n\u003cbr\u003e\nAn example of the syntax for a copy scalar addition operation is given as:\n```\nval wins \u003d 3.0\nval x \u003d sRDD.map(p \u003d\u003e p(\"metaDataOption\" :+ wins) \n```\n\u003cbr\u003e\n\n#### Example with real data\nLet\u0027s convert the TRMM 3hrly rate data from a rate to 3hrly accumulations. To do this, we will leverage the in-place scalar multiplication operation. ",
+      "dateUpdated": "Jun 22, 2016 3:18:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464195160242_-920417983",
+      "id": "20160525-095240_100500346",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003e\u003cstrong\u003e(2) Arithmetic operations\u003c/strong\u003e\n\u003cbr  /\u003eArithmetic operators maybe useful for tasks such as converting units, determining totals within time periods or finding averages. To perform such tasks in SciSpark, the sciTensor is operated on. The end user can determine which variable in the sciTensor (i.e. the data associated with that variable) to perform the operation on. If no variable in the sciTensor is explicitly identified to use in the operation, the operation will occur on the \u003cem\u003evarInUse\u003c/em\u003e by default. Operators are provided for both in-place operators (i.e. the original sciTensor is changed) and copy operators (i.e. a copy of the sciTensor is created). For scalar operations, the scalar must be represented as a Double.\u003c/p\u003e\n\u003cp\u003eThe table of available arithmetic operators are provided in the table below.\n\u003cbr  /\u003e\u003cbr\u003e\u003c/p\u003e\n\u003ctable width\u003d\"100%\"\u003e\n  \u003ctbody\u003e\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e\u003cb\u003eArithmetic Operator\u003c/b\u003e\u003c/td\u003e\n\n      \u003ctd\u003e\u003cb\u003eDescription\u003c/b\u003e\u003c/td\u003e\n    \u003c/tr\u003e\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e+\u003c/td\u003e\n\n      \u003ctd\u003eIn-place scalar or matrix element-wise addition.\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e-\u003c/td\u003e\n\n      \u003ctd\u003eIn-place scalar or matrix element-wise subtraction.\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e*\u003c/td\u003e\n\n      \u003ctd\u003eIn-place scalar or matrix element-wise multiplication.\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e/\u003c/td\u003e\n\n      \u003ctd\u003eIn-place scalar or matrix element-wise division.\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e:+\u003c/td\u003e\n\n      \u003ctd\u003e\n        \u003cp\u003eScalar or matrix addition element-wise copy operation.\u003c/p\u003e\n      \u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e:-\u003c/td\u003e\n\n      \u003ctd\u003eScalar or matrix element-wise subtraction copy operation.\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e:*\u003c/td\u003e\n\n      \u003ctd\u003eScalar or matrix element-wise multiplication copy operation.\u003c/td\u003e\n    \u003c/tr\u003e\n\n    \u003ctr\u003e\n      \u003ctd align\u003d\"center\"\u003e:/\u003c/td\u003e\n\n      \u003ctd\u003eScalar or matrix element-wise division copy operation.\u003c/td\u003e\n    \u003c/tr\u003e\n  \u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003e\u003cbr\u003e\n\u003cbr  /\u003eAn example of the syntax for a copy scalar addition operation is given as:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eval wins \u003d 3.0\nval x \u003d sRDD.map(p \u003d\u0026gt; p(\"metaDataOption\" :+ wins) \n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cbr\u003e\u003c/p\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eLet\u0027s convert the TRMM 3hrly rate data from a rate to 3hrly accumulations. To do this, we will leverage the in-place scalar multiplication operation.\u003c/p\u003e\n"
+      },
+      "dateCreated": "May 25, 2016 9:52:40 AM",
+      "dateStarted": "Jun 22, 2016 3:18:30 PM",
+      "dateFinished": "Jun 22, 2016 3:18:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// calculating the amt of rainfall at each time (instead of the hourly rate)\nval accu3hrly \u003d labeled3.map(p \u003d\u003e p(\"pcp\") *  3.0 )",
+      "dateUpdated": "Jun 23, 2016 2:48:35 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464221427471_-919554069",
+      "id": "20160525-171027_1964747446",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "accu3hrly: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[14] at map at \u003cconsole\u003e:58\n"
+      },
+      "dateCreated": "May 25, 2016 5:10:27 PM",
+      "dateStarted": "Jun 23, 2016 2:48:35 PM",
+      "dateFinished": "Jun 23, 2016 2:48:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n## Maintaining time in the sRDD\nThe sRDD is a distributed dataset. When the data are read into memory, they are collated in groups according to the number of paritions to be used, then actions are performed in parallel on the data in each parition. There is no guarantee that the data in each partition or the sRDD are in any type of order. However, maintaining a timeseries throughout a set of calculations maybe prudent for *some* evaluations. \nGiven the inherent distributed environment, this is not a trivial task. \n\u003cbr\u003eTo maintain the timeseries in SciSpark,a metadata field in the ***sciTensor*** representing the datetime can be used. This metadata field **SHOULD** be created by the user when the data is being loaded into the ***sciTensors*** (or at anytime). The datetime is usually available in the filename and can be parsed. For example, above when the data was read into the ***sRDD***, the metaData **Date** was created from the filename. \nOnce the datetime is known, inorder to maintain the timeseries, a copy of the data is generated, and tuples between consecutive datetimes created. For example, for the dates 2016060100, 2016060101, 2016060102, 2016060103, 2016060104, 2016060105, the following linkages will occur:\n```\nMap(Date -\u003e 2016060100) connected to Map(Date -\u003e 2016060101)\nMap(Date -\u003e 2016060101) connected to Map(Date -\u003e 2016060102)\nMap(Date -\u003e 2016060102) connected to Map(Date -\u003e 2016060103)\nMap(Date -\u003e 2016060103) connected to Map(Date -\u003e 2016060104)\nMap(Date -\u003e 2016060104) connected to Map(Date -\u003e 2016060105)\n```\nIn this way, time between consecutive frames will always be maintained, and the timeseries.\n\n#### Example with real data\nLet\u0027s demonstrate creating the tuples with the TRMM data. We will create the timeseries with the data so as to determine 6hr- and 12hr- accumulations. Note that because this data is 3hrly, we add 3 to the \u0027Date\u0027. \n",
+      "dateUpdated": "Jun 22, 2016 3:18:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464109824610_-721370881",
+      "id": "20160524-101024_693471555",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eMaintaining time in the sRDD\u003c/h2\u003e\n\u003cp\u003eThe sRDD is a distributed dataset. When the data are read into memory, they are collated in groups according to the number of paritions to be used, then actions are performed in parallel on the data in each parition. There is no guarantee that the data in each partition or the sRDD are in any type of order. However, maintaining a timeseries throughout a set of calculations maybe prudent for \u003cem\u003esome\u003c/em\u003e evaluations.\n\u003cbr  /\u003eGiven the inherent distributed environment, this is not a trivial task.\n\u003cbr  /\u003e\u003cbr\u003eTo maintain the timeseries in SciSpark,a metadata field in the \u003cstrong\u003e\u003cem\u003esciTensor\u003c/em\u003e\u003c/strong\u003e representing the datetime can be used. This metadata field \u003cstrong\u003eSHOULD\u003c/strong\u003e be created by the user when the data is being loaded into the \u003cstrong\u003e\u003cem\u003esciTensors\u003c/em\u003e\u003c/strong\u003e (or at anytime). The datetime is usually available in the filename and can be parsed. For example, above when the data was read into the \u003cstrong\u003e\u003cem\u003esRDD\u003c/em\u003e\u003c/strong\u003e, the metaData \u003cstrong\u003eDate\u003c/strong\u003e was created from the filename.\n\u003cbr  /\u003eOnce the datetime is known, inorder to maintain the timeseries, a copy of the data is generated, and tuples between consecutive datetimes created. For example, for the dates 2016060100, 2016060101, 2016060102, 2016060103, 2016060104, 2016060105, the following linkages will occur:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eMap(Date -\u0026gt; 2016060100) connected to Map(Date -\u0026gt; 2016060101)\nMap(Date -\u0026gt; 2016060101) connected to Map(Date -\u0026gt; 2016060102)\nMap(Date -\u0026gt; 2016060102) connected to Map(Date -\u0026gt; 2016060103)\nMap(Date -\u0026gt; 2016060103) connected to Map(Date -\u0026gt; 2016060104)\nMap(Date -\u0026gt; 2016060104) connected to Map(Date -\u0026gt; 2016060105)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eIn this way, time between consecutive frames will always be maintained, and the timeseries.\u003c/p\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eLet\u0027s demonstrate creating the tuples with the TRMM data. We will create the timeseries with the data so as to determine 6hr- and 12hr- accumulations. Note that because this data is 3hrly, we add 3 to the \u0027Date\u0027.\u003c/p\u003e\n"
+      },
+      "dateCreated": "May 24, 2016 10:10:24 AM",
+      "dateStarted": "Jun 22, 2016 3:18:30 PM",
+      "dateFinished": "Jun 22, 2016 3:18:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val consecTRMM \u003d accu3hrly.flatMap(p \u003d\u003e {\n    List((p.metaData(\"Date\").toInt, p), (p.metaData(\"Date\").toInt + 3, p))\n}).groupBy(_._1)\n    .map(p \u003d\u003e p._2.map(e \u003d\u003e e._2).toList)\n    .filter(p \u003d\u003e p.size \u003e 1)\n    .map(p \u003d\u003e p.sortBy(_.metaData(\"Date\").toInt))\n    .map(p \u003d\u003e (p(0), p(1)))",
+      "dateUpdated": "Jun 23, 2016 2:48:39 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464110073704_-1731181334",
+      "id": "20160524-101433_1789419492",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "consecTRMM: org.apache.spark.rdd.RDD[(org.dia.core.SciTensor, org.dia.core.SciTensor)] \u003d MapPartitionsRDD[21] at map at \u003cconsole\u003e:65\n"
+      },
+      "dateCreated": "May 24, 2016 10:14:33 AM",
+      "dateStarted": "Jun 23, 2016 2:48:39 PM",
+      "dateFinished": "Jun 23, 2016 2:48:40 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Metrics: Accumulations\nNow the data is in order, we can determine accumulations. Let\u0027s say we wanted to calculate the 6hrly accumulations. \nIntuitively, one may consider in each tuple adding the values as demostrated below. \n```\nval sliding6hrly \u003d timeseries.map(p \u003d\u003e p._1(\"pcp\") + p._2(\"pcp\"))\n```\nThis approach will produce a 6hrly accumuluation every 3 hrs i.e. a sliding window. \n\u003cbr\u003e\n\n#### Example with real data\nNow the data is in order, let\u0027s find the sliding window 6hrly accumulation. ",
+      "dateUpdated": "Jun 22, 2016 3:18:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1465245259080_1834752219",
+      "id": "20160606-133419_1431523121",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eMetrics: Accumulations\u003c/h3\u003e\n\u003cp\u003eNow the data is in order, we can determine accumulations. Let\u0027s say we wanted to calculate the 6hrly accumulations.\n\u003cbr  /\u003eIntuitively, one may consider in each tuple adding the values as demostrated below.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eval sliding6hrly \u003d timeseries.map(p \u003d\u0026gt; p._1(\"pcp\") + p._2(\"pcp\"))\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThis approach will produce a 6hrly accumuluation every 3 hrs i.e. a sliding window.\n\u003cbr  /\u003e\u003cbr\u003e\u003c/p\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eNow the data is in order, let\u0027s find the sliding window 6hrly accumulation.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 6, 2016 1:34:19 PM",
+      "dateStarted": "Jun 22, 2016 3:18:31 PM",
+      "dateFinished": "Jun 22, 2016 3:18:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val sliding6hrly \u003d consecTRMM.map(p \u003d\u003e p._1(\"pcp\") + p._2(\"pcp\"))",
+      "dateUpdated": "Jun 23, 2016 2:49:11 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466010572101_-326506325",
+      "id": "20160615-100932_1907203803",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "sliding6hrly: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[22] at map at \u003cconsole\u003e:64\n"
+      },
+      "dateCreated": "Jun 15, 2016 10:09:32 AM",
+      "dateStarted": "Jun 23, 2016 2:49:11 PM",
+      "dateFinished": "Jun 23, 2016 2:49:11 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nTo calculate the common metrics, the arithmetic operators are used. The available operators with sciTensors were introduced above. Standard Apache Spark transformations e.g. *reduce* can be used with the *sliding* function from Apache Spark\u0027s MLlib (or any other standard functions available) to emulate various common metrics. The *sliding* function provides \u0027windowed computations\u0027. Please consult [Apache Spark\u0027s documentation](http://spark.apache.org/docs/latest/mllib-guide.html) for more on the transformations available. \n```\nval slidingComputation \u003d rdd.sliding(window_length, sliding_interval)\n```\n\n####Example with real data\nHere we will demonstrate how to find the 12hrly accumulations. ",
+      "dateUpdated": "Jun 22, 2016 3:18:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466011199016_-1753807608",
+      "id": "20160615-101959_442884869",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eTo calculate the common metrics, the arithmetic operators are used. The available operators with sciTensors were introduced above. Standard Apache Spark transformations e.g. \u003cem\u003ereduce\u003c/em\u003e can be used with the \u003cem\u003esliding\u003c/em\u003e function from Apache Spark\u0027s MLlib (or any other standard functions available) to emulate various common metrics. The \u003cem\u003esliding\u003c/em\u003e function provides \u0027windowed computations\u0027. Please consult \u003ca href\u003d\"http://spark.apache.org/docs/latest/mllib-guide.html\"\u003eApache Spark\u0027s documentation\u003c/a\u003e for more on the transformations available.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eval slidingComputation \u003d rdd.sliding(window_length, sliding_interval)\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eHere we will demonstrate how to find the 12hrly accumulations.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 15, 2016 10:19:59 AM",
+      "dateStarted": "Jun 22, 2016 3:18:31 PM",
+      "dateFinished": "Jun 22, 2016 3:18:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val sliding12hrly \u003d consecTRMM.sliding(4)",
+      "dateUpdated": "Jun 22, 2016 3:18:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466011260572_-1665471892",
+      "id": "20160615-102100_1628547510",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "\u003cconsole\u003e:56: error: value sliding is not a member of org.apache.spark.rdd.RDD[(org.dia.core.SciTensor, org.dia.core.SciTensor)]\n         val sliding12hrly \u003d consecTRMM.sliding(4)\n                                        ^\n"
+      },
+      "dateCreated": "Jun 15, 2016 10:21:00 AM",
+      "dateStarted": "Jun 22, 2016 3:18:34 PM",
+      "dateFinished": "Jun 22, 2016 3:18:34 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nAt this point, we may wish to visualize the data **while** it is still in the sRDD leveraging Python\u0027s matloblib. To do this, we need to pass the data from the Scala environment to the Python environment. \n\n####Passing data\nThis is done leveraging the Py4J Gateway and the \"Object exchange\" property in Apache Zeppelin that shares the **sparkcontext** and **SciSparkContext** between environments. We can pass the entire RDD using the \"Object exchange\" thus reducing the need for I/O inorder to visualize by leveraging the [PySpark MLLIB common library](https://spark.apache.org/docs/1.5.0/api/python/_modules/pyspark/mllib/common.html).  \n\nHowever, the Py4J environment requires Java objects. Furthermore, Py4J by default passes the objects by reference (as opposed to value) within the JVM. In order to access the actual data in the Python enviroment, the data will have to be passed as an arraybuffer object. \n\nThe sciTensor provides the following methods to access the data stored within. \n* The *.data* method returns a flattened array of doubles of the values associated with the varInUse. \n* The *.shape* method returns the shape of the original data array. \n```\nval t \u003d sRDD.map(p \u003d\u003e (p(\"varName\").data, p(\"varName\").shape))\n```\n\nTo convert Scala array to a Java ArrayBuffer object, leverage the java.nio library as demonstrated below:\n\n```\nimport java.nio\n\nval scalaBytebuffer \u003d java.nio.ByteBuffer.allocate(8*scalaDataArray.length)\nbbuf.asDoubleBuffer.put(java.nio.DoubleBuffer.wrap(scalaDataArray))\nval javaDataBuffer \u003d bbuf.array\n```\n\nIn general, to put an object from the Scala/ Java environment use:\n```\nval myVar \u003d ...\nz.put(\"myVarName\", myVar)\n```\n\nTo get the object from Python use:\n```\n%pyspark\nmyVar \u003d z.get(\"myVarName\")\n```\nThe reverse is also true.\n\n####Example with real data\nLet\u0027s pass the 12hrly accumulation data to the Python environment.\n",
+      "dateUpdated": "Jun 22, 2016 3:18:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466010584676_76356422",
+      "id": "20160615-100944_1800780239",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eAt this point, we may wish to visualize the data \u003cstrong\u003ewhile\u003c/strong\u003e it is still in the sRDD leveraging Python\u0027s matloblib. To do this, we need to pass the data from the Scala environment to the Python environment.\u003c/p\u003e\n\u003ch4\u003ePassing data\u003c/h4\u003e\n\u003cp\u003eThis is done leveraging the Py4J Gateway and the \u0026ldquo;Object exchange\u0026rdquo; property in Apache Zeppelin that shares the \u003cstrong\u003esparkcontext\u003c/strong\u003e and \u003cstrong\u003eSciSparkContext\u003c/strong\u003e between environments. We can pass the entire RDD using the \u0026ldquo;Object exchange\u0026rdquo; thus reducing the need for I/O inorder to visualize by leveraging the \u003ca href\u003d\"https://spark.apache.org/docs/1.5.0/api/python/_modules/pyspark/mllib/common.html\"\u003ePySpark MLLIB common library\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003eHowever, the Py4J environment requires Java objects. Furthermore, Py4J by default passes the objects by reference (as opposed to value) within the JVM. In order to access the actual data in the Python enviroment, the data will have to be passed as an arraybuffer object.\u003c/p\u003e\n\u003cp\u003eThe sciTensor provides the following methods to access the data stored within.\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eThe \u003cem\u003e.data\u003c/em\u003e method returns a flattened array of doubles of the values associated with the varInUse.\u003c/li\u003e\n\u003cli\u003eThe \u003cem\u003e.shape\u003c/em\u003e method returns the shape of the original data array.\u003cpre\u003e\u003ccode\u003eval t \u003d sRDD.map(p \u003d\u0026gt; (p(\"varName\").data, p(\"varName\").shape))\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eTo convert Scala array to a Java ArrayBuffer object, leverage the java.nio library as demonstrated below:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eimport java.nio\n\nval scalaBytebuffer \u003d java.nio.ByteBuffer.allocate(8*scalaDataArray.length)\nbbuf.asDoubleBuffer.put(java.nio.DoubleBuffer.wrap(scalaDataArray))\nval javaDataBuffer \u003d bbuf.array\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eIn general, to put an object from the Scala/ Java environment use:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eval myVar \u003d ...\nz.put(\"myVarName\", myVar)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eTo get the object from Python use:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e%pyspark\nmyVar \u003d z.get(\"myVarName\")\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe reverse is also true.\u003c/p\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eLet\u0027s pass the 12hrly accumulation data to the Python environment.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 15, 2016 10:09:44 AM",
+      "dateStarted": "Jun 22, 2016 3:18:31 PM",
+      "dateFinished": "Jun 22, 2016 3:18:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.nio\n\nval sliding6hrlyArrays \u003d sliding6hrly.map(p \u003d\u003e {\n    val listData \u003d new java.util.ArrayList[Any]()\n    val scalaBytebuffer \u003d java.nio.ByteBuffer.allocate(8*p(\"pcp\").data.length)\n    scalaBytebuffer.asDoubleBuffer.put(java.nio.DoubleBuffer.wrap(p(\"pcp\").data))\n    listData.add(scalaBytebuffer.array)\n    listData.add(p(\"pcp\").shape)\n    listData.add(java.lang.Integer.valueOf(p.metaData(\"Date\").toInt))\n    listData //listData is a Java List containing a Java arrayBuffer and a Scala array\n})\nz.put(\"sliding6hrlyList\", sliding6hrlyArrays)",
+      "dateUpdated": "Jun 23, 2016 2:49:23 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": true,
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466010748316_-227012891",
+      "id": "20160615-101228_1811478170",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.nio\nsliding6hrlyArrays: org.apache.spark.rdd.RDD[java.util.ArrayList[Any]] \u003d MapPartitionsRDD[23] at map at \u003cconsole\u003e:69\nres80: Object \u003d null\n"
+      },
+      "dateCreated": "Jun 15, 2016 10:12:28 AM",
+      "dateStarted": "Jun 23, 2016 2:49:23 PM",
+      "dateFinished": "Jun 23, 2016 2:49:24 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nOn the Python side, to access the data, the following is done",
+      "dateUpdated": "Jun 22, 2016 3:18:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466103913513_-1667645290",
+      "id": "20160616-120513_394369516",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eOn the Python side, to access the data, the following is done\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 16, 2016 12:05:13 PM",
+      "dateStarted": "Jun 22, 2016 3:18:31 PM",
+      "dateFinished": "Jun 22, 2016 3:18:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nfrom pyspark.mllib.common import _java2py\nimport numpy\n\nsliding6hrly \u003d z.get(\"sliding6hrlyList\")\n\npythonRDD \u003d _java2py(sc, sliding6hrly)\n\ndef convert_to_numpy(aList):\n    \u0027\u0027\u0027\n        aList is  [javaDataBuffer, p(\"pcp\").shape, dtime] in the sRDD\n    \u0027\u0027\u0027\n    dt \u003d numpy.dtype(\u0027d\u0027)\n    dt \u003d dt.newbyteorder(\u0027\u003e\u0027)\n    da \u003d numpy.frombuffer(aList[0], dtype\u003ddt)\n    da.shape \u003d (aList[1][0], aList[1][1])\n    return (da, aList[2])\n    \nlistOfNumpy \u003d pythonRDD.map(lambda t: convert_to_numpy(t))\n\nprint len(listOfNumpy.collect()), sorted(listOfNumpy.collect(), key\u003dlambda x:x[1])[0], listOfNumpy.collect()[0][0].shape\n\n",
+      "dateUpdated": "Jun 23, 2016 2:49:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false,
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466034344365_-311504922",
+      "id": "20160615-164544_100886927",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "14 (array([[ 0.        ,  0.        ,  0.        , ...,  0.        ,\n         0.        ,  0.        ],\n       [ 0.        ,  0.        ,  0.        , ...,  0.        ,\n         0.        ,  0.        ],\n       [ 0.        ,  0.        ,  0.        , ...,  0.        ,\n         0.        ,  0.        ],\n       ..., \n       [ 0.        ,  0.        ,  0.        , ...,  0.        ,\n         0.        ,  0.        ],\n       [ 0.        ,  0.        ,  0.        , ...,  0.        ,\n         0.        ,  0.        ],\n       [ 0.        ,  0.        ,  0.21000001, ...,  0.        ,\n         0.        ,  0.        ]]), 2010010100) (400, 1440)\n"
+      },
+      "dateCreated": "Jun 15, 2016 4:45:44 PM",
+      "dateStarted": "Jun 23, 2016 2:49:28 PM",
+      "dateFinished": "Jun 23, 2016 2:49:43 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Visualize the results with matplotlib",
+      "dateUpdated": "Jun 22, 2016 3:18:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466100151659_-283310525",
+      "id": "20160616-110231_482918009",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eVisualize the results with matplotlib\u003c/h3\u003e\n"
+      },
+      "dateCreated": "Jun 16, 2016 11:02:31 AM",
+      "dateStarted": "Jun 22, 2016 3:18:31 PM",
+      "dateFinished": "Jun 22, 2016 3:18:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nimport numpy as np\nimport numpy.ma as ma\nimport StringIO\nimport urlparse, urllib\n\nfrom netCDF4 import Dataset\nimport glob, os\n\nimport matplotlib\nmatplotlib.use(\u0027Agg\u0027)\n#os.system(\"export DISPLAY\u003d:0\") \n\nimport matplotlib.pyplot as plt\nplt.rcdefaults()\n\nfrom mpl_toolkits.basemap import Basemap, cm\n\nsliding6hrs \u003d listOfNumpy.collect()[0]\nlat1s \u003d np.arange(-50,50,.25)\nlon1s \u003d np.arange(-180,180,.25)\nlon1, lat1 \u003d np.meshgrid(lon1s, lat1s)\n\naccum \u003d sc.accumulator(0)\n\ndef show(p):\n    img \u003d StringIO.StringIO()\n    p.savefig(img, format\u003d\u0027svg\u0027)\n    img.seek(0)\n    print \"%html \u003cdiv style\u003d\u0027width:600px\u0027\u003e\" + img.buf + \"\u003c/div\u003e\"\n\ndef contour_plot(currData):\n    import subprocess\n    from pyhdfs import HdfsClient\n    client \u003d HdfsClient(hosts\u003d\"localhost\")\n    \n    import matplotlib\n    matplotlib.use(\u0027Agg\u0027)\n    os.system(\"export DISPLAY\u003d:0\") \n    \n    import matplotlib.pyplot as plt\n    plt.rcdefaults()\n    \n    from mpl_toolkits.basemap import Basemap, cm\n    \n    mp \u003d Basemap(projection \u003d \u0027merc\u0027, llcrnrlon \u003d min(lon1s), urcrnrlon \u003d max(lon1s), llcrnrlat \u003d min(lat1s), urcrnrlat \u003d max(lat1s), resolution \u003d \u0027l\u0027)\n    x1, y1 \u003d mp(lon1, lat1)\n    clevs1 \u003d [0,1,2.5,5,7.5,10,15,20,30,40,50,70,100,150,200,250,300,400,500,600,750]\n    cs1 \u003d mp.contourf(x1, y1, currData[0], clevs1, cmap\u003dcm.s3pcpn)\n    \n    # Add Grid Lines\n    mp.drawparallels(np.arange(-50., 50., 10.), labels\u003d[1,0,0,0], fontsize\u003d8)\n    mp.drawmeridians(np.arange(-180., 181., 20.), labels\u003d[0,0,0,1], fontsize\u003d8)\n    \n    mp.drawcoastlines(linewidth \u003d 0.25)\n    mp.drawcountries(linewidth \u003d 0.25)\n    \n    # Add Colorbar\n    cbar1 \u003d mp.colorbar(cs1, location\u003d\u0027bottom\u0027, pad\u003d\"30%\")\n    cbar1.set_label(\"pcp total in mm\")\n    \n    # Add Title\n    plt.title(\u00276-hr total starting at \u0027+str(currData[1]))\n    \n    plt.savefig(\u0027/tmp/\u0027+str(currData[1])+\u0027.png\u0027)\n    plt.savefig(\u0027/tmp/\u0027+str(currData[1])+\u0027.svg\u0027)\n    \n    # Copy to HDFS\n    client.copy_from_local(\u0027/tmp/\u0027+str(currData[1])+\u0027.png\u0027, \u0027hdfs://128.149.112.134:8090/tmp/zGenImgs/\u0027+str(currData[1])+\u0027.png\u0027 )\n   # cmd \u003d \u0027hadoop fs -copyFromLocal /tmp/\u0027+str(currData[1])+\u0027.png /tmp/zGenImgs/\u0027+str(currData[1])+\u0027.png\u0027\n    #subprocess.Popen(cmd.split(), stdout\u003dsubprocess.PIPE)\n    \n    plt.close()\n\ndef show_from_file():\n    import os\n    import subprocess\n    # Remove from local node\n    os.remove(\u0027/tmp/*.png\u0027)\n    \n    cmd \u003d \u0027hadoop fs -ls /tmp/zGenImgs/*.png\u0027\n    aprocess \u003d subprocess.Popen(cmd.split(), stdout\u003dsubprocess.PIPE)\n    alist, _ \u003d aprocess.communicate()\n    \n    \n    print imgs\n    for i in range(len(imgs)):\n        print \"\"\"%html \u003ch1\u003e Image 1: \"\"\" + str(i) + \"\"\"\u003c/h1\u003e\"\"\"\n        with open(\"hdfs://128.149.112.134:8090/tmp/zGenImgs/g{0}.svg\".format(i),\"r\") as f:\n            svgData \u003d f.read()\n            print \"\"\"%html \u003cspan id\u003d\"container\"\u003e\"\"\" + svgData + \"\"\"\u003c/span\u003e\"\"\"\n        \n#contour_plot(sliding6hrs) # assuming a collect call, would have to make this in a loop\n\nim \u003d listOfNumpy.map(lambda t: contour_plot(t))\nprint im.collect()[0]\n\n#display the jpegs in the html location\n#use glob to get the files at the location then loop over them and use the show() method defined above\n#show_from_file()\n\n",
+      "dateUpdated": "Jun 23, 2016 6:40:47 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466112632953_1606560969",
+      "id": "20160616-143032_1510385956",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Py4JJavaError: An error occurred while calling z:org.apache.spark.api.python.PythonRDD.collectAndServe.\n: org.apache.spark.SparkException: Job aborted due to stage failure: Task 6 in stage 22.0 failed 4 times, most recent failure: Lost task 6.3 in stage 22.0 (TID 286, scispark4.jpl.nasa.gov): org.apache.spark.api.python.PythonException: Traceback (most recent call last):\n  File \"/data/cluster-local/software/mesos-0.26.0/build/workdir/slaves/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/frameworks/62c57448-506c-47a5-aa7e-080270cce269-0008/executors/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/runs/5bed1775-171b-4ae8-bcf5-ca4d59c02bca/spark-1.6.0-bin-hadoop2.4/python/lib/pyspark.zip/pyspark/worker.py\", line 111, in main\n    process()\n  File \"/data/cluster-local/software/mesos-0.26.0/build/workdir/slaves/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/frameworks/62c57448-506c-47a5-aa7e-080270cce269-0008/executors/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/runs/5bed1775-171b-4ae8-bcf5-ca4d59c02bca/spark-1.6.0-bin-hadoop2.4/python/lib/pyspark.zip/pyspark/worker.py\", line 106, in process\n    serializer.dump_stream(func(split_index, iterator), outfile)\n  File \"/data/cluster-local/software/mesos-0.26.0/build/workdir/slaves/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/frameworks/62c57448-506c-47a5-aa7e-080270cce269-0008/executors/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/runs/5bed1775-171b-4ae8-bcf5-ca4d59c02bca/spark-1.6.0-bin-hadoop2.4/python/lib/pyspark.zip/pyspark/serializers.py\", line 263, in dump_stream\n    vs \u003d list(itertools.islice(iterator, batch))\n  File \"\u003cstring\u003e\", line 60, in \u003clambda\u003e\n  File \"\u003cstring\u003e\", line 45, in contour_plot\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/pyhdfs.py\", line 715, in copy_from_local\n    self.create(dest, f, **kwargs)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/pyhdfs.py\", line 391, in create\n    path, \u0027CREATE\u0027, expected_status\u003dhttplib.TEMPORARY_REDIRECT, **kwargs)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/pyhdfs.py\", line 362, in _put\n    return self._request(\u0027put\u0027, *args, **kwargs)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/pyhdfs.py\", line 356, in _request\n    raise HdfsNoServerException(\"Could not use any of the given hosts\")\nHdfsNoServerException: Could not use any of the given hosts\n\n\tat org.apache.spark.api.python.PythonRunner$$anon$1.read(PythonRDD.scala:166)\n\tat org.apache.spark.api.python.PythonRunner$$anon$1.\u003cinit\u003e(PythonRDD.scala:207)\n\tat org.apache.spark.api.python.PythonRunner.compute(PythonRDD.scala:125)\n\tat org.apache.spark.api.python.PythonRDD.compute(PythonRDD.scala:70)\n\tat org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:306)\n\tat org.apache.spark.rdd.RDD.iterator(RDD.scala:270)\n\tat org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:66)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:89)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:213)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)\n\tat java.lang.Thread.run(Thread.java:745)\n\nDriver stacktrace:\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1419)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$abortStage$1.apply(DAGScheduler.scala:1418)\n\tat scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)\n\tat scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:47)\n\tat org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:1418)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleTaskSetFailed$1.apply(DAGScheduler.scala:799)\n\tat scala.Option.foreach(Option.scala:236)\n\tat org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:799)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1640)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1845)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1858)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1929)\n\tat org.apache.spark.rdd.RDD$$anonfun$collect$1.apply(RDD.scala:927)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.collect(RDD.scala:926)\n\tat org.apache.spark.api.python.PythonRDD$.collectAndServe(PythonRDD.scala:405)\n\tat org.apache.spark.api.python.PythonRDD.collectAndServe(PythonRDD.scala)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:231)\n\tat py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:381)\n\tat py4j.Gateway.invoke(Gateway.java:259)\n\tat py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:133)\n\tat py4j.commands.CallCommand.execute(CallCommand.java:79)\n\tat py4j.GatewayConnection.run(GatewayConnection.java:209)\n\tat java.lang.Thread.run(Thread.java:745)\nCaused by: org.apache.spark.api.python.PythonException: Traceback (most recent call last):\n  File \"/data/cluster-local/software/mesos-0.26.0/build/workdir/slaves/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/frameworks/62c57448-506c-47a5-aa7e-080270cce269-0008/executors/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/runs/5bed1775-171b-4ae8-bcf5-ca4d59c02bca/spark-1.6.0-bin-hadoop2.4/python/lib/pyspark.zip/pyspark/worker.py\", line 111, in main\n    process()\n  File \"/data/cluster-local/software/mesos-0.26.0/build/workdir/slaves/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/frameworks/62c57448-506c-47a5-aa7e-080270cce269-0008/executors/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/runs/5bed1775-171b-4ae8-bcf5-ca4d59c02bca/spark-1.6.0-bin-hadoop2.4/python/lib/pyspark.zip/pyspark/worker.py\", line 106, in process\n    serializer.dump_stream(func(split_index, iterator), outfile)\n  File \"/data/cluster-local/software/mesos-0.26.0/build/workdir/slaves/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/frameworks/62c57448-506c-47a5-aa7e-080270cce269-0008/executors/f6e05db9-9b26-422a-b070-834b42e3e2c7-S0/runs/5bed1775-171b-4ae8-bcf5-ca4d59c02bca/spark-1.6.0-bin-hadoop2.4/python/lib/pyspark.zip/pyspark/serializers.py\", line 263, in dump_stream\n    vs \u003d list(itertools.islice(iterator, batch))\n  File \"\u003cstring\u003e\", line 60, in \u003clambda\u003e\n  File \"\u003cstring\u003e\", line 45, in contour_plot\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/pyhdfs.py\", line 715, in copy_from_local\n    self.create(dest, f, **kwargs)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/pyhdfs.py\", line 391, in create\n    path, \u0027CREATE\u0027, expected_status\u003dhttplib.TEMPORARY_REDIRECT, **kwargs)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/pyhdfs.py\", line 362, in _put\n    return self._request(\u0027put\u0027, *args, **kwargs)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/pyhdfs.py\", line 356, in _request\n    raise HdfsNoServerException(\"Could not use any of the given hosts\")\nHdfsNoServerException: Could not use any of the given hosts\n\n\tat org.apache.spark.api.python.PythonRunner$$anon$1.read(PythonRDD.scala:166)\n\tat org.apache.spark.api.python.PythonRunner$$anon$1.\u003cinit\u003e(PythonRDD.scala:207)\n\tat org.apache.spark.api.python.PythonRunner.compute(PythonRDD.scala:125)\n\tat org.apache.spark.api.python.PythonRDD.compute(PythonRDD.scala:70)\n\tat org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:306)\n\tat org.apache.spark.rdd.RDD.iterator(RDD.scala:270)\n\tat org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:66)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:89)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:213)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)\n\t... 1 more\n\n(\u003cclass \u0027py4j.protocol.Py4JJavaError\u0027\u003e, Py4JJavaError(u\u0027An error occurred while calling z:org.apache.spark.api.python.PythonRDD.collectAndServe.\\n\u0027, JavaObject id\u003do131), \u003ctraceback object at 0x7fc474e70290\u003e)"
+      },
+      "dateCreated": "Jun 16, 2016 2:30:32 PM",
+      "dateStarted": "Jun 23, 2016 6:40:48 PM",
+      "dateFinished": "Jun 23, 2016 6:42:07 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nVisualize the images from the HDFS location",
+      "dateUpdated": "Jun 22, 2016 3:18:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466118134873_1024665149",
+      "id": "20160616-160214_1041067079",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eVisualize the images from the HDFS location\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 16, 2016 4:02:14 PM",
+      "dateStarted": "Jun 22, 2016 3:18:32 PM",
+      "dateFinished": "Jun 22, 2016 3:18:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jun 22, 2016 3:18:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466121507686_715709540",
+      "id": "20160616-165827_1334734107",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT"
+      },
+      "dateCreated": "Jun 16, 2016 4:58:27 PM",
+      "dateStarted": "Jun 22, 2016 3:18:43 PM",
+      "dateFinished": "Jun 22, 2016 3:18:43 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Metrics: Accumulations (continued)\nSuppose we wish to achieve an accumulation **every 6 hours** instead. One approach can be to collect the data, sort it by date, then group by the required amount. For example: \n```\nval accu6hrly \u003d timeseries.collect().toList.sortBy(_._1.metaData(\"Date\").toInt)\n                                           .grouped(2).map(i \u003d\u003e i(\"pcp\").sum).toArray\n```\nNote that the grouping is done every 2 intervals because the data is 3hrly. \n\n#### Example with real data\nNow the data is in order, we can determine 12hrly accumulations. The data represents 3hrly accumulations in each sciTensor at this point. Thus for 12hrly accumulations, we will have to sum every 4 in the list. ",
+      "dateUpdated": "Jun 22, 2016 3:18:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466010428856_-903612707",
+      "id": "20160615-100708_1310617119",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eMetrics: Accumulations (continued)\u003c/h3\u003e\n\u003cp\u003eSuppose we wish to achieve an accumulation \u003cstrong\u003eevery 6 hours\u003c/strong\u003e instead. One approach can be to collect the data, sort it by date, then group by the required amount. For example:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eval accu6hrly \u003d timeseries.collect().toList.sortBy(_._1.metaData(\"Date\").toInt)\n                                           .grouped(2).map(i \u003d\u0026gt; i(\"pcp\").sum).toArray\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNote that the grouping is done every 2 intervals because the data is 3hrly.\u003c/p\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eNow the data is in order, we can determine 12hrly accumulations. The data represents 3hrly accumulations in each sciTensor at this point. Thus for 12hrly accumulations, we will have to sum every 4 in the list.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 15, 2016 10:07:08 AM",
+      "dateStarted": "Jun 22, 2016 3:18:32 PM",
+      "dateFinished": "Jun 22, 2016 3:18:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val collectedConsec \u003d consecTRMM.collect().toList.sortBy(_._1.metaData(\"Date\").toInt)\nval split \u003d collectedConsec.length/ 4\n\nval accu12hrly \u003d collectedConsec.grouped(4).map(i \u003d\u003e (i(0)._1 + i(0)._1)).toList //toArray\n",
+      "dateUpdated": "Jun 22, 2016 3:18:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "lineNumbers": true,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1465245393022_580686988",
+      "id": "20160606-133633_246352473",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "collectedConsec: List[(org.dia.core.SciTensor, org.dia.core.SciTensor)] \u003d \nList((Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010100)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100101.00.7A.nc)\n,Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010103)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100101.03.7A.nc)\n), (Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010103)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100101.03.7A.nc)\n,Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010106)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100101.06.7A.nc)\n), (Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010106)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100101.06.7A.nc)\n,Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010109)\n(SOURCE,hdfs://128.149.112.134:8090/...split: Int \u003d 3\naccu12hrly: List[org.dia.core.SciTensor] \u003d \nList(Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010100)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100101.00.7A.nc)\n, Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010112)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100101.12.7A.nc)\n, Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010203)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100102.03.7A.nc)\n, Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010215)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100102.15.7A.nc)\n)\n"
+      },
+      "dateCreated": "Jun 6, 2016 1:36:33 PM",
+      "dateStarted": "Jun 22, 2016 3:18:43 PM",
+      "dateFinished": "Jun 22, 2016 3:18:56 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \n###Metrics: Arithmetic operations  (TO be removed)\nTo calculate the common metrics, the arithmetic operators are used. The available operators with sciTensors were introduced above. Standard Apache Spark transformations e.g. *reduce* can be used with the *sliding* function from Apache Spark\u0027s MLlib (or any other standard functions available) to emulate various common metrics. The *sliding* function provides \u0027windowed computations\u0027. Please consult [Apache Spark\u0027s documentation](http://spark.apache.org/docs/latest/mllib-guide.html) for more on the transformations available. \n```\nval slidingComputation \u003d rdd.sliding(window_length, sliding_interval)\n```\n\n####Example with real data\nHere we will demonstrate how to find the difference between the 12hrly accumulations. ",
+      "dateUpdated": "Jun 22, 2016 3:18:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1465227133437_-1382455813",
+      "id": "20160606-083213_1947317273",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eMetrics: Arithmetic operations  (TO be removed)\u003c/h3\u003e\n\u003cp\u003eTo calculate the common metrics, the arithmetic operators are used. The available operators with sciTensors were introduced above. Standard Apache Spark transformations e.g. \u003cem\u003ereduce\u003c/em\u003e can be used with the \u003cem\u003esliding\u003c/em\u003e function from Apache Spark\u0027s MLlib (or any other standard functions available) to emulate various common metrics. The \u003cem\u003esliding\u003c/em\u003e function provides \u0027windowed computations\u0027. Please consult \u003ca href\u003d\"http://spark.apache.org/docs/latest/mllib-guide.html\"\u003eApache Spark\u0027s documentation\u003c/a\u003e for more on the transformations available.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eval slidingComputation \u003d rdd.sliding(window_length, sliding_interval)\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch4\u003eExample with real data\u003c/h4\u003e\n\u003cp\u003eHere we will demonstrate how to find the difference between the 12hrly accumulations.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jun 6, 2016 8:32:13 AM",
+      "dateStarted": "Jun 22, 2016 3:18:32 PM",
+      "dateFinished": "Jun 22, 2016 3:18:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val diff12hrs \u003d accu12hrly.sliding(2).map(_.reduce(_-_)).toList",
+      "dateUpdated": "Jun 22, 2016 3:18:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": true,
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1465227032434_-1306629632",
+      "id": "20160606-083032_636477878",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "diff12hrs: List[org.dia.core.SciTensor] \u003d \nList(Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010100)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100101.00.7A.nc)\n, Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010112)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100101.12.7A.nc)\n, Variable in use \u003d pcp\nSet(pcp)\n(Date,2010010203)\n(SOURCE,hdfs://128.149.112.134:8090/data/TRMM48hrs/3B42.20100102.03.7A.nc)\n)\n"
+      },
+      "dateCreated": "Jun 6, 2016 8:30:32 AM",
+      "dateStarted": "Jun 22, 2016 3:18:44 PM",
+      "dateFinished": "Jun 22, 2016 3:18:57 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Visualizations\n \n### Writing intermediate netCDF files",
+      "dateUpdated": "Jun 22, 2016 3:18:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1464116631821_1554999693",
+      "id": "20160524-120351_1689465145",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eVisualizations\u003c/h3\u003e\n\u003ch3\u003eWriting intermediate netCDF files\u003c/h3\u003e\n"
+      },
+      "dateCreated": "May 24, 2016 12:03:51 PM",
+      "dateStarted": "Jun 22, 2016 3:18:32 PM",
+      "dateFinished": "Jun 22, 2016 3:18:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "####Example with real data\nLet\u0027s pass the 12hrly accumulation data to the Python environment so as to leverage matplotlib.\n",
+      "dateUpdated": "Jun 22, 2016 3:18:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1466009717256_1557489440",
+      "id": "20160615-095517_1874213341",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "\u003cconsole\u003e:1: error: \u0027;\u0027 expected but \u0027with\u0027 found.\n       ####Example with real data\n                   ^\n"
+      },
+      "dateCreated": "Jun 15, 2016 9:55:17 AM",
+      "dateStarted": "Jun 22, 2016 3:18:57 PM",
+      "dateFinished": "Jun 22, 2016 3:18:57 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jun 22, 2016 3:18:32 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1465327043053_-1940975900",
+      "id": "20160607-121723_838700854",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT"
+      },
+      "dateCreated": "Jun 7, 2016 12:17:23 PM",
+      "dateStarted": "Jun 22, 2016 3:18:57 PM",
+      "dateFinished": "Jun 22, 2016 3:18:57 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "201-1 sRDD",
+  "id": "2BMN47T84",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": [],
+    "2BBAYHPQT": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

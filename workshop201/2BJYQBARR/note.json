@@ -1,0 +1,747 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n#Graph Algorithm to-date in SciSpark\nPurpose: This notebook will demonstrate using SciSpark to:\n* read in netCDF files\n* mask areas in an array meeting a criteria \n* connect these areas via overlap between two time steps to form a graph object. \n* This graph is searched to find subgraphs meeting a minimum length criteria, and are visualized. \nThese are all the steps conducted to identify and track mesoscale convective systems (MCSs). \n\nFor this demonstration, hrly data for 1st August 2006 of the brightness temperature NCEP/CPC MERG dataset over location 5S - 40N, 60E - 90W is used. More information about the NCEP/CPC 4km MERG Dataset used for this demonstration can be found  [here] (http://mirador.gsfc.nasa.gov/collections/MERG__001.shtml).\n\u003cbr\u003e\n\nThis environment contains all the classes and dependencies necessary to use SciSpark.By default we have loaded the SciSpark jar into the Zeppelin and Spark environment in the config folder. ",
+      "dateUpdated": "Jun 22, 2016 3:27:03 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453452_313349",
+      "id": "20160519-152053_1763875329",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch1\u003eGraph Algorithm to-date in SciSpark\u003c/h1\u003e\n\u003cp\u003ePurpose: This notebook will demonstrate using SciSpark to:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eread in netCDF files\u003c/li\u003e\n\u003cli\u003emask areas in an array meeting a criteria\u003c/li\u003e\n\u003cli\u003econnect these areas via overlap between two time steps to form a graph object.\u003c/li\u003e\n\u003cli\u003eThis graph is searched to find subgraphs meeting a minimum length criteria, and are visualized.\n\u003cbr  /\u003eThese are all the steps conducted to identify and track mesoscale convective systems (MCSs).\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eFor this demonstration, hrly data for 1st August 2006 of the brightness temperature NCEP/CPC MERG dataset over location 5S - 40N, 60E - 90W is used. More information about the NCEP/CPC 4km MERG Dataset used for this demonstration can be found  \u003ca href\u003d\"http://mirador.gsfc.nasa.gov/collections/MERG__001.shtml\"\u003ehere\u003c/a\u003e.\n\u003cbr  /\u003e\u003cbr\u003e\u003c/p\u003e\n\u003cp\u003eThis environment contains all the classes and dependencies necessary to use SciSpark.By default we have loaded the SciSpark jar into the Zeppelin and Spark environment in the config folder.\u003c/p\u003e\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:01 PM",
+      "dateFinished": "Jun 21, 2016 1:56:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \n##Import Classes: Both generic Scala \u0026 Java classes and  SciSpark classes",
+      "dateUpdated": "Jun 22, 2016 3:27:09 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453452_313349",
+      "id": "20160519-152053_1588391315",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eImport Classes: Both generic Scala \u0026amp; Java classes and  SciSpark classes\u003c/h2\u003e\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:02 PM",
+      "dateFinished": "Jun 21, 2016 1:56:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//generic imports\nimport java.io.{ File, PrintWriter }\nimport java.text.SimpleDateFormat\nimport org.slf4j.Logger\nimport scala.collection.mutable\nimport scala.io.Source\nimport scala.language.implicitConversions\nimport java.io.{BufferedWriter, OutputStreamWriter}\nimport breeze.io.TextWriter.FileWriter\nimport org.apache.hadoop.conf._\nimport org.apache.hadoop.fs._\nimport org.apache.hadoop.io._\nimport org.apache.spark.rdd.RDD\nimport org.slf4j.Logger\nimport org.apache.spark.{SparkConf, SparkContext}\nimport scala.collection.mutable\n\n//SciSpark imports\nimport org.dia.Parsers\nimport org.dia.core.{ SciSparkContext, SciTensor }\nimport org.dia.algorithms.mcc.MCCOps\nimport org.dia.algorithms.mcc.MainDistGraphMCC\nimport org.dia.urlgenerators.{RandomDatesGenerator}\n\n",
+      "dateUpdated": "Jun 22, 2016 3:27:11 PM",
+      "config": {
+        "lineNumbers": true,
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453452_313349",
+      "id": "20160519-152053_723615348",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.io.{File, PrintWriter}\nimport java.text.SimpleDateFormat\nimport org.slf4j.Logger\nimport scala.collection.mutable\nimport scala.io.Source\nimport scala.language.implicitConversions\nimport java.io.{BufferedWriter, OutputStreamWriter}\nimport breeze.io.TextWriter.FileWriter\nimport org.apache.hadoop.conf._\nimport org.apache.hadoop.fs._\nimport org.apache.hadoop.io._\nimport org.apache.spark.rdd.RDD\nimport org.slf4j.Logger\nimport org.apache.spark.{SparkConf, SparkContext}\nimport scala.collection.mutable\nimport org.dia.Parsers\nimport org.dia.core.{SciSparkContext, SciTensor}\nimport org.dia.algorithms.mcc.MCCOps\nimport org.dia.algorithms.mcc.MainDistGraphMCC\nimport org.dia.urlgenerators.RandomDatesGenerator\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:57:39 PM",
+      "dateFinished": "Jun 21, 2016 2:05:01 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n## Initialize the SciSpark context",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453453_-71400",
+      "id": "20160519-152053_366814028",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eInitialize the SciSpark context\u003c/h2\u003e\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:02 PM",
+      "dateFinished": "Jun 21, 2016 1:56:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val dssc \u003d new SciSparkContext(sc)  ",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "lineNumbers": true,
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453453_-71400",
+      "id": "20160519-152053_1765301706",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "dssc: org.dia.core.SciSparkContext \u003d org.dia.core.SciSparkContext@612da3ba\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 2:04:56 PM",
+      "dateFinished": "Jun 21, 2016 2:05:01 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##In this step the data is accessed from HDFS and paritioned into the sRDD. \n![sRDD](https://scispark.jpl.nasa.gov/images/sRDD.jpg)\n",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453454_1082846",
+      "id": "20160519-152053_1939189437",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eIn this step the data is accessed from HDFS and paritioned into the sRDD.\u003c/h2\u003e\n\u003cp\u003e\u003cimg src\u003d\"https://scispark.jpl.nasa.gov/images/sRDD.jpg\" alt\u003d\"sRDD\" /\u003e\u003c/p\u003e\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:02 PM",
+      "dateFinished": "Jun 21, 2016 1:56:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val args \u003d Array(\"6\",\"ch4\", \"hdfs://128.149.112.134:8090/data/48hrs\")\n// the user variables\nval partCount \u003d if (args.length \u003c\u003d 1) 2 else args(0).toInt\nval varName \u003d if (args.length \u003c\u003d 2) \"ch4\" else args(1)\nval hdfspath \u003d if (args.length \u003c\u003d 3) args(2) else \"hdfs://128.149.112.134:8090/data/July2006\"\n\nval sRDD1 \u003d dssc.NetcdfDFSFile(hdfspath, List(varName), partCount)\n\nval labeled1 \u003d sRDD1.map(p1 \u003d\u003e {\n    val source1 \u003d p1.metaData(\"SOURCE\").split(\"/\").last.split(\"_\")(1)\n    val FrameID1 \u003d source1.toInt\n    p1.insertDictionary((\"FRAME\", FrameID1.toString))\n    p1\n})",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "lineNumbers": true,
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453454_1082846",
+      "id": "20160519-152053_1745040787",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "args: Array[String] \u003d Array(6, ch4, hdfs://128.149.112.134:8090/data/48hrs)\npartCount: Int \u003d 6\nvarName: String \u003d ch4\nhdfspath: String \u003d hdfs://128.149.112.134:8090/data/48hrs\nsRDD1: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[174] at map at SciSparkContext.scala:104\nlabeled1: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[175] at map at \u003cconsole\u003e:186\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 2:05:01 PM",
+      "dateFinished": "Jun 21, 2016 2:05:04 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Make the graph\n",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453454_1082846",
+      "id": "20160519-152053_224646869",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eMake the graph\u003c/h2\u003e\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:02 PM",
+      "dateFinished": "Jun 21, 2016 1:56:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//masking \nval filtered1 \u003d labeled1.map(p \u003d\u003e p(\"ch4\") \u003c\u003d 241.0)\n\n//keeping time in the sRDD\nval consecFrames1 \u003d filtered1.flatMap(p \u003d\u003e {\n    List((p.metaData(\"FRAME\").toInt, p), (p.metaData(\"FRAME\").toInt + 1, p))\n}).groupBy(_._1)\n    .map(p \u003d\u003e p._2.map(e \u003d\u003e e._2).toList)\n    .filter(p \u003d\u003e p.size \u003e 1)\n    .map(p \u003d\u003e p.sortBy(_.metaData(\"FRAME\").toInt))\n    .map(p \u003d\u003e (p(0), p(1)))\n\n//finding contiguous areas and connecting by overlap between consecutive times    \nval componentFrameRDD1 \u003d consecFrames1.flatMap({\n    case (t1, t2) \u003d\u003e {\n        val (components1, _) \u003d MCCOps.labelConnectedComponents(t1.tensor)\n        val (components2, _) \u003d MCCOps.labelConnectedComponents(t2.tensor)\n        val product1 \u003d components1 * components2\n        var overlappedPairsList1 \u003d mutable.MutableList[(Double, Double)]()\n        var areaPairsList1 \u003d mutable.MutableList[(String, String)]()\n        var areaMaxMinTable1 \u003d new mutable.HashMap[String, (Double, Double, Double)]\n\n    def updateComponent(label: Double, frame: String, value: Double): Unit \u003d {\n        if (label !\u003d 0.0) {\n            var area \u003d 0.0\n            var max \u003d Double.MaxValue\n            var min \u003d Double.MinValue\n            val currentProperties1 \u003d areaMaxMinTable1.get(frame + \":\" + label)\n            if (currentProperties1 !\u003d null \u0026\u0026 currentProperties1.isDefined) {\n              area \u003d currentProperties1.get._1\n              max \u003d currentProperties1.get._2\n              min \u003d currentProperties1.get._3\n              if (value \u003c min) min \u003d value\n              if (value \u003e max) max \u003d value\n            } else {\n              min \u003d value\n              max \u003d value\n            }\n            area +\u003d 1\n            areaMaxMinTable1 +\u003d ((frame + \":\" + label, (area, max, min)))\n          }\n        }\n\n        for (row \u003c- 0 to product1.rows - 1) {\n          for (col \u003c- 0 to product1.cols - 1) {\n            if (product1(row, col) !\u003d 0.0) {\n              val value1 \u003d components1(row, col)\n              val value2 \u003d components2(row, col)\n              overlappedPairsList1 +\u003d ((value1, value2))\n            }\n            updateComponent(components1(row, col), t1.metaData(\"FRAME\"), t1.tensor(row, col))\n            updateComponent(components2(row, col), t2.metaData(\"FRAME\"), t2.tensor(row, col))\n          }\n        }\n    \n    val edgesSet1 \u003d overlappedPairsList1.toSet\n    val edges1 \u003d edgesSet1.map({ case (c1, c2) \u003d\u003e ((t1.metaData(\"FRAME\"),c1), (t2.metaData(\"FRAME\"), c2)) })\n\n    val filtered1 \u003d edges1.filter({\n          case ((frameId1, compId1), (frameId2, compId2)) \u003d\u003e {\n            val (area1, max1, min1) \u003d areaMaxMinTable1(frameId1 + \":\" + compId1)\n            val isCloud1 \u003d ((area1 \u003e\u003d 150) || ((area1 \u003c 150) \u0026\u0026 ((min1/max1) \u003c 0.9)))\n            val (area2, max2, min2) \u003d areaMaxMinTable1(frameId2 + \":\" + compId2)\n            val isCloud2 \u003d ((area2 \u003e\u003d 150) || ((area2 \u003c 150) \u0026\u0026 ((min2/max2) \u003c 0.9)))\n            isCloud1 \u0026\u0026 isCloud2\n          }\n        })\n       \n    val addarea \u003d filtered1.map({ \n        case (m1 , m2) \u003d\u003e ((m1._1, m1._2, areaMaxMinTable1(m1._1 + \":\" + m1._2)._1), (m2._1, m2._2, areaMaxMinTable1(m2._1 + \":\" + m2._2)._1)) \n    })\n        addarea\n      }\n    })\n    \nval collectedEdges1 \u003d componentFrameRDD1.collect()\nval collectedVertices1 \u003d collectedEdges1.flatMap({ case (n1, n2) \u003d\u003e List(n1, n2) }).toSet\n\nval outvertices1 \u003d new PrintWriter(new File(\"VertexList.txt\"))\noutvertices1.write(collectedVertices1.toList.sortBy(_._1) + \"\\n\")\noutvertices1.close()\n\nval outedges1 \u003d new PrintWriter(new File(\"EdgeList.txt\"))\noutedges1.write(collectedEdges1.toList.sorted + \"\\n\")\noutedges1.close()\n\nprintln(\"NUM VERTICES : \" + collectedVertices1.size + \"\\n\")\nprintln(\"NUM EDGES : \" + collectedEdges1.length + \"\\n\")\n\n//edges for the subgraphs part\nval edgeListOnly \u003d collectedEdges1.map({ case(t1,t2) \u003d\u003e ((t1._1.toInt,t1._2.toInt),(t2._1.toInt,t2._2.toInt))})\nval edgeListP2 \u003d new PrintWriter(new File(\"EdgelistP2.txt\"))\nedgeListP2.write(edgeListOnly.toList + \"\\n\")\nedgeListP2.close()\n\n//table for sql viz\nval verticesRDD \u003d sc.parallelize(collectedVertices1.toList)\ncase class CloudElement(time: String, uid: Int, size:Float)\nval cloud_elements \u003d verticesRDD.map({\n    case(t1,t2,t3)  \u003d\u003e CloudElement(t1, t2.toInt, t3.toFloat)\n})\n\nval data_frame \u003d cloud_elements.toDF()\ndata_frame.registerTempTable(\"cloud_elems_table\")\n",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "lineNumbers": true,
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453455_698097",
+      "id": "20160519-152053_363675857",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "filtered1: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[176] at map at \u003cconsole\u003e:188\nconsecFrames1: org.apache.spark.rdd.RDD[(org.dia.core.SciTensor, org.dia.core.SciTensor)] \u003d MapPartitionsRDD[183] at map at \u003cconsole\u003e:197\ncomponentFrameRDD1: org.apache.spark.rdd.RDD[((String, Double, Double), (String, Double, Double))] \u003d MapPartitionsRDD[184] at flatMap at \u003cconsole\u003e:193\ncollectedEdges1: Array[((String, Double, Double), (String, Double, Double))] \u003d Array(((2006080103,683084.0,50.0),(2006080104,778.0,1668.0)), ((2006080103,41612.0,78.0),(2006080104,202.0,164.0)), ((2006080103,32922.0,86.0),(2006080104,177.0,266.0)), ((2006080103,694754.0,1056.0),(2006080104,778.0,1668.0)), ((2006080103,1096000.0,1915.0),(2006080104,1000.0,2447.0)), ((2006080103,164808.0,184.0),(2006080104,378.0,237.0)), ((2006080103,12920.0,651.0),(2006080104,95.0,1406.0)), ((2006080103,99520.0,547.0),(2006080104,311.0,704.0)), ((2006080103,52074.0,2247.0),(2006080104,198.0,4624.0)), ((2006080103,312605.0,1492.0),(2006080104,515.0,1985.0)), ((2006080103,50752.0,2154.0),(2006080104,208.0,16837.0)), ((2006080103,674830.0,5736.0),(2006080104,754.0,7576.0)), ((2006080103,632775.0,551.0),(200...collectedVertices1: scala.collection.immutable.Set[(String, Double, Double)] \u003d Set((2006080117,279112.0,31.0), (2006080103,1546974.0,35.0), (2006080120,900.0,354.0), (2006080118,1884280.0,22.0), (2006080119,1603.0,2491.0), (2006080117,1064496.0,20103.0), (2006080118,934.0,3185.0), (2006080108,182620.0,1612.0), (2006080118,4346784.0,168.0), (2006080117,3502510.0,368.0), (2006080110,1649857.0,1405.0), (2006080114,893.0,281.0), (2006080113,813950.0,357.0), (2006080102,28103.0,269.0), (2006080117,3508113.0,182.0), (2006080100,1056208.0,108.0), (2006080118,1.0,529.0), (2006080123,1312.0,972.0), (2006080120,336.0,1136.0), (2006080109,78076.0,1401.0), (2006080113,186.0,871.0), (2006080119,1.0,2402.0), (2006080122,453.0,790.0), (2006080113,1339.0,1184.0), (2006080112,240462.0,672.0), (200608010...outvertices1: java.io.PrintWriter \u003d java.io.PrintWriter@ecb4af6\noutedges1: java.io.PrintWriter \u003d java.io.PrintWriter@73bed87c\nNUM VERTICES : 4018\n\nNUM EDGES : 2201\n\nedgeListOnly: Array[((Int, Int), (Int, Int))] \u003d Array(((2006080103,683084),(2006080104,778)), ((2006080103,41612),(2006080104,202)), ((2006080103,32922),(2006080104,177)), ((2006080103,694754),(2006080104,778)), ((2006080103,1096000),(2006080104,1000)), ((2006080103,164808),(2006080104,378)), ((2006080103,12920),(2006080104,95)), ((2006080103,99520),(2006080104,311)), ((2006080103,52074),(2006080104,198)), ((2006080103,312605),(2006080104,515)), ((2006080103,50752),(2006080104,208)), ((2006080103,674830),(2006080104,754)), ((2006080103,632775),(2006080104,885)), ((2006080103,357975),(2006080104,555)), ((2006080103,495864),(2006080104,639)), ((2006080103,11252),(2006080104,97)), ((2006080103,1546974),(2006080104,1202)), ((2006080103,1121919),(2006080104,1019)), ((2006080103,147232),(2006...edgeListP2: java.io.PrintWriter \u003d java.io.PrintWriter@6079aa84\nverticesRDD: org.apache.spark.rdd.RDD[(String, Double, Double)] \u003d ParallelCollectionRDD[185] at parallelize at \u003cconsole\u003e:199\ndefined class CloudElement\ncloud_elements: org.apache.spark.rdd.RDD[CloudElement] \u003d MapPartitionsRDD[186] at map at \u003cconsole\u003e:201\ndata_frame: org.apache.spark.sql.DataFrame \u003d [time: string, uid: int, size: float]\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 2:05:02 PM",
+      "dateFinished": "Jun 21, 2016 2:05:29 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \n## Visualize some results using default SQL visualizaitons \nWe will visualize the change of the cloud elements size over time using the Sql environment.\n* a termite plot of the areas for the various cloud elements found at a given time.",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453455_698097",
+      "id": "20160519-152053_221276350",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eVisualize some results using default SQL visualizaitons\u003c/h2\u003e\n\u003cp\u003eWe will visualize the change of the cloud elements size over time using the Sql environment.\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ea termite plot of the areas for the various cloud elements found at a given time.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:02 PM",
+      "dateFinished": "Jun 21, 2016 1:56:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql select time, uid, size from cloud_elems_table",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "lineNumbers": true,
+        "enabled": true,
+        "graph": {
+          "mode": "scatterChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "time",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "uid",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "time",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "uid",
+              "index": 1.0,
+              "aggr": "sum"
+            },
+            "size": {
+              "name": "size",
+              "index": 2.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453457_10701569",
+      "id": "20160519-152053_1486928518",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "time\tuid\tsize\n2006080117\t279112\t31.0\n2006080103\t1546974\t35.0\n2006080120\t900\t354.0\n2006080118\t1884280\t22.0\n2006080119\t1603\t2491.0\n2006080117\t1064496\t20103.0\n2006080118\t934\t3185.0\n2006080108\t182620\t1612.0\n2006080118\t4346784\t168.0\n2006080117\t3502510\t368.0\n2006080110\t1649857\t1405.0\n2006080114\t893\t281.0\n2006080113\t813950\t357.0\n2006080102\t28103\t269.0\n2006080117\t3508113\t182.0\n2006080100\t1056208\t108.0\n2006080118\t1\t529.0\n2006080123\t1312\t972.0\n2006080120\t336\t1136.0\n2006080109\t78076\t1401.0\n2006080113\t186\t871.0\n2006080119\t1\t2402.0\n2006080122\t453\t790.0\n2006080113\t1339\t1184.0\n2006080112\t240462\t672.0\n2006080109\t683\t827.0\n2006080102\t866\t367.0\n2006080109\t1211\t1686.0\n2006080108\t308398\t760.0\n2006080100\t29714\t697.0\n2006080114\t3142688\t2668.0\n2006080119\t635\t781.0\n2006080116\t985908\t127.0\n2006080107\t31515\t149.0\n2006080115\t348\t625.0\n2006080100\t169744\t544.0\n2006080106\t613800\t12217.0\n2006080119\t2068417\t53.0\n2006080112\t3260224\t227.0\n2006080115\t1251640\t1190.0\n2006080116\t498\t3263.0\n2006080116\t2285200\t381.0\n2006080123\t61\t1269.0\n2006080105\t250325\t927.0\n2006080122\t10914\t1004.0\n2006080114\t221616\t38.0\n2006080116\t1067625\t97.0\n2006080103\t52074\t2247.0\n2006080115\t1542\t735.0\n2006080112\t471240\t7.0\n2006080106\t987936\t12943.0\n2006080109\t1354\t777.0\n2006080119\t1233204\t9.0\n2006080100\t339864\t627.0\n2006080101\t3\t341.0\n2006080117\t5317380\t217.0\n2006080100\t2304202\t397.0\n2006080101\t1334\t238.0\n2006080116\t3528448\t275.0\n2006080119\t1014\t886.0\n2006080106\t155\t476.0\n2006080112\t193587\t246.0\n2006080101\t560\t183.0\n2006080115\t2444332\t2349.0\n2006080122\t1525\t224.0\n2006080102\t1241461\t122.0\n2006080123\t355\t578.0\n2006080114\t824\t364.0\n2006080103\t1494\t489.0\n2006080103\t147232\t8146.0\n2006080116\t643\t3576.0\n2006080104\t1707006\t616.0\n2006080109\t1813135\t651.0\n2006080109\t493\t153.0\n2006080111\t1321\t110.0\n2006080113\t1430\t648.0\n2006080120\t162\t1144.0\n2006080120\t600928\t372.0\n2006080113\t887\t1084.0\n2006080109\t71400\t1085.0\n2006080111\t211584\t893.0\n2006080121\t1524441\t437.0\n2006080112\t85500\t608.0\n2006080118\t658\t139.0\n2006080113\t2435832\t3714.0\n2006080100\t88788\t480.0\n2006080103\t12920\t651.0\n2006080107\t268\t521.0\n2006080116\t1684794\t5793.0\n2006080114\t2836196\t98.0\n2006080108\t380760\t6.0\n2006080108\t1168\t751.0\n2006080119\t2523222\t70.0\n2006080113\t90520\t35.0\n2006080108\t518\t389.0\n2006080108\t696\t1018.0\n2006080102\t157\t737.0\n2006080112\t344\t5276.0\n2006080105\t1240\t1122.0\n2006080112\t216762\t1044.0\n2006080111\t1755369\t222.0\n2006080118\t780\t377.0\n2006080118\t966145\t12.0\n2006080114\t3112810\t121.0\n2006080109\t148\t231.0\n2006080113\t1774\t329.0\n2006080114\t2617440\t82.0\n2006080117\t516\t2893.0\n2006080118\t96577\t618.0\n2006080120\t56\t529.0\n2006080108\t106190\t272.0\n2006080119\t2691240\t178.0\n2006080118\t1496\t725.0\n2006080118\t3339280\t4314.0\n2006080119\t685872\t2721.0\n2006080112\t2392920\t416.0\n2006080103\t1028\t409.0\n2006080121\t534153\t98.0\n2006080115\t1096\t338.0\n2006080121\t430760\t554.0\n2006080100\t2442640\t707.0\n2006080103\t942564\t10012.0\n2006080104\t84064\t3156.0\n2006080118\t584\t10688.0\n2006080104\t1125696\t8826.0\n2006080100\t378\t3789.0\n2006080120\t1\t3328.0\n2006080113\t775527\t1096.0\n2006080116\t1613850\t44.0\n2006080110\t1181\t7952.0\n2006080118\t43840\t281.0\n2006080120\t516384\t2865.0\n2006080106\t948\t209.0\n2006080114\t2434780\t220.0\n2006080121\t3167472\t668.0\n2006080121\t530\t4774.0\n2006080109\t736\t545.0\n2006080101\t142\t214.0\n2006080106\t1295\t965.0\n2006080107\t244\t771.0\n2006080120\t2218500\t316.0\n2006080121\t38570\t126.0\n2006080105\t14874\t2702.0\n2006080117\t552\t259.0\n2006080102\t1590732\t240.0\n2006080115\t741000\t186.0\n2006080113\t728252\t37.0\n2006080116\t1583\t383.0\n2006080109\t45784\t15.0\n2006080112\t337820\t610.0\n2006080110\t324849\t260.0\n2006080110\t194\t982.0\n2006080103\t1150\t20020.0\n2006080113\t1879605\t477.0\n2006080109\t710967\t539.0\n2006080112\t376\t1431.0\n2006080110\t238\t1721.0\n2006080118\t606\t381.0\n2006080101\t129\t1663.0\n2006080118\t385662\t9366.0\n2006080116\t4510230\t504.0\n2006080101\t1780188\t183.0\n2006080120\t638388\t381.0\n2006080105\t963252\t213.0\n2006080104\t494262\t95.0\n2006080117\t426\t914.0\n2006080111\t1566\t1342.0\n2006080119\t1796\t537.0\n2006080114\t330456\t489.0\n2006080105\t969240\t3427.0\n2006080103\t461\t667.0\n2006080119\t2714214\t596.0\n2006080101\t1327\t238.0\n2006080102\t31185\t398.0\n2006080117\t2498405\t7417.0\n2006080100\t1804\t163.0\n2006080105\t1343\t1115.0\n2006080122\t1207\t687.0\n2006080114\t2036886\t1068.0\n2006080112\t1151\t366.0\n2006080120\t1380\t539.0\n2006080101\t302\t765.0\n2006080101\t968\t154.0\n2006080118\t1263\t375.0\n2006080109\t801520\t46.0\n2006080109\t223\t168.0\n2006080104\t1584618\t212.0\n2006080115\t2183\t908.0\n2006080118\t836864\t1743.0\n2006080118\t57\t185.0\n2006080101\t179\t913.0\n2006080104\t7310\t4184.0\n2006080112\t319740\t10800.0\n2006080114\t661476\t1090.0\n2006080101\t472503\t166.0\n2006080121\t398\t1405.0\n2006080114\t1328\t340.0\n2006080114\t2614568\t2469.0\n2006080116\t1147575\t301.0\n2006080109\t1008425\t7722.0\n2006080102\t1355\t950.0\n2006080121\t2\t2153.0\n2006080110\t729\t1175.0\n2006080115\t683\t503.0\n2006080118\t2040\t985.0\n2006080108\t871\t1191.0\n2006080103\t280840\t169.0\n2006080106\t1093\t906.0\n2006080100\t385884\t323.0\n2006080103\t248\t337.0\n2006080106\t483120\t1488.0\n2006080101\t879\t604.0\n2006080122\t1116\t3674.0\n2006080105\t267\t1018.0\n2006080116\t3564\t41.0\n2006080108\t1496576\t206.0\n2006080108\t78076\t939.0\n2006080120\t1400\t497.0\n2006080107\t196690\t6028.0\n2006080118\t362004\t224.0\n2006080114\t5141400\t367.0\n2006080122\t198021\t9503.0\n2006080104\t85\t5307.0\n2006080122\t12508\t473.0\n2006080116\t2560004\t1948.0\n2006080116\t2987264\t1189.0\n2006080103\t275\t239.0\n2006080122\t16335\t19.0\n2006080115\t735\t65.0\n2006080116\t640\t14.0\n2006080112\t1960812\t2103.0\n2006080122\t738820\t280.0\n2006080101\t1278\t717.0\n2006080113\t463\t3599.0\n2006080121\t1618\t569.0\n2006080106\t383\t11655.0\n2006080100\t98595\t85.0\n2006080110\t289050\t2779.0\n2006080115\t974\t591.0\n2006080109\t256949\t708.0\n2006080102\t1110248\t1686.0\n2006080120\t505172\t425.0\n2006080115\t199133\t52.0\n2006080119\t52800\t199.0\n2006080117\t508\t517.0\n2006080121\t1453652\t2216.0\n2006080116\t27117\t977.0\n2006080106\t37\t1071.0\n2006080103\t66\t345.0\n2006080117\t1146600\t23.0\n2006080119\t20368\t229.0\n2006080106\t348\t283.0\n2006080113\t4\t566.0\n2006080122\t1178\t2965.0\n2006080121\t667397\t1087.0\n2006080109\t807\t663.0\n2006080101\t130\t1730.0\n2006080105\t1270080\t620.0\n2006080102\t948168\t99.0\n2006080114\t492443\t375.0\n2006080107\t929\t1455.0\n2006080101\t7600\t1143.0\n2006080117\t2035703\t346.0\n2006080116\t1656\t649.0\n2006080112\t1453\t302.0\n2006080105\t975\t552.0\n2006080116\t298634\t5232.0\n2006080120\t1952626\t7232.0\n2006080113\t5265\t84.0\n2006080113\t519\t487.0\n2006080114\t10241\t258.0\n2006080109\t298\t1615.0\n2006080113\t2540425\t192.0\n2006080117\t266\t580.0\n2006080103\t821215\t196.0\n2006080109\t385\t2738.0\n2006080110\t470\t4467.0\n2006080114\t701394\t555.0\n2006080113\t60456\t167.0\n2006080106\t984\t15887.0\n2006080108\t26550\t251.0\n2006080112\t2802664\t162.0\n2006080116\t255\t172.0\n2006080113\t8588\t179.0\n2006080116\t315\t1778.0\n2006080107\t1085\t1796.0\n2006080120\t698964\t1876.0\n2006080102\t1174\t209.0\n2006080112\t266706\t160.0\n2006080122\t3\t188.0\n2006080109\t100870\t1982.0\n2006080104\t1301\t296.0\n2006080117\t205662\t334.0\n2006080110\t580\t617.0\n2006080113\t74976\t13.0\n2006080117\t451503\t130.0\n2006080121\t281285\t1240.0\n2006080122\t146\t501.0\n2006080122\t49\t46.0\n2006080100\t2259180\t1452.0\n2006080123\t1337\t2271.0\n2006080105\t372960\t151.0\n2006080115\t1486\t373.0\n2006080119\t745472\t216.0\n2006080118\t1257138\t218.0\n2006080106\t373\t362.0\n2006080114\t635626\t1023.0\n2006080108\t7480\t192.0\n2006080112\t3402018\t242.0\n2006080110\t331\t1240.0\n2006080113\t178350\t508.0\n2006080109\t667\t368.0\n2006080110\t86411\t3836.0\n2006080119\t25272\t259.0\n2006080123\t1196\t528.0\n2006080101\t24\t86.0\n2006080106\t35931\t707.0\n2006080109\t497\t3000.0\n2006080121\t1187781\t13678.0\n2006080106\t69649\t593.0\n2006080118\t393624\t126.0\n2006080120\t324421\t1375.0\n2006080123\t192\t560.0\n2006080113\t478744\t340.0\n2006080114\t283590\t99.0\n2006080106\t671\t8313.0\n2006080110\t1018\t583.0\n2006080107\t168119\t200.0\n2006080119\t4477410\t195.0\n2006080111\t1615432\t519.0\n2006080116\t3076230\t313.0\n2006080109\t77\t510.0\n2006080111\t66868\t56.0\n2006080114\t677\t208.0\n2006080117\t1360380\t83.0\n2006080110\t1811479\t206.0\n2006080122\t39203\t386.0\n2006080116\t395539\t158.0\n2006080102\t1154469\t972.0\n2006080111\t75816\t174.0\n2006080123\t557\t253.0\n2006080101\t1520\t1136.0\n2006080110\t2244901\t178.0\n2006080123\t1638\t418.0\n2006080112\t104175\t1742.0\n2006080118\t2266\t599.0\n2006080105\t767\t738.0\n2006080121\t1450\t2187.0\n2006080114\t533461\t240.0\n2006080103\t169125\t495.0\n2006080115\t2015\t1795.0\n2006080122\t720780\t78.0\n2006080100\t115258\t403.0\n2006080115\t285600\t39.0\n2006080117\t880\t591.0\n2006080119\t2556792\t97.0\n2006080114\t553\t3567.0\n2006080113\t331344\t799.0\n2006080105\t225944\t195.0\n2006080121\t1137\t431.0\n2006080114\t630\t1493.0\n2006080107\t213\t4709.0\n2006080108\t125100\t762.0\n2006080118\t384810\t257.0\n2006080115\t2379000\t2913.0\n2006080105\t259284\t117.0\n2006080109\t580704\t352.0\n2006080116\t1177\t331.0\n2006080104\t17688\t2702.0\n2006080122\t634140\t235.0\n2006080108\t1495312\t228.0\n2006080113\t2422944\t3605.0\n2006080111\t12\t313.0\n2006080118\t1785176\t14825.0\n2006080107\t59840\t1652.0\n2006080115\t30\t595.0\n2006080110\t1085\t1150.0\n2006080115\t4358655\t310.0\n2006080110\t1112010\t124.0\n2006080100\t1442810\t373.0\n2006080101\t363\t6045.0\n2006080104\t272435\t1557.0\n2006080105\t1149135\t51.0\n2006080108\t421\t316.0\n2006080119\t1999200\t195.0\n2006080114\t264\t18434.0\n2006080121\t905\t100.0\n2006080114\t264140\t257.0\n2006080112\t472234\t622.0\n2006080111\t323456\t230.0\n2006080104\t134196\t979.0\n2006080114\t886835\t20.0\n2006080122\t464\t664.0\n2006080122\t1408888\t463.0\n2006080115\t1852350\t3436.0\n2006080103\t10450\t189.0\n2006080119\t2082\t942.0\n2006080104\t948390\t1059.0\n2006080111\t8960\t11.0\n2006080105\t479\t396.0\n2006080115\t1763\t630.0\n2006080107\t1004\t15939.0\n2006080120\t32\t637.0\n2006080122\t833\t1074.0\n2006080122\t1568\t504.0\n2006080104\t1142\t763.0\n2006080105\t1048944\t9212.0\n2006080112\t12\t177.0\n2006080118\t1026\t512.0\n2006080116\t1450\t730.0\n2006080122\t107\t1529.0\n2006080106\t543744\t483.0\n2006080115\t1160\t1614.0\n2006080115\t1820\t305.0\n2006080119\t403848\t181.0\n2006080111\t868\t470.0\n2006080104\t691250\t193.0\n2006080102\t215\t1738.0\n2006080112\t373\t508.0\n2006080106\t306\t312.0\n2006080116\t130782\t419.0\n2006080112\t1104\t348.0\n2006080109\t998\t163.0\n2006080111\t720440\t311.0\n2006080122\t1334\t168.0\n2006080121\t1597904\t618.0\n2006080102\t144018\t2699.0\n2006080120\t248\t398.0\n2006080120\t1490104\t18342.0\n2006080112\t1090600\t113.0\n2006080111\t764841\t10.0\n2006080114\t4962895\t866.0\n2006080103\t387\t14142.0\n2006080104\t133792\t195.0\n2006080117\t8\t3838.0\n2006080117\t1873\t1461.0\n2006080101\t117\t1045.0\n2006080118\t1876\t6431.0\n2006080102\t564\t1145.0\n2006080118\t771456\t166.0\n2006080103\t8245\t2029.0\n2006080122\t195696\t571.0\n2006080104\t897804\t338.0\n2006080102\t172056\t8405.0\n2006080111\t428802\t450.0\n2006080119\t2021\t261.0\n2006080103\t1230\t260.0\n2006080113\t786\t1219.0\n2006080114\t3025398\t170.0\n2006080101\t1230\t188.0\n2006080101\t2228025\t193.0\n2006080116\t1605\t816.0\n2006080119\t556920\t7.0\n2006080119\t929\t207.0\n2006080121\t225141\t505.0\n2006080119\t1080560\t120.0\n2006080113\t103752\t278.0\n2006080109\t1032689\t1128.0\n2006080120\t1455553\t177.0\n2006080113\t22302\t18.0\n2006080121\t319\t8131.0\n2006080108\t113715\t1523.0\n2006080120\t2\t2278.0\n2006080114\t1187\t248.0\n2006080105\t95904\t226.0\n2006080112\t397\t1075.0\n2006080105\t83\t317.0\n2006080108\t287\t526.0\n2006080108\t1183\t1036.0\n2006080121\t778022\t596.0\n2006080114\t496\t189.0\n2006080112\t488\t33.0\n2006080112\t704\t308.0\n2006080101\t168096\t519.0\n2006080121\t2104872\t592.0\n2006080106\t132201\t235.0\n2006080119\t2794623\t143.0\n2006080116\t2215\t315.0\n2006080117\t657540\t49.0\n2006080114\t576\t270.0\n2006080104\t69\t393.0\n2006080121\t712\t826.0\n2006080105\t345\t14192.0\n2006080118\t248653\t4277.0\n2006080109\t818300\t97.0\n2006080100\t1305665\t12688.0\n2006080110\t66\t1048.0\n2006080105\t870\t303.0\n2006080115\t366021\t405.0\n2006080121\t107\t177.0\n2006080108\t159936\t261.0\n2006080101\t2283576\t180.0\n2006080112\t264\t143.0\n2006080116\t1094\t529.0\n2006080110\t1474\t768.0\n2006080113\t588\t272.0\n2006080118\t2218398\t7531.0\n2006080116\t224896\t77.0\n2006080121\t1810692\t7121.0\n2006080104\t186\t1845.0\n2006080121\t44\t501.0\n2006080100\t1062432\t2637.0\n2006080102\t83712\t212.0\n2006080114\t5220864\t591.0\n2006080102\t1123020\t7473.0\n2006080107\t1261\t973.0\n2006080123\t725\t1769.0\n2006080116\t4204014\t331.0\n2006080110\t190\t460.0\n2006080105\t1186980\t274.0\n2006080102\t1286625\t55.0\n2006080103\t584\t474.0\n2006080116\t1532\t5104.0\n2006080121\t167\t317.0\n2006080110\t435\t643.0\n2006080116\t525\t226.0\n2006080100\t111878\t130.0\n2006080110\t20\t1109.0\n2006080102\t1491\t410.0\n2006080119\t1620273\t12.0\n2006080114\t23409\t80.0\n2006080108\t62\t9254.0\n2006080113\t3247600\t673.0\n2006080113\t3879900\t864.0\n2006080110\t925\t449.0\n2006080120\t942\t2494.0\n2006080121\t146464\t1136.0\n2006080102\t37492\t57.0\n2006080115\t35\t120.0\n2006080102\t31772\t1183.0\n2006080115\t10\t3941.0\n2006080116\t147\t383.0\n2006080122\t531\t500.0\n2006080108\t45715\t35.0\n2006080110\t1319864\t373.0\n2006080118\t836\t449.0\n2006080115\t424\t3289.0\n2006080112\t1822\t2524.0\n2006080110\t2460106\t183.0\n2006080103\t965\t402.0\n2006080115\t2113027\t758.0\n2006080120\t1338\t6091.0\n2006080116\t816000\t1032.0\n2006080115\t1078896\t466.0\n2006080106\t1012\t407.0\n2006080120\t1013044\t1064.0\n2006080103\t260\t648.0\n2006080102\t100165\t3267.0\n2006080106\t226\t674.0\n2006080114\t1513597\t126.0\n2006080102\t958375\t24.0\n2006080118\t1165\t301.0\n2006080119\t48316\t30.0\n2006080103\t4554\t233.0\n2006080110\t1303\t664.0\n2006080107\t1222011\t213.0\n2006080102\t136611\t12274.0\n2006080119\t2248470\t3574.0\n2006080118\t997217\t18.0\n2006080116\t172\t2839.0\n2006080114\t2374704\t111.0\n2006080105\t379797\t35.0\n2006080116\t1135\t234.0\n2006080109\t177\t319.0\n2006080105\t243\t175.0\n2006080107\t1099105\t1636.0\n2006080115\t778\t1811.0\n2006080107\t534\t763.0\n2006080105\t863838\t465.0\n2006080112\t2402442\t757.0\n2006080122\t2815722\t196.0\n2006080111\t55836\t34.0\n2006080121\t2187375\t6072.0\n2006080116\t448\t256.0\n2006080112\t1775930\t158.0\n2006080105\t787\t502.0\n2006080107\t121\t1097.0\n2006080107\t1145100\t250.0\n2006080103\t136\t1425.0\n2006080114\t220\t372.0\n2006080110\t1060\t428.0\n2006080108\t170\t636.0\n2006080116\t3108\t927.0\n2006080112\t78\t846.0\n2006080117\t1\t339.0\n2006080113\t1715\t6648.0\n2006080121\t1609\t645.0\n2006080103\t150062\t310.0\n2006080105\t1227439\t121.0\n2006080104\t1043\t308.0\n2006080114\t349416\t481.0\n2006080105\t1134\t629.0\n2006080115\t652\t721.0\n2006080118\t3392644\t400.0\n2006080113\t635360\t215.0\n2006080112\t1871568\t611.0\n2006080116\t869\t354.0\n2006080113\t256039\t2716.0\n2006080116\t2755440\t73.0\n2006080114\t2153466\t55.0\n2006080114\t3212186\t153.0\n2006080101\t861063\t186.0\n2006080112\t1303\t8711.0\n2006080104\t1016\t182.0\n2006080111\t73280\t4371.0\n2006080119\t520520\t176.0\n2006080122\t427188\t77.0\n2006080101\t693056\t778.0\n2006080109\t411\t369.0\n2006080104\t515\t1985.0\n2006080112\t111192\t32.0\n2006080104\t460\t272.0\n2006080104\t1350594\t256.0\n2006080123\t1172\t1348.0\n2006080121\t44084\t57.0\n2006080102\t294\t2121.0\n2006080119\t2100\t1285.0\n2006080113\t1622\t467.0\n2006080111\t1383502\t46.0\n2006080107\t244500\t4122.0\n2006080107\t708750\t96.0\n2006080121\t1836\t364.0\n2006080102\t408\t1141.0\n2006080114\t1343137\t54.0\n2006080100\t407500\t11988.0\n2006080113\t666166\t186.0\n2006080110\t98560\t292.0\n2006080119\t1040\t267.0\n2006080111\t1006\t1454.0\n2006080116\t434375\t171.0\n2006080121\t1534\t2491.0\n2006080102\t1078\t19853.0\n2006080112\t40326\t103.0\n2006080122\t989\t1580.0\n2006080114\t319889\t5764.0\n2006080113\t2845623\t106.0\n2006080104\t54432\t38.0\n2006080118\t590580\t5.0\n2006080116\t644652\t535.0\n2006080104\t1040160\t4433.0\n2006080108\t814925\t214.0\n2006080119\t2898506\t272.0\n2006080120\t713804\t7624.0\n2006080123\t623\t319.0\n2006080108\t826\t216.0\n2006080117\t1830\t589.0\n2006080122\t1558\t220.0\n2006080113\t157850\t23.0\n2006080105\t1129\t532.0\n2006080115\t407831\t22.0\n2006080110\t1111\t2508.0\n2006080120\t244354\t85.0\n2006080117\t3227256\t204.0\n2006080116\t2018\t1097.0\n2006080116\t760\t6008.0\n2006080114\t185103\t65.0\n2006080100\t1683126\t525.0\n2006080111\t497024\t179.0\n2006080111\t2052960\t2272.0\n2006080121\t209658\t197.0\n2006080120\t1674538\t2576.0\n2006080119\t1018056\t655.0\n2006080111\t596\t332.0\n2006080102\t1308\t290.0\n2006080113\t1658\t793.0\n2006080112\t498324\t487.0\n2006080101\t336\t4105.0\n2006080115\t128169\t175.0\n2006080123\t955\t225.0\n2006080115\t68\t60.0\n2006080119\t3058901\t424.0\n2006080102\t1020\t8311.0\n2006080115\t414\t7670.0\n2006080122\t1428\t1060.0\n2006080119\t410818\t207.0\n2006080111\t117040\t5348.0\n2006080108\t233\t5535.0\n2006080121\t1065153\t653.0\n2006080113\t322317\t5386.0\n2006080119\t1259\t206.0\n2006080115\t494780\t328.0\n2006080106\t88515\t797.0\n2006080118\t4203680\t160.0\n2006080105\t413\t393.0\n2006080107\t316500\t93.0\n2006080122\t43036\t120.0\n2006080119\t4295304\t170.0\n2006080119\t2108\t637.0\n2006080113\t961\t1434.0\n2006080108\t784\t363.0\n2006080116\t1959\t800.0\n2006080111\t2285519\t662.0\n2006080116\t1255956\t2401.0\n2006080121\t10807\t519.0\n2006080117\t339304\t8678.0\n2006080113\t156210\t10.0\n2006080121\t401632\t1806.0\n2006080106\t527\t1415.0\n2006080103\t563\t168.0\n2006080108\t1005\t312.0\n2006080112\t966672\t105.0\n2006080101\t766\t253.0\n2006080116\t2291040\t228.0\n2006080115\t1487\t2158.0\n2006080119\t1692592\t16802.0\n2006080102\t743869\t851.0\n2006080115\t575320\t3055.0\n2006080118\t3082322\t84.0\n2006080116\t297\t203.0\n2006080123\t712\t260.0\n2006080112\t4\t422.0\n2006080108\t810\t250.0\n2006080103\t335\t4403.0\n2006080101\t397\t14400.0\n2006080103\t1157\t191.0\n2006080116\t762\t1475.0\n2006080116\t1237\t7011.0\n2006080105\t790\t288.0\n2006080106\t211\t3678.0\n2006080118\t4037160\t527.0\n2006080121\t33\t112.0\n2006080103\t1052328\t202.0\n2006080119\t1577535\t66.0\n2006080104\t935000\t1348.0\n2006080119\t1487\t162.0\n2006080113\t1096\t254.0\n2006080101\t653\t1666.0\n2006080123\t118\t607.0\n2006080107\t1710532\t413.0\n2006080113\t393\t373.0\n2006080103\t62776\t3568.0\n2006080104\t198\t4624.0\n2006080117\t1\t496.0\n2006080113\t1435590\t383.0\n2006080105\t350960\t748.0\n2006080114\t613470\t170.0\n2006080110\t306540\t4704.0\n2006080105\t948\t9339.0\n2006080100\t41811\t393.0\n2006080113\t4992768\t842.0\n2006080113\t741\t454.0\n2006080115\t16244\t961.0\n2006080115\t1398384\t11.0\n2006080121\t1144564\t163.0\n2006080104\t1007964\t351.0\n2006080117\t1792\t1670.0\n2006080103\t215\t6504.0\n2006080117\t811\t345.0\n2006080108\t34\t712.0\n2006080122\t652\t556.0\n2006080113\t626340\t11400.0\n2006080104\t476\t393.0\n2006080119\t629\t22824.0\n2006080120\t1599\t146.0\n2006080114\t375912\t172.0\n2006080122\t370216\t1130.0\n2006080118\t1303809\t13227.0\n2006080110\t112960\t114.0\n2006080110\t2233613\t692.0\n2006080121\t14310\t167.0\n2006080114\t1920\t392.0\n2006080114\t836\t1262.0\n2006080122\t1061\t22293.0\n2006080103\t266\t4688.0\n2006080108\t76200\t3287.0\n2006080113\t2332080\t687.0\n2006080111\t986886\t716.0\n2006080120\t516\t704.0\n2006080113\t4196418\t400.0\n2006080119\t1419\t358.0\n2006080101\t1059598\t1742.0\n2006080102\t101\t1467.0\n2006080122\t1934940\t861.0\n2006080111\t709\t791.0\n2006080104\t55769\t3401.0\n2006080110\t1464989\t55.0\n2006080104\t32\t437.0\n2006080120\t291711\t628.0\n2006080102\t1247166\t30.0\n2006080112\t383900\t55.0\n2006080111\t1591\t245.0\n2006080101\t1395886\t176.0\n2006080106\t501\t507.0\n2006080114\t582796\t242.0\n2006080112\t1135872\t14553.0\n2006080109\t939614\t356.0\n2006080101\t1189\t1644.0\n2006080120\t205368\t591.0\n2006080103\t50752\t2154.0\n2006080120\t632\t369.0\n2006080107\t1433952\t1210.0\n2006080117\t3589100\t268.0\n2006080116\t2217\t320.0\n2006080103\t642\t933.0\n2006080111\t140352\t3931.0\n2006080120\t316958\t4354.0\n2006080119\t485092\t730.0\n2006080114\t1194\t309.0\n2006080110\t87108\t242.0\n2006080118\t2096\t454.0\n2006080102\t1330550\t73.0\n2006080116\t1361\t2022.0\n2006080105\t217\t10186.0\n2006080108\t1041\t370.0\n2006080122\t203\t377.0\n2006080112\t1449\t1530.0\n2006080113\t2815839\t429.0\n2006080119\t1528930\t834.0\n2006080115\t1344\t5222.0\n2006080121\t1205478\t13.0\n2006080108\t13824\t448.0\n2006080114\t1749\t595.0\n2006080108\t881\t1473.0\n2006080108\t254\t4173.0\n2006080122\t2835470\t179.0\n2006080102\t1506156\t713.0\n2006080114\t274\t376.0\n2006080112\t1743170\t168.0\n2006080111\t469853\t138.0\n2006080120\t2006\t1518.0\n2006080112\t398373\t165.0\n2006080118\t1147120\t68.0\n2006080114\t161\t7377.0\n2006080100\t438933\t396.0\n2006080120\t1417\t9016.0\n2006080101\t1004\t241.0\n2006080116\t177\t410.0\n2006080120\t923\t239.0\n2006080109\t3479\t6687.0\n2006080108\t15984\t152.0\n2006080122\t1519\t342.0\n2006080107\t13068\t724.0\n2006080117\t1417805\t94.0\n2006080108\t954\t352.0\n2006080112\t656250\t154.0\n2006080112\t623\t814.0\n2006080117\t518\t916.0\n2006080119\t1654\t739.0\n2006080115\t604960\t687.0\n2006080122\t1609\t343.0\n2006080117\t960\t2026.0\n2006080115\t2084858\t272.0\n2006080100\t411480\t992.0\n2006080109\t1344310\t1732.0\n2006080122\t461\t842.0\n2006080123\t1378\t3377.0\n2006080113\t724996\t31.0\n2006080110\t2035491\t1025.0\n2006080118\t1088567\t108.0\n2006080106\t1374\t2045.0\n2006080118\t4440906\t652.0\n2006080116\t1087008\t578.0\n2006080117\t2018\t357.0\n2006080114\t315468\t28.0\n2006080110\t765578\t333.0\n2006080122\t544876\t2863.0\n2006080123\t1675\t291.0\n2006080102\t1012\t384.0\n2006080122\t57\t979.0\n2006080118\t672\t31.0\n2006080112\t995\t410.0\n2006080121\t327497\t3525.0\n2006080114\t4257695\t489.0\n2006080106\t1260000\t1056.0\n2006080105\t385\t435.0\n2006080123\t1637\t1119.0\n2006080101\t138006\t149.0\n2006080111\t1710\t3519.0\n2006080104\t1000\t2447.0\n2006080123\t877\t2200.0\n2006080101\t654\t653.0\n2006080108\t439420\t924.0\n2006080109\t140429\t816.0\n2006080111\t434805\t1909.0\n2006080120\t152388\t81.0\n2006080109\t1285\t1359.0\n2006080115\t1970\t422.0\n2006080120\t28080\t140.0\n2006080115\t1586\t8768.0\n2006080104\t243\t541.0\n2006080113\t858\t87.0\n2006080112\t271656\t58.0\n2006080116\t1478646\t84.0\n2006080119\t48112\t216.0\n2006080101\t905112\t33.0\n2006080120\t2361348\t254.0\n2006080116\t238\t275.0\n2006080116\t378\t418.0\n2006080123\t386\t1518.0\n2006080104\t265\t632.0\n2006080103\t256\t471.0\n2006080104\t810840\t118.0\n2006080122\t162506\t861.0\n2006080120\t495\t461.0\n2006080116\t279312\t69.0\n2006080102\t839125\t299.0\n2006080117\t465650\t119.0\n2006080123\t1457\t899.0\n2006080107\t296474\t978.0\n2006080122\t1490312\t388.0\n2006080122\t1244\t526.0\n2006080105\t284\t4358.0\n2006080103\t249504\t421.0\n2006080114\t45056\t75.0\n2006080117\t2235\t966.0\n2006080123\t773\t464.0\n2006080113\t1656\t855.0\n2006080120\t2614443\t85.0\n2006080111\t312\t505.0\n2006080123\t924\t18518.0\n2006080111\t2018665\t522.0\n2006080116\t607\t500.0\n2006080108\t225429\t966.0\n2006080110\t476180\t192.0\n2006080110\t1526\t1782.0\n2006080115\t850\t76.0\n2006080111\t1092\t393.0\n2006080102\t1041\t1340.0\n2006080109\t2132076\t1987.0\n2006080117\t337\t1952.0\n2006080119\t1428\t512.0\n2006080115\t291\t1043.0\n2006080120\t665\t182.0\n2006080121\t1721\t662.0\n2006080122\t198230\t246.0\n2006080111\t1397\t1968.0\n2006080113\t410\t723.0\n2006080123\t1049\t136.0\n2006080120\t23166\t344.0\n2006080120\t2523430\t1731.0\n2006080115\t1434\t6795.0\n2006080112\t14508\t517.0\n2006080120\t72576\t392.0\n2006080108\t1181\t355.0\n2006080110\t881\t740.0\n2006080121\t101\t983.0\n2006080106\t1120\t1277.0\n2006080118\t247446\t124.0\n2006080111\t615\t3817.0\n2006080108\t191\t457.0\n2006080119\t642804\t976.0\n2006080119\t390609\t18844.0\n2006080114\t16929\t28.0\n2006080108\t1505424\t154.0\n2006080106\t281\t912.0\n2006080104\t203648\t207.0\n2006080119\t954\t9466.0\n2006080122\t567\t156.0\n2006080119\t1077\t4165.0\n2006080101\t323\t323.0\n2006080114\t427\t233.0\n2006080106\t268686\t37.0\n2006080116\t240792\t33.0\n2006080101\t21\t5052.0\n2006080118\t2220\t491.0\n2006080112\t432440\t141.0\n2006080102\t1410\t1551.0\n2006080116\t1343\t9404.0\n2006080122\t950\t151.0\n2006080103\t188\t1420.0\n2006080100\t1836\t206.0\n2006080110\t531\t470.0\n2006080119\t420546\t8342.0\n2006080102\t398\t3274.0\n2006080105\t74408\t2838.0\n2006080105\t36462\t943.0\n2006080108\t126665\t2105.0\n2006080116\t3128959\t155.0\n2006080117\t2203\t432.0\n2006080114\t807\t4382.0\n2006080102\t457412\t169.0\n2006080122\t447\t12329.0\n2006080119\t1780\t5189.0\n2006080101\t2052\t2115.0\n2006080116\t535\t479.0\n2006080115\t1606\t3171.0\n2006080103\t263\t2877.0\n2006080119\t2834172\t95.0\n2006080102\t1479\t392.0\n2006080121\t985\t449.0\n2006080115\t824500\t110.0\n2006080120\t1494\t4782.0\n2006080110\t59280\t268.0\n2006080107\t69\t772.0\n2006080115\t238\t492.0\n2006080121\t779\t1102.0\n2006080108\t969150\t9740.0\n2006080101\t147\t1969.0\n2006080100\t36\t85.0\n2006080101\t853\t641.0\n2006080116\t1421\t1082.0\n2006080119\t2012\t449.0\n2006080107\t449841\t37.0\n2006080111\t898\t303.0\n2006080105\t186102\t616.0\n2006080102\t820\t9755.0\n2006080114\t1499\t1510.0\n2006080108\t423620\t460.0\n2006080121\t216\t916.0\n2006080105\t296769\t1716.0\n\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 2:05:04 PM",
+      "dateFinished": "Jun 21, 2016 2:05:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \n## Find the subgraphs\nOur graph is:\n* Sparse, disconnected and directed. \n* There are no cycles\n\nOur initial approach to determine all the connected subgraphs within this graph is:\n* Partition nodes such that possible connected nodes are together\n* On each partition: eliminate only subgraphs that are found in that partition \n* Merge consecutive partitions and repeat subgraph elimination\n* Continue until one partition remains OR all nodes are gone\n\nOur approach ensures a maximum number of iterations of log(paritions)/log(2) + 1",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453458_11855816",
+      "id": "20160519-152053_540401887",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eFind the subgraphs\u003c/h2\u003e\n\u003cp\u003eOur graph is:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eSparse, disconnected and directed.\u003c/li\u003e\n\u003cli\u003eThere are no cycles\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eOur initial approach to determine all the connected subgraphs within this graph is:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ePartition nodes such that possible connected nodes are together\u003c/li\u003e\n\u003cli\u003eOn each partition: eliminate only subgraphs that are found in that partition\u003c/li\u003e\n\u003cli\u003eMerge consecutive partitions and repeat subgraph elimination\u003c/li\u003e\n\u003cli\u003eContinue until one partition remains OR all nodes are gone\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eOur approach ensures a maximum number of iterations of log(paritions)/log(2) + 1\u003c/p\u003e\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:02 PM",
+      "dateFinished": "Jun 21, 2016 1:56:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sh\n# edit the file by removing the \u0027List(\u0027 from the beginning  and last \u0027)\u0027, then copy the file to hdfs\nsed -i \u0027s/^.\\{,5\\}//; s/.$//\u0027 EdgelistP2.txt\n\n# move the file to hdfs\nif hadoop fs -test -e /tmp/EdgelistP2.txt; then\nhadoop fs -rm /tmp/EdgelistP2.txt\nfi\n\nhadoop fs -copyFromLocal EdgelistP2.txt /tmp/EdgelistP2.txt",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/sh",
+        "colWidth": 12.0,
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453459_11471067",
+      "id": "20160519-152053_826171646",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "OpenJDK 64-Bit Server VM warning: You have loaded library /data/cluster-local/software/hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/06/21 13:56:03 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\nOpenJDK 64-Bit Server VM warning: You have loaded library /data/cluster-local/software/hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/06/21 13:56:05 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n16/06/21 13:56:06 INFO fs.TrashPolicyDefault: Namenode trash configuration: Deletion interval \u003d 0 minutes, Emptier interval \u003d 0 minutes.\nDeleted /tmp/EdgelistP2.txt\nOpenJDK 64-Bit Server VM warning: You have loaded library /data/cluster-local/software/hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/06/21 13:56:07 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:02 PM",
+      "dateFinished": "Jun 21, 2016 1:56:09 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val edgesRDD \u003d sc.textFile(\"hdfs://128.149.112.134:8090/tmp/EdgelistP2.txt\")\n\nval subGraphsCount \u003d edgesRDD.flatMap(line \u003d\u003e line.split(\", \"))\n      .map(MainDistGraphMCC.mapFrames)\n      .groupByKey()\n    MainDistGraphMCC.getSubgraphs(subGraphsCount, 1)\n    println(\"Done\")\n\n// for custom viz\nval sg \u003d subGraphsCount.flatMap(t\u003d\u003e t._2)\nval sg1 \u003d sg.map({ t \u003d\u003e (\"\u0027F\"+t.toString.split(\",\")(0).split(\",\")(0).drop(2).takeRight(2)+\"CE\"+t.toString.split(\",\")(1).split(\",\")(0).dropRight(3)+\"\u0027\", \"\u0027F\"+t.toString.split(\",\")(2).split(\",\")(0).drop(1).takeRight(2)+\"CE\"+t.toString.split(\",\")(3).dropRight(4)+\"\u0027\")})\n\nval d3Vis \u003d new PrintWriter(new File(\"graphEdgesVis.txt\"))\nval sg1_data \u003d sg1.collect().toList\nd3Vis.write(sg1_data + \"\\n\")\n\n//transfer variable to pyspark (no need to write to text file)\nz.put(\"graphEdgesVis\", sg1_data)\n\nd3Vis.close()",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0,
+        "editorHide": false,
+        "tableHide": false,
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453459_11471067",
+      "id": "20160519-152053_1985076467",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "edgesRDD: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[192] at textFile at \u003cconsole\u003e:173\nsubGraphsCount: org.apache.spark.rdd.RDD[(Integer, Iterable[org.dia.algorithms.mcc.MCCEdge])] \u003d ShuffledRDD[195] at groupByKey at \u003cconsole\u003e:178\nDone\nsg: org.apache.spark.rdd.RDD[org.dia.algorithms.mcc.MCCEdge] \u003d MapPartitionsRDD[196] at flatMap at \u003cconsole\u003e:179\nsg1: org.apache.spark.rdd.RDD[(String, String)] \u003d MapPartitionsRDD[197] at map at \u003cconsole\u003e:179\nd3Vis: java.io.PrintWriter \u003d java.io.PrintWriter@fa3e108\nsg1_data: List[(String, String)] \u003d List((\u0027F03CE683084\u0027,\u0027F04CE778\u0027), (\u0027F03CE41612\u0027,\u0027F04CE202\u0027), (\u0027F03CE32922\u0027,\u0027F04CE177\u0027), (\u0027F03CE694754\u0027,\u0027F04CE778\u0027), (\u0027F03CE1096000\u0027,\u0027F04CE1000\u0027), (\u0027F03CE164808\u0027,\u0027F04CE378\u0027), (\u0027F03CE12920\u0027,\u0027F04CE95\u0027), (\u0027F03CE99520\u0027,\u0027F04CE311\u0027), (\u0027F03CE52074\u0027,\u0027F04CE198\u0027), (\u0027F03CE312605\u0027,\u0027F04CE515\u0027), (\u0027F03CE50752\u0027,\u0027F04CE208\u0027), (\u0027F03CE674830\u0027,\u0027F04CE754\u0027), (\u0027F03CE632775\u0027,\u0027F04CE885\u0027), (\u0027F03CE357975\u0027,\u0027F04CE555\u0027), (\u0027F03CE495864\u0027,\u0027F04CE639\u0027), (\u0027F03CE11252\u0027,\u0027F04CE97\u0027), (\u0027F03CE1546974\u0027,\u0027F04CE1202\u0027), (\u0027F03CE1121919\u0027,\u0027F04CE1019\u0027), (\u0027F03CE147232\u0027,\u0027F04CE344\u0027), (\u0027F03CE1176995\u0027,\u0027F04CE1037\u0027), (\u0027F03CE62776\u0027,\u0027F04CE236\u0027), (\u0027F03CE399284\u0027,\u0027F04CE577\u0027), (\u0027F03CE169125\u0027,\u0027F04CE375\u0027), (\u0027F03CE950175\u0027,\u0027F04CE927\u0027), (\u0027F03CE99160\u0027,\u0027F04CE296\u0027), (\u0027F03CE1313300\u0027,\u0027F04CE1142\u0027), (\u0027F03CE979204\u0027,\u0027F04CE916\u0027), (\u0027...res339: Object \u003d List((\u0027F03CE683084\u0027,\u0027F04CE778\u0027), (\u0027F03CE41612\u0027,\u0027F04CE202\u0027), (\u0027F03CE32922\u0027,\u0027F04CE177\u0027), (\u0027F03CE694754\u0027,\u0027F04CE778\u0027), (\u0027F03CE1096000\u0027,\u0027F04CE1000\u0027), (\u0027F03CE164808\u0027,\u0027F04CE378\u0027), (\u0027F03CE12920\u0027,\u0027F04CE95\u0027), (\u0027F03CE99520\u0027,\u0027F04CE311\u0027), (\u0027F03CE52074\u0027,\u0027F04CE198\u0027), (\u0027F03CE312605\u0027,\u0027F04CE515\u0027), (\u0027F03CE50752\u0027,\u0027F04CE208\u0027), (\u0027F03CE674830\u0027,\u0027F04CE754\u0027), (\u0027F03CE632775\u0027,\u0027F04CE885\u0027), (\u0027F03CE357975\u0027,\u0027F04CE555\u0027), (\u0027F03CE495864\u0027,\u0027F04CE639\u0027), (\u0027F03CE11252\u0027,\u0027F04CE97\u0027), (\u0027F03CE1546974\u0027,\u0027F04CE1202\u0027), (\u0027F03CE1121919\u0027,\u0027F04CE1019\u0027), (\u0027F03CE147232\u0027,\u0027F04CE344\u0027), (\u0027F03CE1176995\u0027,\u0027F04CE1037\u0027), (\u0027F03CE62776\u0027,\u0027F04CE236\u0027), (\u0027F03CE399284\u0027,\u0027F04CE577\u0027), (\u0027F03CE169125\u0027,\u0027F04CE375\u0027), (\u0027F03CE950175\u0027,\u0027F04CE927\u0027), (\u0027F03CE99160\u0027,\u0027F04CE296\u0027), (\u0027F03CE1313300\u0027,\u0027F04CE1142\u0027), (\u0027F03CE979204\u0027,\u0027F04CE916\u0027), (\u0027F03CE204\u0027,\u0027F04CE17..."
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 2:05:29 PM",
+      "dateFinished": "Jun 21, 2016 2:05:34 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \n##Visualize the subgraphs using custom graphics",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorHide": true,
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453461_9162573",
+      "id": "20160519-152053_1641173434",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eVisualize the subgraphs using custom graphics\u003c/h2\u003e\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:02 PM",
+      "dateFinished": "Jun 21, 2016 1:56:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sh\n# edit the file by removing the \u0027List(\u0027 from the beginning  and last \u0027)\u0027, then add \u0027[\u0027 at beginning and \u0027]\u0027 at the end for the Python script\nsed -i \u0027s/^.\\{,5\\}//; s/.$//\u0027 graphEdgesVis.txt\nsed -i \u0027s/^/[/; s/$/]/\u0027 graphEdgesVis.txt\n\n",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "colWidth": 12.0,
+        "editorHide": false,
+        "editorMode": "ace/mode/sh"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453461_9162573",
+      "id": "20160519-152053_1004345085",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:02 PM",
+      "dateFinished": "Jun 21, 2016 1:56:09 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nimport xmltodict, json, functools, sys\nimport networkx as nx\nfrom pprint import pprint\nimport graphviz as gv\n\ndef add_nodes(graph, nodes):\n    for n in nodes:\n        if isinstance(n, tuple):\n            graph.node(n[0], **n[1])\n        else:\n            graph.node(n) #_attributes\u003d{\"style\":\"filled\", \"fillcolor\":\"white\", \"tooltip\": \"brightness field\"}\n    return graph\n\n\ndef add_edges(graph, edges):\n    for e in edges:\n        if isinstance(e[0], tuple):\n            graph.edge(*e[0], **e[1])\n        else:\n            graph.edge(*e)\n    return graph\n\n\ndef main(argFile, maxLimit, edgeList):\n    inF \u003d open(edgeList, \u0027r\u0027)\n    tuples \u003d eval(inF.readline())\n    inF.close()\n\n    G \u003d nx.DiGraph(tuples)\n    weakConnComponents \u003d []\n    for w in nx.weakly_connected_component_subgraphs(G):\n        weakConnComponents.append(w.edges())\n\n    weakConnComponents.sort(key\u003dlambda x: len(x), reverse\u003dTrue)\n\n    #traverse weak component\n    \"\"\"\n    for w in nx.weakly_connected_component_subgraphs(G):\n    sorted(nx.weakly_connected_component_subgraphs(G), key\u003dlen, reverse \u003d True)]\n    \"\"\"\n\n    # iterate through all weakConnComponents here, lay them out one on top of another\n    yPos \u003d 0\n    for i in range(0, int(maxLimit)): #len(weakConnComponents)\n\n        digraph \u003d functools.partial(gv.Digraph, graph_attr\u003d{\"rankdir\": \"LR\", }, format\u003d\u0027svg\u0027) #\"ordering\":\"out\"\n        nodes \u003d set()\n        for edgeTup in weakConnComponents[i]:\n            nodes.add(edgeTup[0])\n            nodes.add(edgeTup[1])\n        nodes \u003d list(nodes)\n        edges \u003d weakConnComponents[i]\n\n\n        add_edges(add_nodes(digraph(), nodes), edges).render(\u0027/data/cluster-local/notebook_data/img/g\u0027 + str(i))\n\n\n        with open(\u0027/data/cluster-local/notebook_data/img/g{0}.svg\u0027.format(i)) as fd:\n            doc \u003d xmltodict.parse(fd.read())\n\n            nodeYLocation \u003d {}\n            for elem in doc[\"svg\"][\"g\"][\"g\"]:\n                if elem[\"@class\"] \u003d\u003d \"node\":\n                    #(Cx, Cy) x, y coordinates of center, origin top left corner\n                    #(Rx, Ry) radius of ellipse along x, y axes\n                    nodeYLocation[elem[\"title\"]] \u003d int(elem[\"ellipse\"][\"@cy\"])\n\n            #minNode \u003d max(nodeYLocation, key\u003dnodeYLocation.get)\n            #maxNode \u003d min(nodeYLocation, key\u003dnodeYLocation.get)\n            #diff \u003d nodeYLocation[minNode] - nodeYLocation[maxNode]\n            #print diff/9.0\n\n\n            #for every 24 change in y coordinate, place a node, in json\n            for key in nodeYLocation:\n                nodeYLocation[key] /\u003d -9\n                nodeYLocation[key] +\u003d yPos\n\n            yPos +\u003d nodeYLocation[max(nodeYLocation, key\u003dnodeYLocation.get)]\n\n            #print yPos\n\n            # assert len(nodeYLocation.keys()) len(nodes)\n\n            jsonData \u003d None\n            tempList \u003d []\n            with open(argFile) as jsonF:\n                jsonData \u003d eval(jsonF.read().split(\"girls \u003d \")[-1])\n\n                for lineDict in jsonData:\n                    for node in lineDict[\"values\"]:\n\n                        tempList.append(node[\"name\"])\n                        try:\n                            node[\"position\"] \u003d nodeYLocation[node[\"name\"]] + tempList.count(node[\"name\"]) * 0.0001\n                        except KeyError:\n                            continue\n\n\n\n            with open(argFile, \u0027w\u0027) as outF:\n                json.dump(jsonData, outF, indent\u003d4, sort_keys\u003dTrue, separators\u003d(\u0027,\u0027, \u0027: \u0027))\n\n            data \u003d None\n            with open(argFile, \"r\") as original:\n                data \u003d original.read().lstrip(\"[\")\n\n            with open(argFile, \"w\") as modified:\n                modified.write(\"var girls \u003d [\\n\" + data)\n                \n            with open(\u0027/data/cluster-local/notebook_data/img/g{0}.svg\u0027.format(i), \"r\") as f:\n                lines \u003d f.read()\n                new_data \u003d lines.replace(\u0027\u003cg id\u003d\"graph1\u0027, \u0027\u003cg id\u003d\"graph{0}\u0027.format(i))\n                f.close()\n\n            with open(\u0027/data/cluster-local/notebook_data/img/g{0}.svg\u0027.format(i), \"w\") as f:\n                f.write(new_data)\n                f.close()\n",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453461_9162573",
+      "id": "20160519-152053_806378175",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 2:05:30 PM",
+      "dateFinished": "Jun 21, 2016 2:05:30 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\n\nnum_subgraphs \u003d 5\nmain(\"/data/cluster-local/notebook_data/girl_name_us.js\", 5,\"/data/cluster-local/software/zeppelin-0.5.6-incubating-bin-all/bin/graphEdgesVis.txt\")\n\nprint \"\"\"%html \n    \u003c!DOCTYPE html\u003e\n    \u003cmeta charset\u003d\"utf-8\"\u003e\n    \u003cstyle\u003e\n      div.tooltip {\t\n        position: absolute;\t\t\t\n        text-align: center;\n        padding: 2px;\t\t\n        font: 12px sans-serif;\n        background: lightsteelblue;\n        border: 0px;\n        border-radius: 8px;\n        pointer-events: none;\t\t\t\n    }\n    \u003c/style\u003e\n    \u003cbody\u003e\n      \u003cscript src\u003d\"https://d3js.org/d3.v3.min.js\"\u003e\u003c/script\u003e\n      \u003cdiv id\u003d\"container\"\u003e\u003c/div\u003e\n      \u003cscript\u003e\n        var div \u003d d3.select(\"body\").append(\"div\")\t\n          .attr(\"class\", \"tooltip\")\t\t\t\t\n          .style(\"opacity\", 0);\n        \u003c/script\u003e\n    \u003c/body\n        \"\"\"\n\nfor i in range(num_subgraphs):\n    with open(\"/data/cluster-local/notebook_data/img/g{0}.svg\".format(i),\"r\") as f:\n        svg_files_data \u003d f.read()\n    print svg_files_data \n\n\nprint \"\"\"%html\n\u003cscript\u003e\nvar all_svg \u003d d3.selectAll(\"svg\");\n  all_svg.on(\"mousemove\", function(d) {\n\tvar graph_id \u003d d3.select(this)[0][0].firstElementChild.id;\n\tvar svg \u003d d3.selectAll(\"#\" + graph_id);\n  \n  var w  \u003d d3.transform(svg.attr(\"transform\")).translate[0];\n  var h  \u003d d3.transform(svg.attr(\"transform\")).translate[1];\n\t  //.attr(\"transform\", \"translate(\" + w + \",\" + h + \")scale(\" + 1 + \")\")\n\t  svg.call(d3.behavior.zoom().scaleExtent([1, 8]).on(\"zoom\", zoom));\n\n\t  svg.selectAll(\"text\")\n\t  .on(\"mouseover\", function(d) {\n\t\tvar tmp \u003d d3.select(this)[0][0].innerHTML;\n\t\t\t  div.transition()\t\t\n\t\t\t\t  .duration(200)\t\t\n\t\t\t\t  .style(\"opacity\", .9);\t\t\n\t\t\t  div\t.html(\"Node name: \" + tmp + \"\u003cbr/\u003e Latitude: \" + \"122\" + \"\u003cbr/\u003e Longitude: \" + \"90\" )\t\n\t\t\t\t  .style(\"left\", (d3.event.pageX) + \"px\")\n\t\t\t\t  .style(\"top\", (d3.event.pageY - 28) + \"px\");\t\n\t\t\t  })\t\t\t\t\t\n\t\t  .on(\"mouseout\", function(d) {\n\t\t\t  div.transition()\t\t\n\t\t\t\t  .duration(500)\t\t\n\t\t\t\t  .style(\"opacity\", 0);});\n\t\n\t  function zoom() {\n\t\tvar s \u003d d3.event.scale;\n\t\tvar new_w \u003d w + d3.event.translate[0];\n\t\tvar new_h \u003d h + d3.event.translate[1];\n\t\tsvg.attr(\"transform\", \"translate(\" + new_w + \",\" + new_h + \")scale(\" + s + \")\");\n\t  }\n  \n  });\n  \u003c/script\u003e\n  \"\"\"",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453461_9162573",
+      "id": "20160519-152053_28691008",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n    \u003c!DOCTYPE html\u003e\n    \u003cmeta charset\u003d\"utf-8\"\u003e\n    \u003cstyle\u003e\n      div.tooltip {\t\n        position: absolute;\t\t\t\n        text-align: center;\n        padding: 2px;\t\t\n        font: 12px sans-serif;\n        background: lightsteelblue;\n        border: 0px;\n        border-radius: 8px;\n        pointer-events: none;\t\t\t\n    }\n    \u003c/style\u003e\n    \u003cbody\u003e\n      \u003cscript src\u003d\"https://d3js.org/d3.v3.min.js\"\u003e\u003c/script\u003e\n      \u003cdiv id\u003d\"container\"\u003e\u003c/div\u003e\n      \u003cscript\u003e\n        var div \u003d d3.select(\"body\").append(\"div\")\t\n          .attr(\"class\", \"tooltip\")\t\t\t\t\n          .style(\"opacity\", 0);\n        \u003c/script\u003e\n    \u003c/body\n        \n\u003c?xml version\u003d\"1.0\" encoding\u003d\"UTF-8\" standalone\u003d\"no\"?\u003e\n\u003c!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"\u003e\n\u003c!-- Generated by graphviz version 2.26.0 (20091210.2329)\n --\u003e\n\u003c!-- Title: _anonymous_0 Pages: 1 --\u003e\n\u003csvg width\u003d\"284pt\" height\u003d\"550pt\"\n viewBox\u003d\"0.00 0.00 284.00 550.00\" xmlns\u003d\"http://www.w3.org/2000/svg\" xmlns:xlink\u003d\"http://www.w3.org/1999/xlink\"\u003e\n\u003cg id\u003d\"graph0\" class\u003d\"graph\" transform\u003d\"scale(1 1) rotate(0) translate(4 546)\"\u003e\n\u003ctitle\u003e_anonymous_0\u003c/title\u003e\n\u003cpolygon fill\u003d\"white\" stroke\u003d\"white\" points\u003d\"-4,5 -4,-546 281,-546 281,5 -4,5\"/\u003e\n\u003c!-- F14CE375912 --\u003e\n\u003cg id\u003d\"node1\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE375912\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-523\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-519.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE375912\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE414 --\u003e\n\u003cg id\u003d\"node10\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE414\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"223\" cy\u003d\"-271\" rx\u003d\"53.033\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"223\" y\u003d\"-267.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE414\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE375912\u0026#45;\u0026gt;F15CE414 --\u003e\n\u003cg id\u003d\"edge18\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE375912\u0026#45;\u0026gt;F15CE414\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M113.645,-509.26C121.111,-505.527 128.257,-500.845 134,-495 188.28,-439.753 210.593,-347.306 218.791,-300.327\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"222.284,-300.651 220.458,-290.215 215.378,-299.512 222.284,-300.651\"/\u003e\n\u003c/g\u003e\n\u003c!-- F14CE256266 --\u003e\n\u003cg id\u003d\"node2\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE256266\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-467\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-463.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE256266\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE256266\u0026#45;\u0026gt;F15CE414 --\u003e\n\u003cg id\u003d\"edge2\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE256266\u0026#45;\u0026gt;F15CE414\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M112.78,-452.892C120.424,-449.187 127.854,-444.609 134,-439 176.453,-400.257 202.33,-336.492 214.54,-299.67\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"217.907,-300.633 217.624,-290.042 211.24,-298.498 217.907,-300.633\"/\u003e\n\u003c/g\u003e\n\u003c!-- F14CE349416 --\u003e\n\u003cg id\u003d\"node3\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE349416\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-411\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-407.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE349416\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE349416\u0026#45;\u0026gt;F15CE414 --\u003e\n\u003cg id\u003d\"edge4\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE349416\u0026#45;\u0026gt;F15CE414\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M110.916,-396.406C118.997,-392.701 127.062,-388.248 134,-383 164.872,-359.648 191.142,-323.216 206.971,-298.286\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"210.02,-300.01 212.319,-289.668 204.072,-296.319 210.02,-300.01\"/\u003e\n\u003c/g\u003e\n\u003c!-- F14CE341136 --\u003e\n\u003cg id\u003d\"node4\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE341136\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-355\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-351.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE341136\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE341136\u0026#45;\u0026gt;F15CE414 --\u003e\n\u003cg id\u003d\"edge6\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE341136\u0026#45;\u0026gt;F15CE414\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M106.825,-339.634C115.89,-335.787 125.384,-331.472 134,-327 153.003,-317.137 173.274,-304.558 189.663,-293.821\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"191.933,-296.516 198.336,-288.075 188.066,-290.68 191.933,-296.516\"/\u003e\n\u003c/g\u003e\n\u003c!-- F14CE315468 --\u003e\n\u003cg id\u003d\"node5\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE315468\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-299\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-295.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE315468\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE315468\u0026#45;\u0026gt;F15CE414 --\u003e\n\u003cg id\u003d\"edge8\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE315468\u0026#45;\u0026gt;F15CE414\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M123.761,-288.812C137.298,-286.382 151.759,-283.787 165.337,-281.35\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"166.293,-284.734 175.517,-279.523 165.056,-277.844 166.293,-284.734\"/\u003e\n\u003c/g\u003e\n\u003c!-- F14CE323748 --\u003e\n\u003cg id\u003d\"node6\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE323748\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-243\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-239.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE323748\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE323748\u0026#45;\u0026gt;F15CE414 --\u003e\n\u003cg id\u003d\"edge10\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE323748\u0026#45;\u0026gt;F15CE414\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M123.761,-253.188C137.298,-255.618 151.759,-258.213 165.337,-260.65\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"165.056,-264.156 175.517,-262.477 166.293,-257.266 165.056,-264.156\"/\u003e\n\u003c/g\u003e\n\u003c!-- F14CE283590 --\u003e\n\u003cg id\u003d\"node7\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE283590\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-187\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-183.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE283590\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE283590\u0026#45;\u0026gt;F15CE414 --\u003e\n\u003cg id\u003d\"edge12\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE283590\u0026#45;\u0026gt;F15CE414\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M106.825,-202.366C115.89,-206.213 125.384,-210.528 134,-215 153.003,-224.863 173.274,-237.442 189.663,-248.179\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"188.066,-251.32 198.336,-253.925 191.933,-245.484 188.066,-251.32\"/\u003e\n\u003c/g\u003e\n\u003c!-- F14CE189612 --\u003e\n\u003cg id\u003d\"node8\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE189612\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-131\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-127.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE189612\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE189612\u0026#45;\u0026gt;F15CE414 --\u003e\n\u003cg id\u003d\"edge14\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE189612\u0026#45;\u0026gt;F15CE414\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M110.916,-145.594C118.997,-149.299 127.062,-153.752 134,-159 164.872,-182.352 191.142,-218.784 206.971,-243.714\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"204.072,-245.681 212.319,-252.332 210.02,-241.99 204.072,-245.681\"/\u003e\n\u003c/g\u003e\n\u003c!-- F14CE280278 --\u003e\n\u003cg id\u003d\"node9\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE280278\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-75\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-71.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE280278\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE280278\u0026#45;\u0026gt;F15CE414 --\u003e\n\u003cg id\u003d\"edge16\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE280278\u0026#45;\u0026gt;F15CE414\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M112.78,-89.1077C120.424,-92.8133 127.854,-97.3912 134,-103 176.453,-141.743 202.33,-205.508 214.54,-242.33\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"211.24,-243.502 217.624,-251.958 217.907,-241.367 211.24,-243.502\"/\u003e\n\u003c/g\u003e\n\u003c!-- F14CE359766 --\u003e\n\u003cg id\u003d\"node11\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE359766\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-19\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-15.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE359766\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE359766\u0026#45;\u0026gt;F15CE414 --\u003e\n\u003cg id\u003d\"edge20\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE359766\u0026#45;\u0026gt;F15CE414\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M113.645,-32.7399C121.111,-36.4726 128.257,-41.1547 134,-47 188.28,-102.247 210.593,-194.694 218.791,-241.673\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"215.378,-242.488 220.458,-251.785 222.284,-241.349 215.378,-242.488\"/\u003e\n\u003c/g\u003e\n\u003c/g\u003e\n\u003c/svg\u003e\n\n\u003c?xml version\u003d\"1.0\" encoding\u003d\"UTF-8\" standalone\u003d\"no\"?\u003e\n\u003c!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"\u003e\n\u003c!-- Generated by graphviz version 2.26.0 (20091210.2329)\n --\u003e\n\u003c!-- Title: _anonymous_0 Pages: 1 --\u003e\n\u003csvg width\u003d\"636pt\" height\u003d\"158pt\"\n viewBox\u003d\"0.00 0.00 636.00 158.00\" xmlns\u003d\"http://www.w3.org/2000/svg\" xmlns:xlink\u003d\"http://www.w3.org/1999/xlink\"\u003e\n\u003cg id\u003d\"graph1\" class\u003d\"graph\" transform\u003d\"scale(1 1) rotate(0) translate(4 154)\"\u003e\n\u003ctitle\u003e_anonymous_0\u003c/title\u003e\n\u003cpolygon fill\u003d\"white\" stroke\u003d\"white\" points\u003d\"-4,5 -4,-154 633,-154 633,5 -4,5\"/\u003e\n\u003c!-- F20CE1 --\u003e\n\u003cg id\u003d\"node1\" class\u003d\"node\"\u003e\u003ctitle\u003eF20CE1\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"584\" cy\u003d\"-75\" rx\u003d\"43.8406\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"584\" y\u003d\"-71.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF20CE1\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F17CE168 --\u003e\n\u003cg id\u003d\"node2\" class\u003d\"node\"\u003e\u003ctitle\u003eF17CE168\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"177\" cy\u003d\"-19\" rx\u003d\"53.033\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"177\" y\u003d\"-15.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF17CE168\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F18CE12 --\u003e\n\u003cg id\u003d\"node10\" class\u003d\"node\"\u003e\u003ctitle\u003eF18CE12\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"319\" cy\u003d\"-19\" rx\u003d\"48.0833\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"319\" y\u003d\"-15.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF18CE12\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F17CE168\u0026#45;\u0026gt;F18CE12 --\u003e\n\u003cg id\u003d\"edge4\" class\u003d\"edge\"\u003e\u003ctitle\u003eF17CE168\u0026#45;\u0026gt;F18CE12\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M230.28,-19C240.092,-19 250.387,-19 260.348,-19\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"260.572,-22.5001 270.572,-19 260.572,-15.5001 260.572,-22.5001\"/\u003e\n\u003c/g\u003e\n\u003c!-- F18CE1 --\u003e\n\u003cg id\u003d\"node3\" class\u003d\"node\"\u003e\u003ctitle\u003eF18CE1\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"319\" cy\u003d\"-75\" rx\u003d\"43.8406\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"319\" y\u003d\"-71.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF18CE1\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F19CE1 --\u003e\n\u003cg id\u003d\"node6\" class\u003d\"node\"\u003e\u003ctitle\u003eF19CE1\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"456\" cy\u003d\"-75\" rx\u003d\"43.8406\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"456\" y\u003d\"-71.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF19CE1\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F18CE1\u0026#45;\u0026gt;F19CE1 --\u003e\n\u003cg id\u003d\"edge6\" class\u003d\"edge\"\u003e\u003ctitle\u003eF18CE1\u0026#45;\u0026gt;F19CE1\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M363.102,-75C375.446,-75 389.006,-75 401.86,-75\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"401.981,-78.5001 411.981,-75 401.981,-71.5001 401.981,-78.5001\"/\u003e\n\u003c/g\u003e\n\u003c!-- F16CE7 --\u003e\n\u003cg id\u003d\"node4\" class\u003d\"node\"\u003e\u003ctitle\u003eF16CE7\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"44\" cy\u003d\"-75\" rx\u003d\"43.8406\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"44\" y\u003d\"-71.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF16CE7\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F17CE1 --\u003e\n\u003cg id\u003d\"node8\" class\u003d\"node\"\u003e\u003ctitle\u003eF17CE1\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"177\" cy\u003d\"-75\" rx\u003d\"43.8406\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"177\" y\u003d\"-71.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF17CE1\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F16CE7\u0026#45;\u0026gt;F17CE1 --\u003e\n\u003cg id\u003d\"edge8\" class\u003d\"edge\"\u003e\u003ctitle\u003eF16CE7\u0026#45;\u0026gt;F17CE1\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M88.2871,-75C99.2796,-75 111.187,-75 122.602,-75\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"122.906,-78.5001 132.906,-75 122.906,-71.5001 122.906,-78.5001\"/\u003e\n\u003c/g\u003e\n\u003c!-- F19CE56 --\u003e\n\u003cg id\u003d\"node5\" class\u003d\"node\"\u003e\u003ctitle\u003eF19CE56\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"456\" cy\u003d\"-131\" rx\u003d\"48.0833\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"456\" y\u003d\"-127.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF19CE56\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F19CE56\u0026#45;\u0026gt;F20CE1 --\u003e\n\u003cg id\u003d\"edge10\" class\u003d\"edge\"\u003e\u003ctitle\u003eF19CE56\u0026#45;\u0026gt;F20CE1\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M488.3,-116.869C505.047,-109.542 525.668,-100.52 543.475,-92.7299\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"545.276,-95.7619 553.035,-88.5471 542.471,-89.3488 545.276,-95.7619\"/\u003e\n\u003c/g\u003e\n\u003c!-- F19CE1\u0026#45;\u0026gt;F20CE1 --\u003e\n\u003cg id\u003d\"edge2\" class\u003d\"edge\"\u003e\u003ctitle\u003eF19CE1\u0026#45;\u0026gt;F20CE1\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M500.05,-75C509.604,-75 519.817,-75 529.712,-75\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"529.868,-78.5001 539.868,-75 529.868,-71.5001 529.868,-78.5001\"/\u003e\n\u003c/g\u003e\n\u003c!-- F19CE79 --\u003e\n\u003cg id\u003d\"node7\" class\u003d\"node\"\u003e\u003ctitle\u003eF19CE79\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"456\" cy\u003d\"-19\" rx\u003d\"48.0833\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"456\" y\u003d\"-15.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF19CE79\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F19CE79\u0026#45;\u0026gt;F20CE1 --\u003e\n\u003cg id\u003d\"edge12\" class\u003d\"edge\"\u003e\u003ctitle\u003eF19CE79\u0026#45;\u0026gt;F20CE1\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M488.3,-33.1312C505.047,-40.4579 525.668,-49.4797 543.475,-57.2701\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"542.471,-60.6512 553.035,-61.4529 545.276,-54.2381 542.471,-60.6512\"/\u003e\n\u003c/g\u003e\n\u003c!-- F17CE1\u0026#45;\u0026gt;F18CE1 --\u003e\n\u003cg id\u003d\"edge14\" class\u003d\"edge\"\u003e\u003ctitle\u003eF17CE1\u0026#45;\u0026gt;F18CE1\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M221.151,-75C234.909,-75 250.244,-75 264.617,-75\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"264.876,-78.5001 274.876,-75 264.876,-71.5001 264.876,-78.5001\"/\u003e\n\u003c/g\u003e\n\u003c!-- F18CE672 --\u003e\n\u003cg id\u003d\"node9\" class\u003d\"node\"\u003e\u003ctitle\u003eF18CE672\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"319\" cy\u003d\"-131\" rx\u003d\"53.033\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"319\" y\u003d\"-127.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF18CE672\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F18CE672\u0026#45;\u0026gt;F19CE56 --\u003e\n\u003cg id\u003d\"edge16\" class\u003d\"edge\"\u003e\u003ctitle\u003eF18CE672\u0026#45;\u0026gt;F19CE56\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M372.36,-131C380.693,-131 389.34,-131 397.774,-131\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"397.922,-134.5 407.922,-131 397.922,-127.5 397.922,-134.5\"/\u003e\n\u003c/g\u003e\n\u003c!-- F18CE12\u0026#45;\u0026gt;F19CE1 --\u003e\n\u003cg id\u003d\"edge18\" class\u003d\"edge\"\u003e\u003ctitle\u003eF18CE12\u0026#45;\u0026gt;F19CE1\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M352.514,-32.6991C371.167,-40.3237 394.551,-49.8822 414.369,-57.9831\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"413.195,-61.284 423.775,-61.8279 415.843,-54.8044 413.195,-61.284\"/\u003e\n\u003c/g\u003e\n\u003c/g\u003e\n\u003c/svg\u003e\n\n\u003c?xml version\u003d\"1.0\" encoding\u003d\"UTF-8\" standalone\u003d\"no\"?\u003e\n\u003c!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"\u003e\n\u003c!-- Generated by graphviz version 2.26.0 (20091210.2329)\n --\u003e\n\u003c!-- Title: _anonymous_0 Pages: 1 --\u003e\n\u003csvg width\u003d\"390pt\" height\u003d\"326pt\"\n viewBox\u003d\"0.00 0.00 390.00 326.00\" xmlns\u003d\"http://www.w3.org/2000/svg\" xmlns:xlink\u003d\"http://www.w3.org/1999/xlink\"\u003e\n\u003cg id\u003d\"graph2\" class\u003d\"graph\" transform\u003d\"scale(1 1) rotate(0) translate(4 322)\"\u003e\n\u003ctitle\u003e_anonymous_0\u003c/title\u003e\n\u003cpolygon fill\u003d\"white\" stroke\u003d\"white\" points\u003d\"-4,5 -4,-322 387,-322 387,5 -4,5\"/\u003e\n\u003c!-- F15CE20 --\u003e\n\u003cg id\u003d\"node1\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE20\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"200\" cy\u003d\"-299\" rx\u003d\"48.0833\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"200\" y\u003d\"-295.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE20\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F16CE5 --\u003e\n\u003cg id\u003d\"node7\" class\u003d\"node\"\u003e\u003ctitle\u003eF16CE5\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"338\" cy\u003d\"-159\" rx\u003d\"43.8406\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"338\" y\u003d\"-155.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF16CE5\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE20\u0026#45;\u0026gt;F16CE5 --\u003e\n\u003cg id\u003d\"edge2\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE20\u0026#45;\u0026gt;F16CE5\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M234.848,-285.667C242.93,-281.659 251.159,-276.764 258,-271 286.194,-247.245 309.463,-211.441 323.502,-186.741\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"326.634,-188.309 328.421,-177.866 320.512,-184.915 326.634,-188.309\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE35 --\u003e\n\u003cg id\u003d\"node2\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE35\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"200\" cy\u003d\"-243\" rx\u003d\"48.0833\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"200\" y\u003d\"-239.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE35\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE35\u0026#45;\u0026gt;F16CE5 --\u003e\n\u003cg id\u003d\"edge10\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE35\u0026#45;\u0026gt;F16CE5\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M232.089,-228.645C240.652,-224.508 249.801,-219.807 258,-215 275.116,-204.966 293.302,-192.402 308.003,-181.719\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"310.235,-184.422 316.221,-175.68 306.09,-178.781 310.235,-184.422\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE1190 --\u003e\n\u003cg id\u003d\"node3\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE1190\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"200\" cy\u003d\"-187\" rx\u003d\"57.9828\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"200\" y\u003d\"-183.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE1190\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE1190\u0026#45;\u0026gt;F16CE5 --\u003e\n\u003cg id\u003d\"edge6\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE1190\u0026#45;\u0026gt;F16CE5\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M249.431,-176.97C262.003,-174.42 275.519,-171.677 288.112,-169.122\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"288.875,-172.539 297.979,-167.12 287.483,-165.679 288.875,-172.539\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE50 --\u003e\n\u003cg id\u003d\"node4\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE50\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"200\" cy\u003d\"-131\" rx\u003d\"48.0833\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"200\" y\u003d\"-127.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE50\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE50\u0026#45;\u0026gt;F16CE5 --\u003e\n\u003cg id\u003d\"edge8\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE50\u0026#45;\u0026gt;F16CE5\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M242.908,-139.706C257.179,-142.602 273.197,-145.852 287.96,-148.847\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"287.446,-152.314 297.943,-150.872 288.838,-145.454 287.446,-152.314\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE995 --\u003e\n\u003cg id\u003d\"node5\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE995\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"200\" cy\u003d\"-75\" rx\u003d\"53.033\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"200\" y\u003d\"-71.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE995\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE995\u0026#45;\u0026gt;F16CE5 --\u003e\n\u003cg id\u003d\"edge4\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE995\u0026#45;\u0026gt;F16CE5\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M233.301,-89.943C241.511,-93.9345 250.187,-98.4195 258,-103 275.116,-113.034 293.302,-125.598 308.003,-136.281\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"306.09,-139.219 316.221,-142.32 310.235,-133.578 306.09,-139.219\"/\u003e\n\u003c/g\u003e\n\u003c!-- F16CE6 --\u003e\n\u003cg id\u003d\"node6\" class\u003d\"node\"\u003e\u003ctitle\u003eF16CE6\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"338\" cy\u003d\"-19\" rx\u003d\"43.8406\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"338\" y\u003d\"-15.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF16CE6\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE30 --\u003e\n\u003cg id\u003d\"node8\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE30\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"200\" cy\u003d\"-19\" rx\u003d\"48.0833\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"200\" y\u003d\"-15.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE30\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE30\u0026#45;\u0026gt;F16CE6 --\u003e\n\u003cg id\u003d\"edge12\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE30\u0026#45;\u0026gt;F16CE6\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M248.266,-19C259.688,-19 271.945,-19 283.618,-19\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"283.689,-22.5001 293.689,-19 283.689,-15.5001 283.689,-22.5001\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE30\u0026#45;\u0026gt;F16CE5 --\u003e\n\u003cg id\u003d\"edge14\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE30\u0026#45;\u0026gt;F16CE5\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M234.848,-32.3332C242.93,-36.3406 251.159,-41.2363 258,-47 286.194,-70.7553 309.463,-106.559 323.502,-131.259\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"320.512,-133.085 328.421,-140.134 326.634,-129.691 320.512,-133.085\"/\u003e\n\u003c/g\u003e\n\u003c!-- F14CE210 --\u003e\n\u003cg id\u003d\"node9\" class\u003d\"node\"\u003e\u003ctitle\u003eF14CE210\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"53\" cy\u003d\"-243\" rx\u003d\"53.033\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"53\" y\u003d\"-239.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF14CE210\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F14CE210\u0026#45;\u0026gt;F15CE35 --\u003e\n\u003cg id\u003d\"edge16\" class\u003d\"edge\"\u003e\u003ctitle\u003eF14CE210\u0026#45;\u0026gt;F15CE35\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M106.07,-243C117.647,-243 129.958,-243 141.724,-243\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"141.892,-246.5 151.892,-243 141.892,-239.5 141.892,-246.5\"/\u003e\n\u003c/g\u003e\n\u003c/g\u003e\n\u003c/svg\u003e\n\n\u003c?xml version\u003d\"1.0\" encoding\u003d\"UTF-8\" standalone\u003d\"no\"?\u003e\n\u003c!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"\u003e\n\u003c!-- Generated by graphviz version 2.26.0 (20091210.2329)\n --\u003e\n\u003c!-- Title: _anonymous_0 Pages: 1 --\u003e\n\u003csvg width\u003d\"256pt\" height\u003d\"382pt\"\n viewBox\u003d\"0.00 0.00 256.00 382.00\" xmlns\u003d\"http://www.w3.org/2000/svg\" xmlns:xlink\u003d\"http://www.w3.org/1999/xlink\"\u003e\n\u003cg id\u003d\"graph3\" class\u003d\"graph\" transform\u003d\"scale(1 1) rotate(0) translate(4 378)\"\u003e\n\u003ctitle\u003e_anonymous_0\u003c/title\u003e\n\u003cpolygon fill\u003d\"white\" stroke\u003d\"white\" points\u003d\"-4,5 -4,-378 253,-378 253,5 -4,5\"/\u003e\n\u003c!-- F15CE1029 --\u003e\n\u003cg id\u003d\"node1\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE1029\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"58\" cy\u003d\"-355\" rx\u003d\"57.9828\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"58\" y\u003d\"-351.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE1029\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F16CE21 --\u003e\n\u003cg id\u003d\"node8\" class\u003d\"node\"\u003e\u003ctitle\u003eF16CE21\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"200\" cy\u003d\"-187\" rx\u003d\"48.0833\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"200\" y\u003d\"-183.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF16CE21\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE1029\u0026#45;\u0026gt;F16CE21 --\u003e\n\u003cg id\u003d\"edge2\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE1029\u0026#45;\u0026gt;F16CE21\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M96.2088,-340.494C103.265,-336.763 110.22,-332.278 116,-327 150.562,-295.437 175.487,-246.343 188.826,-215.466\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"192.104,-216.702 192.748,-206.127 185.649,-213.992 192.104,-216.702\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE5019 --\u003e\n\u003cg id\u003d\"node2\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE5019\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"58\" cy\u003d\"-299\" rx\u003d\"57.9828\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"58\" y\u003d\"-295.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE5019\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE5019\u0026#45;\u0026gt;F16CE21 --\u003e\n\u003cg id\u003d\"edge4\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE5019\u0026#45;\u0026gt;F16CE21\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M94.0341,-283.931C101.562,-280.152 109.254,-275.791 116,-271 139.476,-254.326 162.33,-230.855 178.258,-212.959\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"181.118,-215.006 185.066,-205.174 175.849,-210.398 181.118,-215.006\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE1701 --\u003e\n\u003cg id\u003d\"node3\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE1701\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"58\" cy\u003d\"-243\" rx\u003d\"57.9828\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"58\" y\u003d\"-239.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE1701\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE1701\u0026#45;\u0026gt;F16CE21 --\u003e\n\u003cg id\u003d\"edge6\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE1701\u0026#45;\u0026gt;F16CE21\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M95.3088,-228.287C114.093,-220.879 136.973,-211.856 156.547,-204.137\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"157.839,-207.389 165.858,-200.465 155.271,-200.877 157.839,-207.389\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE1176 --\u003e\n\u003cg id\u003d\"node4\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE1176\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"58\" cy\u003d\"-187\" rx\u003d\"57.9828\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"58\" y\u003d\"-183.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE1176\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE1176\u0026#45;\u0026gt;F16CE21 --\u003e\n\u003cg id\u003d\"edge8\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE1176\u0026#45;\u0026gt;F16CE21\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M116.167,-187C124.552,-187 133.185,-187 141.576,-187\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"141.657,-190.5 151.657,-187 141.657,-183.5 141.657,-190.5\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE210 --\u003e\n\u003cg id\u003d\"node5\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE210\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"58\" cy\u003d\"-19\" rx\u003d\"53.033\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"58\" y\u003d\"-15.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE210\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F16CE15 --\u003e\n\u003cg id\u003d\"node6\" class\u003d\"node\"\u003e\u003ctitle\u003eF16CE15\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"200\" cy\u003d\"-19\" rx\u003d\"48.0833\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"200\" y\u003d\"-15.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF16CE15\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE210\u0026#45;\u0026gt;F16CE15 --\u003e\n\u003cg id\u003d\"edge12\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE210\u0026#45;\u0026gt;F16CE15\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M111.28,-19C121.092,-19 131.387,-19 141.348,-19\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"141.572,-22.5001 151.572,-19 141.572,-15.5001 141.572,-22.5001\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE210\u0026#45;\u0026gt;F16CE21 --\u003e\n\u003cg id\u003d\"edge10\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE210\u0026#45;\u0026gt;F16CE21\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M94.6957,-32.7176C102.265,-36.6002 109.808,-41.345 116,-47 150.562,-78.5628 175.487,-127.657 188.826,-158.534\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"185.649,-160.008 192.748,-167.873 192.104,-157.298 185.649,-160.008\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE1617 --\u003e\n\u003cg id\u003d\"node7\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE1617\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"58\" cy\u003d\"-131\" rx\u003d\"57.9828\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"58\" y\u003d\"-127.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE1617\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE1617\u0026#45;\u0026gt;F16CE21 --\u003e\n\u003cg id\u003d\"edge14\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE1617\u0026#45;\u0026gt;F16CE21\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M95.3088,-145.713C114.093,-153.121 136.973,-162.144 156.547,-169.863\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"155.271,-173.123 165.858,-173.535 157.839,-166.611 155.271,-173.123\"/\u003e\n\u003c/g\u003e\n\u003c!-- F15CE735 --\u003e\n\u003cg id\u003d\"node9\" class\u003d\"node\"\u003e\u003ctitle\u003eF15CE735\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"58\" cy\u003d\"-75\" rx\u003d\"53.033\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"58\" y\u003d\"-71.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF15CE735\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F15CE735\u0026#45;\u0026gt;F16CE21 --\u003e\n\u003cg id\u003d\"edge16\" class\u003d\"edge\"\u003e\u003ctitle\u003eF15CE735\u0026#45;\u0026gt;F16CE21\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M92.815,-89.461C100.728,-93.3776 108.89,-97.9497 116,-103 139.476,-119.674 162.33,-143.145 178.258,-161.041\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"175.849,-163.602 185.066,-168.826 181.118,-158.994 175.849,-163.602\"/\u003e\n\u003c/g\u003e\n\u003c/g\u003e\n\u003c/svg\u003e\n\n\u003c?xml version\u003d\"1.0\" encoding\u003d\"UTF-8\" standalone\u003d\"no\"?\u003e\n\u003c!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"\u003e\n\u003c!-- Generated by graphviz version 2.26.0 (20091210.2329)\n --\u003e\n\u003c!-- Title: _anonymous_0 Pages: 1 --\u003e\n\u003csvg width\u003d\"284pt\" height\u003d\"382pt\"\n viewBox\u003d\"0.00 0.00 284.00 382.00\" xmlns\u003d\"http://www.w3.org/2000/svg\" xmlns:xlink\u003d\"http://www.w3.org/1999/xlink\"\u003e\n\u003cg id\u003d\"graph4\" class\u003d\"graph\" transform\u003d\"scale(1 1) rotate(0) translate(4 378)\"\u003e\n\u003ctitle\u003e_anonymous_0\u003c/title\u003e\n\u003cpolygon fill\u003d\"white\" stroke\u003d\"white\" points\u003d\"-4,5 -4,-378 281,-378 281,5 -4,5\"/\u003e\n\u003c!-- F10CE98560 --\u003e\n\u003cg id\u003d\"node1\" class\u003d\"node\"\u003e\u003ctitle\u003eF10CE98560\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-355\" rx\u003d\"62.9325\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-351.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF10CE98560\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F11CE320 --\u003e\n\u003cg id\u003d\"node7\" class\u003d\"node\"\u003e\u003ctitle\u003eF11CE320\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"223\" cy\u003d\"-187\" rx\u003d\"53.033\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"223\" y\u003d\"-183.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF11CE320\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F10CE98560\u0026#45;\u0026gt;F11CE320 --\u003e\n\u003cg id\u003d\"edge2\" class\u003d\"edge\"\u003e\u003ctitle\u003eF10CE98560\u0026#45;\u0026gt;F11CE320\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M110.674,-341.303C118.953,-337.49 127.155,-332.768 134,-327 170.568,-296.187 197.139,-246.454 211.299,-215.303\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"214.618,-216.452 215.457,-205.89 208.215,-213.623 214.618,-216.452\"/\u003e\n\u003c/g\u003e\n\u003c!-- F10CE62080 --\u003e\n\u003cg id\u003d\"node2\" class\u003d\"node\"\u003e\u003ctitle\u003eF10CE62080\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-299\" rx\u003d\"62.9325\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-295.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF10CE62080\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F10CE62080\u0026#45;\u0026gt;F11CE320 --\u003e\n\u003cg id\u003d\"edge4\" class\u003d\"edge\"\u003e\u003ctitle\u003eF10CE62080\u0026#45;\u0026gt;F11CE320\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M108.227,-284.527C117.038,-280.688 126.071,-276.151 134,-271 159.099,-254.693 183.525,-230.896 200.419,-212.791\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"203,-215.155 207.178,-205.418 197.84,-210.424 203,-215.155\"/\u003e\n\u003c/g\u003e\n\u003c!-- F10CE87680 --\u003e\n\u003cg id\u003d\"node3\" class\u003d\"node\"\u003e\u003ctitle\u003eF10CE87680\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-243\" rx\u003d\"62.9325\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-239.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF10CE87680\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F10CE87680\u0026#45;\u0026gt;F11CE320 --\u003e\n\u003cg id\u003d\"edge6\" class\u003d\"edge\"\u003e\u003ctitle\u003eF10CE87680\u0026#45;\u0026gt;F11CE320\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M107.58,-228.433C128.404,-220.957 153.893,-211.808 175.615,-204.01\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"177.071,-207.206 185.3,-200.533 174.706,-200.618 177.071,-207.206\"/\u003e\n\u003c/g\u003e\n\u003c!-- F10CE120000 --\u003e\n\u003cg id\u003d\"node4\" class\u003d\"node\"\u003e\u003ctitle\u003eF10CE120000\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-187\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-183.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF10CE120000\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F10CE120000\u0026#45;\u0026gt;F11CE320 --\u003e\n\u003cg id\u003d\"edge8\" class\u003d\"edge\"\u003e\u003ctitle\u003eF10CE120000\u0026#45;\u0026gt;F11CE320\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M134.063,-187C142.518,-187 151.147,-187 159.543,-187\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"159.641,-190.5 169.641,-187 159.641,-183.5 159.641,-190.5\"/\u003e\n\u003c/g\u003e\n\u003c!-- F10CE89280 --\u003e\n\u003cg id\u003d\"node5\" class\u003d\"node\"\u003e\u003ctitle\u003eF10CE89280\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-131\" rx\u003d\"62.9325\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-127.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF10CE89280\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F10CE89280\u0026#45;\u0026gt;F11CE320 --\u003e\n\u003cg id\u003d\"edge10\" class\u003d\"edge\"\u003e\u003ctitle\u003eF10CE89280\u0026#45;\u0026gt;F11CE320\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M107.58,-145.567C128.404,-153.043 153.893,-162.192 175.615,-169.99\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"174.706,-173.382 185.3,-173.467 177.071,-166.794 174.706,-173.382\"/\u003e\n\u003c/g\u003e\n\u003c!-- F10CE112960 --\u003e\n\u003cg id\u003d\"node6\" class\u003d\"node\"\u003e\u003ctitle\u003eF10CE112960\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-75\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-71.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF10CE112960\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F10CE112960\u0026#45;\u0026gt;F11CE320 --\u003e\n\u003cg id\u003d\"edge12\" class\u003d\"edge\"\u003e\u003ctitle\u003eF10CE112960\u0026#45;\u0026gt;F11CE320\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M109.285,-89.937C117.759,-93.6763 126.389,-98.0547 134,-103 159.099,-119.307 183.525,-143.104 200.419,-161.209\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"197.84,-163.576 207.178,-168.582 203,-158.845 197.84,-163.576\"/\u003e\n\u003c/g\u003e\n\u003c!-- F10CE113280 --\u003e\n\u003cg id\u003d\"node8\" class\u003d\"node\"\u003e\u003ctitle\u003eF10CE113280\u003c/title\u003e\n\u003cellipse fill\u003d\"none\" stroke\u003d\"black\" cx\u003d\"67\" cy\u003d\"-19\" rx\u003d\"67.1751\" ry\u003d\"19.0919\"/\u003e\n\u003ctext text-anchor\u003d\"middle\" x\u003d\"67\" y\u003d\"-15.9\" font-family\u003d\"Times Roman,serif\" font-size\u003d\"14.00\"\u003eF10CE113280\u003c/text\u003e\n\u003c/g\u003e\n\u003c!-- F10CE113280\u0026#45;\u0026gt;F11CE320 --\u003e\n\u003cg id\u003d\"edge14\" class\u003d\"edge\"\u003e\u003ctitle\u003eF10CE113280\u0026#45;\u0026gt;F11CE320\u003c/title\u003e\n\u003cpath fill\u003d\"none\" stroke\u003d\"black\" d\u003d\"M111.723,-33.1855C119.644,-36.9112 127.444,-41.4761 134,-47 170.568,-77.8127 197.139,-127.546 211.299,-158.697\"/\u003e\n\u003cpolygon fill\u003d\"black\" stroke\u003d\"black\" points\u003d\"208.215,-160.377 215.457,-168.11 214.618,-157.548 208.215,-160.377\"/\u003e\n\u003c/g\u003e\n\u003c/g\u003e\n\u003c/svg\u003e\n\n%html\n\u003cscript\u003e\nvar all_svg \u003d d3.selectAll(\"svg\");\n  all_svg.on(\"mousemove\", function(d) {\n\tvar graph_id \u003d d3.select(this)[0][0].firstElementChild.id;\n\tvar svg \u003d d3.selectAll(\"#\" + graph_id);\n  var w  \u003d d3.transform(svg.attr(\"transform\")).translate[0];\n  var h  \u003d d3.transform(svg.attr(\"transform\")).translate[1];\n\t  //.attr(\"transform\", \"translate(\" + w + \",\" + h + \")scale(\" + 1 + \")\")\n\t  svg.call(d3.behavior.zoom().scaleExtent([1, 8]).on(\"zoom\", zoom));\n\t  svg.selectAll(\"text\")\n\t  .on(\"mouseover\", function(d) {\n\t\tvar tmp \u003d d3.select(this)[0][0].innerHTML;\n\t\t\t  div.transition()\t\t\n\t\t\t\t  .duration(200)\t\t\n\t\t\t\t  .style(\"opacity\", .9);\t\t\n\t\t\t  div\t.html(\"Node name: \" + tmp + \"\u003cbr/\u003e Latitude: \" + \"122\" + \"\u003cbr/\u003e Longitude: \" + \"90\" )\t\n\t\t\t\t  .style(\"left\", (d3.event.pageX) + \"px\")\n\t\t\t\t  .style(\"top\", (d3.event.pageY - 28) + \"px\");\t\n\t\t\t  })\t\t\t\t\t\n\t\t  .on(\"mouseout\", function(d) {\n\t\t\t  div.transition()\t\t\n\t\t\t\t  .duration(500)\t\t\n\t\t\t\t  .style(\"opacity\", 0);});\n\t  function zoom() {\n\t\tvar s \u003d d3.event.scale;\n\t\tvar new_w \u003d w + d3.event.translate[0];\n\t\tvar new_h \u003d h + d3.event.translate[1];\n\t\tsvg.attr(\"transform\", \"translate(\" + new_w + \",\" + new_h + \")scale(\" + s + \")\");\n\t  }\n  });\n  \u003c/script\u003e\n  \n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 2:05:30 PM",
+      "dateFinished": "Jun 21, 2016 2:05:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n## Accomplishments\n* Parallel ingest of netCDF scientific data formats\n* Scientific RDD’s for large arrays\n   *Bundles of N-D arrays keyed by name\n* Partitioned by time (space to come)\n* Extension of graph algorithms: Dijkstra\u0027s shortest - longest path on a sparse graph\n\nOur TODOs:\n* better binding between the steps to keep in memory\n* further testing\n",
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12.0,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463696453485_-12383365",
+      "id": "20160519-152053_1173434528",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eAccomplishments\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eParallel ingest of netCDF scientific data formats\u003c/li\u003e\n\u003cli\u003eScientific RDD’s for large arrays\n\u003cbr  /\u003e*Bundles of N-D arrays keyed by name\u003c/li\u003e\n\u003cli\u003ePartitioned by time (space to come)\u003c/li\u003e\n\u003cli\u003eExtension of graph algorithms: Dijkstra\u0027s shortest - longest path on a sparse graph\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eOur TODOs:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ebetter binding between the steps to keep in memory\u003c/li\u003e\n\u003cli\u003efurther testing\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "May 19, 2016 3:20:53 PM",
+      "dateStarted": "Jun 21, 2016 1:56:02 PM",
+      "dateFinished": "Jun 21, 2016 1:56:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jun 21, 2016 1:56:02 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1463768348330_-795200852",
+      "id": "20160520-111908_1974332743",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT"
+      },
+      "dateCreated": "May 20, 2016 11:19:08 AM",
+      "dateStarted": "Jun 21, 2016 2:05:31 PM",
+      "dateFinished": "Jun 21, 2016 2:05:34 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Review #4 -- End-to-End MCS Search (short)",
+  "id": "2BJYQBARR",
+  "angularObjects": {
+    "2BCC68R3T": [],
+    "2B9AFX9BM": [],
+    "2BBAYHPQT": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}
