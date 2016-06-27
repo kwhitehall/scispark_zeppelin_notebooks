@@ -1,0 +1,10 @@
+For now, we have added a temporary fix to allow notebooks that generate large JSON files to be imported by Zeppelin. This will likely be fixed in the future by using an version of JSON.
+
+1. Download and untar Zeppelin 0.5.6 at https://zeppelin.incubator.apache.org/download.html. Do NOT install the binary files as the main instructions say to do.
+2. cd into your installation of Zeppelin and then cd zeppelin-server/src/main/java/org/apache/zeppelin/server
+3. In line 170 of ZeppelinServer.java, add a 0 to the end of the number listed there.
+4. Follow the instructions to build at https://github.com/apache/incubator-zeppelin/blob/master/README.md
+   In particular, you should ensure that you install node.js. On a mac this can be done with "brew install node".
+   Then run "mvn clean package -DskipTests"
+5. Now, you can start Zeppelin as follows:
+   bin/zeppelin-daemon.sh start
