@@ -72,7 +72,7 @@
     },
     {
       "title": "Step 1: Load the Data from The netcdf File",
-      "text": "%pyspark\nfrom netCDF4 import Dataset\nnc \u003d Dataset(\u0027/data/cluster-local/notebook_data/pdf_clustering/tas_MERRA_NA_daily_January_1979-2011.nc\u0027)\ntas \u003d nc.variables[\u0027tasjan\u0027][:]\nlats \u003d nc.variables[\u0027lat\u0027][:]\nlons \u003d nc.variables[\u0027lon\u0027][:]",
+      "text": "%pyspark\nfrom netCDF4 import Dataset\nnc \u003d Dataset(\u0027/pdf_clustering/tas_MERRA_NA_daily_January_1979-2011.nc\u0027)\ntas \u003d nc.variables[\u0027tasjan\u0027][:]\nlats \u003d nc.variables[\u0027lat\u0027][:]\nlons \u003d nc.variables[\u0027lon\u0027][:]",
       "dateUpdated": "Jul 7, 2016 8:10:47 PM",
       "config": {
         "colWidth": 12.0,
