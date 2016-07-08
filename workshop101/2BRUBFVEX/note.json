@@ -105,7 +105,7 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val inputds \u003d sc.textFile(\"hdfs://scispark1.jpl.nasa.gov:8090/tmp/StormEvents_details-ftp_v1.0_d2006_c20160223.csv\")\nval ds \u003d inputds.map{ line \u003d\u003e\n    val reader \u003d new CSVReader(new StringReader(line));\n    reader.readNext();\n}\nds.first()\nval resultds \u003d ds.mapPartitionsWithIndex{(idx, iter) \u003d\u003e if (idx \u003d\u003d 0) iter.drop(1) else iter}",
+      "text": "val inputds \u003d sc.textFile(\"hdfs://host:port/tmp/StormEvents_details-ftp_v1.0_d2006_c20160223.csv\")\nval ds \u003d inputds.map{ line \u003d\u003e\n    val reader \u003d new CSVReader(new StringReader(line));\n    reader.readNext();\n}\nds.first()\nval resultds \u003d ds.mapPartitionsWithIndex{(idx, iter) \u003d\u003e if (idx \u003d\u003d 0) iter.drop(1) else iter}",
       "dateUpdated": "Jul 7, 2016 10:09:09 PM",
       "config": {
         "enabled": true,

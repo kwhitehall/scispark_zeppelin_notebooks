@@ -669,7 +669,7 @@
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "OpenJDK 64-Bit Server VM warning: You have loaded library /data/cluster-local/software/hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/07/07 21:53:58 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\nOpenJDK 64-Bit Server VM warning: You have loaded library /data/cluster-local/software/hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/07/07 21:54:00 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n16/07/07 21:54:01 INFO fs.TrashPolicyDefault: Namenode trash configuration: Deletion interval \u003d 0 minutes, Emptier interval \u003d 0 minutes.\nDeleted /tmp/csvFile\n"
+        "msg": "OpenJDK 64-Bit Server VM warning: You have loaded library /hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/07/07 21:53:58 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\nOpenJDK 64-Bit Server VM warning: You have loaded library /hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/07/07 21:54:00 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n16/07/07 21:54:01 INFO fs.TrashPolicyDefault: Namenode trash configuration: Deletion interval \u003d 0 minutes, Emptier interval \u003d 0 minutes.\nDeleted /tmp/csvFile\n"
       },
       "dateCreated": "Jul 6, 2016 5:01:28 PM",
       "dateStarted": "Jul 7, 2016 9:53:57 PM",
@@ -715,7 +715,7 @@
     },
     {
       "title": "Scala Word count",
-      "text": "val text_file \u003d sc.textFile(\"hdfs://128.149.112.134:8090/tmp/forecasts.txt\")\nval counts \u003d text_file.flatMap(line \u003d\u003e line.split(\" \")).map(word \u003d\u003e (word, 1)).reduceByKey(_ + _).sortBy(_._2, false)\ncounts.saveAsTextFile(\"hdfs://128.149.112.134:8090/tmp/scalacount\")",
+      "text": "val text_file \u003d sc.textFile(\"hdfs://host:port/tmp/forecasts.txt\")\nval counts \u003d text_file.flatMap(line \u003d\u003e line.split(\" \")).map(word \u003d\u003e (word, 1)).reduceByKey(_ + _).sortBy(_._2, false)\ncounts.saveAsTextFile(\"hdfs://host:port/tmp/scalacount\")",
       "dateUpdated": "Jul 7, 2016 8:29:17 PM",
       "config": {
         "colWidth": 12.0,
@@ -789,7 +789,7 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "//create the csv for the graphic\nval aPattern \u003d \"(\\\\d+)[NSns](\\\\W?)(\\\\d+)[Ww]\" \n\nval x1 \u003d counts.filter( s \u003d\u003e s._1.matches(aPattern) \u0026\u0026 s._2 \u003e 1)\nval x2 \u003d x1.map( s \u003d\u003e {\n    if (\"[N]\".r.findFirstIn(s._1) !\u003d None){\n        (s._1.replaceAll(\"[^\\\\p{L}\\\\p{Nd}]+\", \"\").toUpperCase.split(\"N\")(0)+\", -\"+s._1.replaceAll(\"[^\\\\p{L}\\\\p{Nd}]+\", \"\").toUpperCase.split(\"N\")(1).split(\"W\")(0)+\", \"+ s._2.toString)\n    }else{\n        (\"-\"+s._1.replaceAll(\"[^\\\\p{L}\\\\p{Nd}]+\", \"\").toUpperCase.split(\"S\")(0)+\", -\"+s._1.replaceAll(\"[^\\\\p{L}\\\\p{Nd}]+\", \"\").toUpperCase.split(\"S\")(1).split(\"W\")(0)+\", \"+ s._2.toString)\n    }\n})\nx2.saveAsTextFile(\"hdfs://128.149.112.134:8090/tmp/csvFile\")\n",
+      "text": "//create the csv for the graphic\nval aPattern \u003d \"(\\\\d+)[NSns](\\\\W?)(\\\\d+)[Ww]\" \n\nval x1 \u003d counts.filter( s \u003d\u003e s._1.matches(aPattern) \u0026\u0026 s._2 \u003e 1)\nval x2 \u003d x1.map( s \u003d\u003e {\n    if (\"[N]\".r.findFirstIn(s._1) !\u003d None){\n        (s._1.replaceAll(\"[^\\\\p{L}\\\\p{Nd}]+\", \"\").toUpperCase.split(\"N\")(0)+\", -\"+s._1.replaceAll(\"[^\\\\p{L}\\\\p{Nd}]+\", \"\").toUpperCase.split(\"N\")(1).split(\"W\")(0)+\", \"+ s._2.toString)\n    }else{\n        (\"-\"+s._1.replaceAll(\"[^\\\\p{L}\\\\p{Nd}]+\", \"\").toUpperCase.split(\"S\")(0)+\", -\"+s._1.replaceAll(\"[^\\\\p{L}\\\\p{Nd}]+\", \"\").toUpperCase.split(\"S\")(1).split(\"W\")(0)+\", \"+ s._2.toString)\n    }\n})\nx2.saveAsTextFile(\"hdfs://host:port/tmp/csvFile\")\n",
       "dateUpdated": "Jul 7, 2016 9:54:11 PM",
       "config": {
         "colWidth": 12.0,
@@ -849,7 +849,7 @@
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "OpenJDK 64-Bit Server VM warning: You have loaded library /data/cluster-local/software/hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/07/07 21:54:22 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n85, 3\n00, -35, 3\n9, -43, 3\n11, -19, 3\n06, -80, 3\n03, -23, 3\n7, -10, 3\n6, -39, 3\n35, -48, 3\n02, -19, 3\n15, -79, 3\n25, -78, 3\n31, -82, 3\n26, -24, 3\n00, -26, 3\n9, -21, 3\n33, -44, 3\n6, -28, 3\n27, -14, 3\n08, -75, 3\n3, -27, 3\n18, -18, 3\n35, -51, 3\n19, -28, 3\n11, -35, 3\n31, -13, 3\n0, -33, 3\n18, -29, 3\n27, -41, 3\n-01, -17, 3\n17, -77, 3\n10, -47, 3\n4, -80, 3\n29, -30, 3\n23, -27, 3\n33, -15, 3\n19, -64, 3\n16, -21, 3\n22, -59, 3\n20, -22, 3\n21, -54, 3\n24, -48, 3\n24, -75, 3\n6, -37, 3\n12, -61, 3\n18, -41, 3\n33, -75, 3\n26, -46, 3\n37, -24, 3\n05, -45, 3\n19, -35, 3\n7, -49, 3\n20, -33, 3\n33, -82, 3\n0, -40, 3\n08, -15, 3\n5, -78, 3\n19, -15, 3\n27, -21, 3\n17, -53, 3\n15, -82, 3\n19, -22, 3\n10, -54, 3\n17, -93, 3\n16, -27, 3\n6, -22, 3\n04, -22, 3\n36, -65, 3\n24, -33, 3\n4, -84, 3\n25, -98, 3\n21, -56, 3\n13, -24, 3\n19, -46, 3\n31, -26, 3\n24, -42, 3\n33, -51, 3\n34, -49, 3\n26, -20, 3\n22, -42, 3\n31, -15, 3\n8, -17, 3\n7, -27, 3\n17, -71, 3\n05, -05, 3\n09, -85, 3\n17, -44, 3\n30, -12, 3\n16, -18, 3\n11, -80, 3\n25, -25, 3\n5, -41, 3\n30, -90, 3\n07, -32, 3\n29, -54, 3\n"
+        "msg": "OpenJDK 64-Bit Server VM warning: You have loaded library /hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/07/07 21:54:22 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n85, 3\n00, -35, 3\n9, -43, 3\n11, -19, 3\n06, -80, 3\n03, -23, 3\n7, -10, 3\n6, -39, 3\n35, -48, 3\n02, -19, 3\n15, -79, 3\n25, -78, 3\n31, -82, 3\n26, -24, 3\n00, -26, 3\n9, -21, 3\n33, -44, 3\n6, -28, 3\n27, -14, 3\n08, -75, 3\n3, -27, 3\n18, -18, 3\n35, -51, 3\n19, -28, 3\n11, -35, 3\n31, -13, 3\n0, -33, 3\n18, -29, 3\n27, -41, 3\n-01, -17, 3\n17, -77, 3\n10, -47, 3\n4, -80, 3\n29, -30, 3\n23, -27, 3\n33, -15, 3\n19, -64, 3\n16, -21, 3\n22, -59, 3\n20, -22, 3\n21, -54, 3\n24, -48, 3\n24, -75, 3\n6, -37, 3\n12, -61, 3\n18, -41, 3\n33, -75, 3\n26, -46, 3\n37, -24, 3\n05, -45, 3\n19, -35, 3\n7, -49, 3\n20, -33, 3\n33, -82, 3\n0, -40, 3\n08, -15, 3\n5, -78, 3\n19, -15, 3\n27, -21, 3\n17, -53, 3\n15, -82, 3\n19, -22, 3\n10, -54, 3\n17, -93, 3\n16, -27, 3\n6, -22, 3\n04, -22, 3\n36, -65, 3\n24, -33, 3\n4, -84, 3\n25, -98, 3\n21, -56, 3\n13, -24, 3\n19, -46, 3\n31, -26, 3\n24, -42, 3\n33, -51, 3\n34, -49, 3\n26, -20, 3\n22, -42, 3\n31, -15, 3\n8, -17, 3\n7, -27, 3\n17, -71, 3\n05, -05, 3\n09, -85, 3\n17, -44, 3\n30, -12, 3\n16, -18, 3\n11, -80, 3\n25, -25, 3\n5, -41, 3\n30, -90, 3\n07, -32, 3\n29, -54, 3\n"
       },
       "dateCreated": "Jul 7, 2016 9:08:45 PM",
       "dateStarted": "Jul 7, 2016 9:54:21 PM",
@@ -895,7 +895,7 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "%sh\nhadoop fs -copyToLocal /tmp/scalacount /data/cluster-local/notebook_data/scalacount",
+      "text": "%sh\nhadoop fs -copyToLocal /tmp/scalacount /tmp/scalacount",
       "dateUpdated": "Jul 7, 2016 1:52:25 PM",
       "config": {
         "colWidth": 12.0,
@@ -921,7 +921,7 @@
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "OpenJDK 64-Bit Server VM warning: You have loaded library /data/cluster-local/software/hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/07/07 13:52:28 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n"
+        "msg": "OpenJDK 64-Bit Server VM warning: You have loaded library /hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/07/07 13:52:28 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n"
       },
       "dateCreated": "Jul 6, 2016 4:55:52 PM",
       "dateStarted": "Jul 7, 2016 1:52:25 PM",
@@ -958,7 +958,7 @@
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "OpenJDK 64-Bit Server VM warning: You have loaded library /data/cluster-local/software/hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/07/07 16:09:27 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n"
+        "msg": "OpenJDK 64-Bit Server VM warning: You have loaded library /hadoop-2.4.0/lib/native/libhadoop.so.1.0.0 which might have disabled stack guard. The VM will try to fix the stack guard now.\nIt\u0027s highly recommended that you fix the library with \u0027execstack -c \u003clibfile\u003e\u0027, or link it with \u0027-z noexecstack\u0027.\n16/07/07 16:09:27 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n"
       },
       "dateCreated": "Jul 7, 2016 8:06:26 AM",
       "dateStarted": "Jul 7, 2016 4:09:26 PM",
@@ -968,7 +968,7 @@
     },
     {
       "title": "Python Word Count ",
-      "text": "%pyspark\ntext_file \u003d sc.textFile(\"hdfs://128.149.112.134:8090/tmp/forecasts.txt\")\ncounts \u003d text_file.flatMap(lambda line: line.split(\" \")).map(lambda word: (word, 1)).reduceByKey(lambda a, b: a + b)\ncounts.saveAsTextFile(\"hdfs://128.149.112.134:8090/tmp/pythoncount\")",
+      "text": "%pyspark\ntext_file \u003d sc.textFile(\"hdfs://host:port/tmp/forecasts.txt\")\ncounts \u003d text_file.flatMap(lambda line: line.split(\" \")).map(lambda word: (word, 1)).reduceByKey(lambda a, b: a + b)\ncounts.saveAsTextFile(\"hdfs://host:port/tmp/pythoncount\")",
       "dateUpdated": "Jul 7, 2016 5:44:00 PM",
       "config": {
         "colWidth": 12.0,
@@ -1005,7 +1005,7 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "%sh\nhadoop fs -copyToLocal /tmp/scalacount /data/cluster-local/notebook_data/pythoncount",
+      "text": "%sh\nhadoop fs -copyToLocal /tmp/scalacount /tmp/pythoncount",
       "dateUpdated": "Jul 7, 2016 1:52:25 PM",
       "config": {
         "colWidth": 12.0,
