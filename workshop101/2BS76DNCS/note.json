@@ -1,0 +1,36 @@
+{
+  "paragraphs": [
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467954681495_603120411",
+      "id": "20160707-221121_938481638",
+      "dateCreated": "Jul 7, 2016 10:11:21 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "101-5 Parallel statistical rollups",
+  "id": "2BS76DNCS",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": [],
+    "2BBAYHPQT": []
+  },
+  "config": {},
+  "info": {}
+}

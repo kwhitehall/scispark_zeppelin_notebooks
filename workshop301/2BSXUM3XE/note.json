@@ -1,0 +1,353 @@
+{
+  "paragraphs": [
+    {
+      "title": "Typical Workflow:",
+      "text": "%md\n - Load Datasets\n - Temporal Regrids\n - Spatial Regrids\n - Evaluate Metrics\n - Plot Results\n",
+      "dateUpdated": "Jul 7, 2016 10:33:11 PM",
+      "config": {
+        "enabled": true,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467955991711_-1566797155",
+      "id": "20160707-223311_360395151",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cul\u003e\n\u003cli\u003eLoad Datasets\u003c/li\u003e\n\u003cli\u003eTemporal Regrids\u003c/li\u003e\n\u003cli\u003eSpatial Regrids\u003c/li\u003e\n\u003cli\u003eEvaluate Metrics\u003c/li\u003e\n\u003cli\u003ePlot Results\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:33:11 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Load Libraries",
+      "text": "%pyspark\nimport ocw\nfrom ocw.functions import loadDatasets, temporalRebins, commonLatLonGrid, spatialRegrids\nfrom ocw.functions import computeMetrics, contourPlot, mymap",
+      "dateUpdated": "Jul 7, 2016 10:33:11 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467955991712_-1581032865",
+      "id": "20160707-223311_1257418317",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 7, 2016 10:33:11 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Load a Reference Dataset and one or more Model Datasets",
+      "text": "%pyspark\npath1 \u003d \"file://tmp/AFRICA_KNMI-RACMO2.2b_CTL_ERAINT_MM_50km_1989-2008_tasmax.nc\"\nvariable1 \u003d \"tasmax\"\npath2 \u003d \"file://tmp/AFRICA_UC-WRF311_CTL_ERAINT_MM_50km-rg_1989-2008_tasmax.nc\"\nvariable2 \u003d \"tasmax\"\n\ndatasets \u003d loadDatasets([(path1, variable1), (path2, variable2)], dir\u003d\u0027/tmp\u0027)\nprint datasets",
+      "dateUpdated": "Jul 7, 2016 10:33:11 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467955991712_-1581032865",
+      "id": "20160707-223311_43083692",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "loadDataset: File /tmp/AFRICA_KNMI-RACMO2.2b_CTL_ERAINT_MM_50km_1989-2008_tasmax.nc has variable tasmax with shape (time, lat, lon): (240, 201, 194)\nloadDataset: File /tmp/AFRICA_UC-WRF311_CTL_ERAINT_MM_50km-rg_1989-2008_tasmax.nc has variable tasmax with shape (time, lat, lon): (240, 201, 194)\n[\u003cocw.dataset.Dataset instance at 0x7fd8a4bdfe60\u003e, \u003cocw.dataset.Dataset instance at 0x7fd87e97d248\u003e]\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:33:11 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Temporal Regrids",
+      "text": "%pyspark\ndatasets \u003d temporalRebins(datasets, \u0027annual\u0027)",
+      "dateUpdated": "Jul 7, 2016 10:33:11 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467955991712_-1581032865",
+      "id": "20160707-223311_405622405",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "temporalRebin: Dataset /tmp/AFRICA_KNMI-RACMO2.2b_CTL_ERAINT_MM_50km_1989-2008_tasmax.nc?tasmax has new shape (20, 201, 194)\ntemporalRebin: Dataset /tmp/AFRICA_UC-WRF311_CTL_ERAINT_MM_50km-rg_1989-2008_tasmax.nc?tasmax has new shape (20, 201, 194)\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:33:11 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Spatial Regrids",
+      "text": "%pyspark\nlatRes \u003d 1.0     # degrees\nlonRes \u003d 1.0     # degrees\n# Find common spatial bounds, return desired grid with specified resolution\nlats, lons \u003d commonLatLonGrid(datasets, latRes, lonRes)\n\ndatasets \u003d spatialRegrids(datasets, lats, lons)",
+      "dateUpdated": "Jul 7, 2016 10:33:11 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467955991713_-1581417614",
+      "id": "20160707-223311_1182665257",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "commonSpatialBounds: Dataset /tmp/AFRICA_KNMI-RACMO2.2b_CTL_ERAINT_MM_50km_1989-2008_tasmax.nc?tasmax has boundaries: lat (-45.7599983215, 42.2400016785), lon (-24.6399993896, 60.2799987793).\ncommonSpatialBounds: Dataset /tmp/AFRICA_UC-WRF311_CTL_ERAINT_MM_50km-rg_1989-2008_tasmax.nc?tasmax has boundaries: lat (-45.76, 42.24), lon (-24.64, 60.28).\ncommonSpatialBounds: Common boundaries are: lat (-45.7599983215, 42.24), lon (-24.6399993896, 60.2799987793).\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:33:11 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Compute Metric(s)",
+      "text": "%pyspark\nmetricNames \u003d [\"Bias\"]\nresults \u003d computeMetrics(datasets, metricNames, subregions\u003dNone)\nbias \u003d results[0][0]",
+      "dateUpdated": "Jul 7, 2016 10:33:11 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467955991713_-1581417614",
+      "id": "20160707-223311_2093821414",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "computeMetrics: Evaluating metrics [\u0027Bias\u0027] . . .\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:33:11 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Plot Bias between two models as time-series of contour maps",
+      "text": "%pyspark\noutputName \u003d \"wrf_bias_compared_to_knm\"\nconfig \u003d {\u0027gridshape\u0027: (4, 5),\n          \u0027ptitle\u0027: \u0027TASMAX Bias of WRF Compared to KNMI (1989 - 2008)\u0027,\n          \u0027subtitles\u0027: range(1989, 2009, 1)\n          }\n\nplotFile \u003d contourPlot(bias, lats, lons, outputName, **config)",
+      "dateUpdated": "Jul 7, 2016 10:33:11 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467955991713_-1581417614",
+      "id": "20160707-223311_41981709",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 6, in \u003cmodule\u003e\n  File \"build/bdist.linux-x86_64/egg/ocw/functions.py\", line 200, in contourPlot\n    plotter.draw_contour_map(metric, lats, lons, outputName, **config)\n  File \"build/bdist.linux-x86_64/egg/ocw/plotter.py\", line 647, in draw_contour_map\n    fig \u003d plt.figure()\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/matplotlib/pyplot.py\", line 435, in figure\n    **kwargs)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/matplotlib/backends/backend_qt4agg.py\", line 47, in new_figure_manager\n    return new_figure_manager_given_figure(num, thisFig)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/matplotlib/backends/backend_qt4agg.py\", line 54, in new_figure_manager_given_figure\n    canvas \u003d FigureCanvasQTAgg(figure)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/matplotlib/backends/backend_qt4agg.py\", line 72, in __init__\n    FigureCanvasQT.__init__(self, figure)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/matplotlib/backends/backend_qt4.py\", line 68, in __init__\n    _create_qApp()\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/matplotlib/backends/backend_qt5.py\", line 138, in _create_qApp\n    raise RuntimeError(\u0027Invalid DISPLAY variable\u0027)\nRuntimeError: Invalid DISPLAY variable\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:33:11 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Display Plot",
+      "text": "%pyspark\nfrom IPython.display import Image, display\n\ndisplay(Image(plotFile))",
+      "dateUpdated": "Jul 7, 2016 10:33:11 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467955991714_-1580263367",
+      "id": "20160707-223311_1211946947",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 2, in \u003cmodule\u003e\nNameError: name \u0027plotFile\u0027 is not defined\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:33:11 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jul 7, 2016 10:33:11 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467955991714_-1580263367",
+      "id": "20160707-223311_309946434",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT"
+      },
+      "dateCreated": "Jul 7, 2016 10:33:11 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "301-4 Parallel RCMES/OCW",
+  "id": "2BSXUM3XE",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": [],
+    "2BBAYHPQT": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}

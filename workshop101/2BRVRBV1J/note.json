@@ -1,0 +1,352 @@
+{
+  "paragraphs": [
+    {
+      "title": "Load \u0026 Split a text file",
+      "text": "// Create a Scala Spark Context.\r//val conf \u003d new SparkConf().setAppName(\"wordCount\") val sc \u003d new SparkContext(conf)\r// Load our input data.\rval input \u003d sc.textFile(\"/usr/share/dict/words\")",
+      "dateUpdated": "Jul 7, 2016 10:07:58 PM",
+      "config": {
+        "enabled": true,
+        "title": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467954478807_1743825923",
+      "id": "20160707-220758_270536204",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "input: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[203] at textFile at \u003cconsole\u003e:176\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:07:58 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Split Lines into Words",
+      "text": "val words \u003d input.flatMap(line \u003d\u003e line.split(\" \"))",
+      "dateUpdated": "Jul 7, 2016 10:07:58 PM",
+      "config": {
+        "enabled": true,
+        "title": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467954478807_1743825923",
+      "id": "20160707-220758_679099929",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "words: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[61] at flatMap at \u003cconsole\u003e:31\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:07:58 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Map words to Tuple of (word, 1)",
+      "text": "val counts1 \u003d words.map(word \u003d\u003e (word, 1))",
+      "dateUpdated": "Jul 7, 2016 10:07:58 PM",
+      "config": {
+        "enabled": true,
+        "title": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467954478807_1743825923",
+      "id": "20160707-220758_1904406545",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "\u003cconsole\u003e:171: error: not found: value words\n         val counts1 \u003d words.map(word \u003d\u003e (word, 1))\n                       ^\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:07:58 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Reduce by Summation",
+      "text": "val counts \u003d counts1.reduceByKey{_ + _}",
+      "dateUpdated": "Jul 7, 2016 10:07:58 PM",
+      "config": {
+        "enabled": true,
+        "title": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467954478808_1741902179",
+      "id": "20160707-220758_1264526927",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "\u003cconsole\u003e:171: error: not found: value counts1\n         val counts \u003d counts1.reduceByKey{_ + _}\n                      ^\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:07:58 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Save Word Counts to File",
+      "text": "// Save the word count back out to a text file, causing evaluation.\rcounts.saveAsTextFile(\"/tmp/wordCount85\")",
+      "dateUpdated": "Jul 7, 2016 10:07:58 PM",
+      "config": {
+        "enabled": true,
+        "title": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467954478808_1741902179",
+      "id": "20160707-220758_1405891377",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 7, 2016 10:07:58 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Word Count Program",
+      "text": "// Create a Scala Spark Context.\r//val conf \u003d new SparkConf().setAppName(\"wordCount\")\r//val sc \u003d new SparkContext(conf)\r\r// Load our input data.\rval input \u003d sc.textFile(\"/usr/share/dict/words\");\r\r// Split it up into words.\rval words \u003d input.flatMap(line \u003d\u003e line.split(\" \"));\r\r// Transform into pairs and count.\rval counts \u003d words.map(word \u003d\u003e (word, 1)).reduceByKey{_ + _};\r\r// Examine top word.\rcounts.first();\r\r// Save the word count back out to a text file, causing evaluation.\rcounts.saveAsTextFile(\"/tmp/wordCounts95\");\r",
+      "dateUpdated": "Jul 7, 2016 10:07:58 PM",
+      "config": {
+        "enabled": true,
+        "title": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467954478808_1741902179",
+      "id": "20160707-220758_53805298",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "input: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[31] at textFile at \u003cconsole\u003e:42\nwords: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[32] at flatMap at \u003cconsole\u003e:45\ncounts: org.apache.spark.rdd.RDD[(String, Int)] \u003d ShuffledRDD[34] at reduceByKey at \u003cconsole\u003e:48\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:07:58 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Word Count in Python",
+      "text": "%pyspark\n#    sc \u003d SparkContext(appName\u003d\"PythonWordCount\")\nlines \u003d sc.textFile(\"/usr/share/dict/words\", 1)\ncounts \u003d lines.flatMap(lambda x: x.split(\u0027 \u0027)) \\\n              .map(lambda x: (x, 1)) \\\n              .reduceByKey(lambda x,y: x + y)\n\noutput \u003d counts.collect()\nfor (word, count) in output:\n    print(\"%s: %i\" % (word, count))",
+      "dateUpdated": "Jul 7, 2016 10:07:58 PM",
+      "config": {
+        "enabled": true,
+        "title": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467954478809_1741517430",
+      "id": "20160707-220758_215028099",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 227, in \u003cmodule\u003e\n    intp.setStatementsFinished(output.get(), False)\nAttributeError: \u0027list\u0027 object has no attribute \u0027get\u0027\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:07:58 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Compute PI using Monte Carlo (scala)",
+      "text": "// Compute PI using Monte Carlo.\nval slices \u003d 1000\nval n \u003d math.min(100000L * slices, Int.MaxValue).toInt // avoid overflow\nval count \u003d sc.parallelize(1 until n, slices).map { i \u003d\u003e\n      val x \u003d Math.random() * 2 - 1 \n      val y \u003d Math.random() * 2 - 1\n      if (x*x + y*y \u003c 1) 1 else 0\n}.reduce(_ + _)\nprintln(\"\\nPi is roughly \" + 4.0 * count / n)",
+      "dateUpdated": "Jul 7, 2016 10:07:58 PM",
+      "config": {
+        "enabled": true,
+        "title": true,
+        "tableHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467954478809_1741517430",
+      "id": "20160707-220758_1909765639",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "slices: Int \u003d 1000\nn: Int \u003d 100000000\ncount: Int \u003d 78535953\n\nPi is roughly 3.14143812\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:07:58 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jul 7, 2016 10:07:58 PM",
+      "config": {
+        "enabled": true,
+        "tableHide": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "colWidth": 12.0
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467954478809_1741517430",
+      "id": "20160707-220758_1140506611",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT"
+      },
+      "dateCreated": "Jul 7, 2016 10:07:58 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "101-3 Simple Spark Examples",
+  "id": "2BRVRBV1J",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": [],
+    "2BBAYHPQT": []
+  },
+  "config": {},
+  "info": {}
+}
