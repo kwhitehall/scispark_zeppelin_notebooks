@@ -1,19 +1,1044 @@
 {
   "paragraphs": [
     {
-      "config": {},
+      "text": "%md\n\u003ch1\u003eParallel Statistical Rollups for a Time-Series of Grids\u003c/h1\u003e\n\n\u003ch3\u003eGeneral Problem:\u003c/h3\u003e\n\u003cb\u003eCompute per-pixel statistics for a physical variable over time for a global or regional lat/lon grid.\u003c/b\u003e\n\u003ch3\u003eSteps:\u003c/h3\u003e\nGiven daily files or OpeNDAP URL\u0027s over 10 - 30 years, load the grids and mask missing values.\nThen compute statistics of choice:  count, mean, standard deviation, minimum, maximum, skewness, kurtosis, etc.\nOptionally \"roll up\" the statistics over time by sub-periods of choice:  month, season, year, 5-year, and total period.\n\u003cbr\u003e\n",
+      "dateUpdated": "Jul 13, 2016 2:48:26 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "title": false
+      },
       "settings": {
         "params": {},
         "forms": {}
       },
       "jobName": "paragraph_1467954681495_603120411",
       "id": "20160707-221121_938481638",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch1\u003eParallel Statistical Rollups for a Time-Series of Grids\u003c/h1\u003e\n\u003ch3\u003eGeneral Problem:\u003c/h3\u003e\n\u003cp\u003e\u003cb\u003eCompute per-pixel statistics for a physical variable over time for a global or regional lat/lon grid.\u003c/b\u003e\u003c/p\u003e\n\u003ch3\u003eSteps:\u003c/h3\u003e\n\u003cp\u003eGiven daily files or OpeNDAP URL\u0027s over 10 - 30 years, load the grids and mask missing values.\n\u003cbr  /\u003eThen compute statistics of choice:  count, mean, standard deviation, minimum, maximum, skewness, kurtosis, etc.\n\u003cbr  /\u003eOptionally \u0026ldquo;roll up\u0026rdquo; the statistics over time by sub-periods of choice:  month, season, year, 5-year, and total period.\n\u003cbr  /\u003e\u003cbr\u003e\u003c/p\u003e\n"
+      },
       "dateCreated": "Jul 7, 2016 10:11:21 PM",
+      "dateStarted": "Jul 13, 2016 2:48:26 PM",
+      "dateFinished": "Jul 13, 2016 2:48:26 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\u003ch3\u003eExample Application:\u003c/h3\u003e\nDataset is daily TRMM precipitation (in mm) over period 1998 - 2012.\nA total of 5,475 netCDF files.\nVariable name is \"r\".\nLat/lon resolution is approx. quarter degree, 1440 x 840.\n\u003cbr\u003e\n",
+      "dateUpdated": "Jul 13, 2016 2:48:26 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "tableHide": false,
+        "editorHide": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468122955707_818154629",
+      "id": "20160709-205555_892715033",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eExample Application:\u003c/h3\u003e\n\u003cp\u003eDataset is daily TRMM precipitation (in mm) over period 1998 - 2012.\n\u003cbr  /\u003eA total of 5,475 netCDF files.\n\u003cbr  /\u003eVariable name is \u0026ldquo;r\u0026rdquo;.\n\u003cbr  /\u003eLat/lon resolution is approx. quarter degree, 1440 x 840.\n\u003cbr  /\u003e\u003cbr\u003e\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 9, 2016 8:55:55 PM",
+      "dateStarted": "Jul 13, 2016 2:48:26 PM",
+      "dateFinished": "Jul 13, 2016 2:48:26 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "ls -d -1 /home/workshop/TRMM_daily/*.* \u003e\u003e /home/workshop/urls_trmm_daily_1998_2012.txt",
+      "dateUpdated": "Jul 13, 2016 3:11:00 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468447811608_1990515068",
+      "id": "20160713-151011_1722323137",
+      "dateCreated": "Jul 13, 2016 3:10:11 PM",
       "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Driver File contains time-Sorted List of URL\u0027s or Local Paths (using OPeNDAP to pull variables would Lengthen I/O time)",
+      "text": "%pyspark\nvariable \u003d \u0027r\u0027\nurlListFile \u003d \"/home/workshop/urls_trmm_daily_1998_2012.txt\"\nwith open(urlListFile, \u0027r\u0027) as f:\n    urlList \u003d f.readlines()\nprint \u0027\u0027.join(urlList[:20])",
+      "dateUpdated": "Jul 13, 2016 2:48:26 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false,
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468124355434_-2138924431",
+      "id": "20160709-211915_1244001387",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.01.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.02.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.03.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.04.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.05.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.06.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.07.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.08.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.09.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.10.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.11.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.12.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.13.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.14.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.15.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.16.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.17.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.18.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.19.7.nc\n/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.20.7.nc\n\n"
+      },
+      "dateCreated": "Jul 9, 2016 9:19:15 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:48:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Import functions from Clim Library",
+      "text": "%pyspark\nimport sys, os, re, time\nimport numpy as N\nfrom netCDF4 import Dataset, default_fillvals\n\nfrom clim.variables import getVariables, close\nfrom clim.split import splitByMonth\nfrom clim.cache import retrieveFile",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468125012089_-359515487",
+      "id": "20160709-213012_1829572151",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 9, 2016 9:30:12 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:48:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Split URL\u0027s by Month -- Special split to support monthly, Seasonal, Yearly, ... and Total stats",
+      "text": "%pyspark\nurlsByKey \u003d splitByMonth(urlList, {\u0027get\u0027: (\u0027year\u0027, \u0027month\u0027), \u0027regex\u0027: re.compile(r\u0027\\/3B42_daily.(....).(..)\u0027)})\nprint urlsByKey[0]",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468123077611_-927314857",
+      "id": "20160709-205757_1988707763",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "((\u00271998\u0027, \u002701\u0027), [\u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.01.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.02.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.03.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.04.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.05.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.06.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.07.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.08.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.09.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.10.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.11.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.12.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.13.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.14.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.15.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.16.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.17.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.18.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.19.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.20.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.21.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.22.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.23.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.24.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.25.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.26.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.27.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.28.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.29.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.30.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.31.7.nc\u0027])\n"
+      },
+      "dateCreated": "Jul 9, 2016 8:57:57 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:48:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Define Accumulate function -- Update accumulators for a set of Variable grids",
+      "text": "%pyspark\ndef accumulate(urls, variable, accumulators\u003d[\u0027count\u0027, \u0027sum\u0027, \u0027sumsq\u0027, \u0027min\u0027, \u0027max\u0027], cachePath\u003d\u0027~/cache\u0027):\n    \u0027\u0027\u0027Accumulate data into statistics accumulators like count, sum, sumsq, min, max, M3, M4, etc.\u0027\u0027\u0027\n    keys, urls \u003d urls\n    accum \u003d {}\n    for i, url in enumerate(urls):\n        try:\n            path \u003d retrieveFile(url, cachePath)\n        except:\n            print \u003e\u003esys.stderr, \u0027accumulate: Error, continuing without file %s\u0027 % url\n            continue\n\n        try:\n            print \u003e\u003esys.stderr, \u0027Reading %s ...\u0027 % path\n            var, fh \u003d getVariables(path, [variable], arrayOnly\u003dTrue, set_auto_mask\u003dTrue)   # return dict of variable objects by name                                                \n            v \u003d var[variable]   # could be masked array                                                                                                                             \n            if v.shape[0] \u003d\u003d 1: v \u003d v[0]    # throw away trivial time dimension for CF-style files                                                                                  \n            close(fh)\n        except:\n            print \u003e\u003esys.stderr, \u0027accumulate: Error, cannot read variable %s from file %s\u0027 % (variable, path)\n            continue\n\n        if i \u003d\u003d 0:\n            for k in accumulators:\n                if k \u003d\u003d \u0027min\u0027:     accum[k] \u003d default_fillvals[\u0027f8\u0027] * N.ones(v.shape, dtype\u003dN.float64)\n                elif k \u003d\u003d \u0027max\u0027:   accum[k] \u003d -default_fillvals[\u0027f8\u0027] * N.ones(v.shape, dtype\u003dN.float64)\n                elif k \u003d\u003d \u0027count\u0027: accum[k] \u003d N.zeros(v.shape, dtype\u003dN.int64)\n                else:\n                    accum[k] \u003d N.zeros(v.shape, dtype\u003dN.float64)\n\n        if N.ma.isMaskedArray(v):\n            if \u0027count\u0027 in accumulators:\n                accum[\u0027count\u0027] +\u003d ~v.mask\n            if \u0027min\u0027 in accumulators:\n                accum[\u0027min\u0027] \u003d N.ma.minimum(accum[\u0027min\u0027], v)\n            if \u0027max\u0027 in accumulators:\n                accum[\u0027max\u0027] \u003d N.ma.maximum(accum[\u0027max\u0027], v)\n\n            v \u003d N.ma.filled(v, 0.)\n    \telse:\n            if \u0027count\u0027 in accumulators:\n                accum[\u0027count\u0027] +\u003d 1\n            if \u0027min\u0027 in accumulators:\n                accum[\u0027min\u0027] \u003d N.minimum(accum[\u0027min\u0027], v)\n            if \u0027max\u0027 in accumulators:\n                accum[\u0027max\u0027] \u003d N.maximum(accum[\u0027max\u0027], v)\n\n        if \u0027sum\u0027 in accumulators:\n            accum[\u0027sum\u0027] +\u003d v\n        if \u0027sumsq\u0027 in accumulators:\n             accum[\u0027sumsq\u0027] +\u003d v*v\n    return (keys, accum)",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false,
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468125433968_498455947",
+      "id": "20160709-213713_495638626",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 9, 2016 9:37:13 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:48:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Define Combine Function -- Merge Accumulators to go from monthly to seasonal to Yearly to Total",
+      "text": "%pyspark\ndef combine(a, b, accumulators\u003d[\u0027count\u0027, \u0027sum\u0027, \u0027sumsq\u0027, \u0027min\u0027, \u0027max\u0027]):\n    \u0027\u0027\u0027Combine accumulators by summing.\u0027\u0027\u0027\n    keys, a \u003d a\n    b \u003d b[1]\n    for k in a.keys():\n        if k !\u003d \u0027min\u0027 and k !\u003d \u0027max\u0027:\n            a[k] +\u003d b[k]\n    if \u0027min\u0027 in accumulators:\n        if N.ma.isMaskedArray(a):\n            a[\u0027min\u0027] \u003d N.ma.minimum(a[\u0027min\u0027], b[\u0027min\u0027])\n        else:\n            a[\u0027min\u0027] \u003d N.minimum(a[\u0027min\u0027], b[\u0027min\u0027])\n    if \u0027max\u0027 in accumulators:\n        if N.ma.isMaskedArray(a):\n            a[\u0027max\u0027] \u003d N.ma.maximum(a[\u0027max\u0027], b[\u0027max\u0027])\n        else:\n            a[\u0027max\u0027] \u003d N.maximum(a[\u0027max\u0027], b[\u0027max\u0027])\n    return ((\u0027total\u0027,), a)",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468125745831_-253482966",
+      "id": "20160709-214225_1098618592",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 9, 2016 9:42:25 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:48:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Define function to compute final statistics from the Accumulators",
+      "text": "%pyspark\ndef statsFromAccumulators(accum):\n    \u0027\u0027\u0027Compute final statistics from accumulators.\u0027\u0027\u0027\n    keys, accum \u003d accum\n    \n    # Mask all of the accumulator arrays                                                                                                                                            \n    accum[\u0027count\u0027] \u003d N.ma.masked_equal(accum[\u0027count\u0027], 0, copy\u003dFalse)\n    mask \u003d accum[\u0027count\u0027].mask\n    for k in accum:\n        if k !\u003d \u0027count\u0027:\n\t    accum[k] \u003d N.ma.array(accum[k], copy\u003dFalse, mask\u003dmask)\n\n    # Compute stats (masked)                                                                                                                                                       \n    stats \u003d {}\n    if \u0027count\u0027 in accum:\n        stats[\u0027count\u0027] \u003d accum[\u0027count\u0027]\n    if \u0027min\u0027 in accum:\n        stats[\u0027min\u0027] \u003d accum[\u0027min\u0027]\n    if \u0027max\u0027 in accum:\n        stats[\u0027max\u0027] \u003d accum[\u0027max\u0027]\n    if \u0027sum\u0027 in accum:\n        stats[\u0027mean\u0027] \u003d accum[\u0027sum\u0027] / accum[\u0027count\u0027]\n    if \u0027sumsq\u0027 in accum:\n        stats[\u0027stddev\u0027] \u003d N.sqrt(accum[\u0027sumsq\u0027] / (accum[\u0027count\u0027].astype(N.float32) - 1))\n    return (keys, stats)",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468125898517_163062175",
+      "id": "20160709-214458_1383645253",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 9, 2016 9:44:58 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:48:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Define Function to write Stats to netCDF file with some attributes",
+      "text": "%pyspark\ndef writeStats(inputFile, variable, stats, outFile, coordinates\u003d[\u0027latitude\u0027, \u0027longitude\u0027],\n               copyToHdfsPath\u003dNone, format\u003d\u0027NETCDF4\u0027, cachePath\u003d\u0027~/cache\u0027):\n    \u0027\u0027\u0027Write out stats arrays to netCDF with some attributes.                                                                                                                       \n    \u0027\u0027\u0027\n    keys, stats \u003d stats\n    if os.path.exists(outFile): os.unlink(outFile)\n    dout \u003d Dataset(outFile, \u0027w\u0027, format\u003dformat)\n    print \u003e\u003esys.stderr, \u0027Writing %s ...\u0027 % outFile\n    dout.setncattr(\u0027variable\u0027, variable)\n    dout.setncattr(\u0027urls\u0027, str(urls))\n    dout.setncattr(\u0027level\u0027, str(keys))\n\n    inFile \u003d retrieveFile(inputFile, cachePath)\n    din \u003d Dataset(inFile, \u0027r\u0027)\n    try:\n        coordinatesFromFile \u003d din.variables[variable].getncattr(\u0027coordinates\u0027)\n        coordinates \u003d coordinatesFromFile.split()\n        if coordinates[0] \u003d\u003d \u0027time\u0027:   coordinates \u003d coordinates[1:]    # discard trivial time dimension for CF-style files                                                         \n    except:\n        if coordinates is None or len(coordinates) \u003d\u003d 0:\n            coordinates \u003d (\u0027lat\u0027, \u0027lon\u0027)     # kludge: another possibility \n\n    # Add dimensions and variables, copying data                                                                                                                                    \n    coordDim \u003d [dout.createDimension(coord, din.variables[coord].shape[0]) for coord in coordinates]     # here lat, lon, alt, etc.                                                 \n    for coord in coordinates:\n        var \u003d dout.createVariable(coord, din.variables[coord].dtype, (coord,))\n        var[:] \u003d din.variables[coord][:]\n\n    # Add stats variables                                                                                                                                                           \n    for k,v in stats.items():\n        var \u003d dout.createVariable(k, stats[k].dtype, coordinates)\n        var[:] \u003d v[:]\n\n    din.close()\n    dout.close()\n    return outFile",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468125921227_535899184",
+      "id": "20160709-214521_472574405",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 9, 2016 9:45:21 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:48:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Now to use sciSpark",
+      "text": "%md\nThe Notebook automatically gives you a predefined SparkContext object as \"sc\".\n\nIf running from the command line, add code like:\n    from pyspark import SparkContext                                                                                                                                                \n    sc \u003d SparkContext(appName\u003d\"PixelStats\")\n    \nAnd then run a command line like:\n    spark-submit --master $MESOS_MASTER --total-executor-cores 16  pixelStats.py urls_trmm_daily_1998_2012.txt r trmm_precip_stats_1998_2012.nc",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468126707877_-1533543677",
+      "id": "20160709-215827_1479642374",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003eThe Notebook automatically gives you a predefined SparkContext object as \u0026ldquo;sc\u0026rdquo;.\u003c/p\u003e\n\u003cp\u003eIf running from the command line, add code like:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003efrom pyspark import SparkContext                                                                                                                                                \nsc \u003d SparkContext(appName\u003d\"PixelStats\")\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eAnd then run a command line like:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003espark-submit --master $MESOS_MASTER --total-executor-cores 16  pixelStats.py urls_trmm_daily_1998_2012.txt r trmm_precip_stats_1998_2012.nc\n\u003c/code\u003e\u003c/pre\u003e\n"
+      },
+      "dateCreated": "Jul 9, 2016 9:58:27 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:48:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Split the months across the cluster (just URL lists, data is read Later on-the-fly)",
+      "text": "%pyspark\nurlsRDD \u003d sc.parallelize(urlsByKey, numSlices\u003d16)        # returns partitioned RDD of URL lists",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468125928640_1780192451",
+      "id": "20160709-214528_1372681724",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 9, 2016 9:45:28 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:48:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Transformations are lazy, only an action triggers computation",
+      "text": "%pyspark\ntmp \u003d urlsRDD.collect()      # RDD is lazy, so must collect to print something\nprint len(tmp)\nprint tmp[0]",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468129682491_-1993679291",
+      "id": "20160709-224802_252484464",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "180\n((\u00271998\u0027, \u002701\u0027), [\u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.01.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.02.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.03.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.04.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.05.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.06.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.07.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.08.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.09.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.10.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.11.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.12.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.13.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.14.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.15.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.16.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.17.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.18.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.19.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.20.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.21.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.22.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.23.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.24.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.25.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.26.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.27.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.28.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.29.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.30.7.nc\u0027, \u0027/storage/users/obs4Mips/TRMM_daily/3B42_daily.1998.01.31.7.nc\u0027])\n"
+      },
+      "dateCreated": "Jul 9, 2016 10:48:02 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:49:45 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Map Accumulate Function across the months and return RDD of stats. Accumulators",
+      "text": "%pyspark\naccumRDD \u003d urlsRDD.map(lambda urls: accumulate(urls, variable))    # returns RDD of stats accumulators                                                                         ",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468126681156_491728560",
+      "id": "20160709-215801_1650881600",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 9, 2016 9:58:01 PM",
+      "dateStarted": "Jul 13, 2016 2:48:28 PM",
+      "dateFinished": "Jul 13, 2016 2:49:45 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Reduce the accumulators using the combine function, returning merged accumulators (reduce is an action)",
+      "text": "%pyspark\nmerged \u003d accumRDD.reduce(combine)                      # merge accumulators on head node\nprint merged[0]\naccumulators \u003d merged[1]\nprint accumulators.keys()\nprint accumulators[\u0027count\u0027]",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468126823885_-801230247",
+      "id": "20160709-220023_142126633",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "(\u0027total\u0027,)\n[\u0027count\u0027, \u0027max\u0027, \u0027sum\u0027, \u0027sumsq\u0027, \u0027min\u0027]\n[[5475 5475 5475 ..., 5475 5475 5475]\n [5475 5475 5475 ..., 5475 5475 5475]\n [5475 5475 5475 ..., 5475 5475 5475]\n ..., \n [5475 5475 5475 ..., 5475 5475 5475]\n [5475 5475 5475 ..., 5475 5475 5475]\n [5475 5475 5475 ..., 5475 5475 5475]]\n"
+      },
+      "dateCreated": "Jul 9, 2016 10:00:23 PM",
+      "dateStarted": "Jul 13, 2016 2:49:45 PM",
+      "dateFinished": "Jul 13, 2016 2:50:58 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Compute the overall statistics from the merged accumulators",
+      "text": "%pyspark\nstats \u003d statsFromAccumulators(merged)     # compute total stats from merged accumulators\n\nprint stats[0]\nstatistics \u003d stats[1]\nprint statistics.keys()\nprint statistics[\u0027mean\u0027]\nprint\nprint statistics[\u0027stddev\u0027]",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468127316043_-474861368",
+      "id": "20160709-220836_1712272780",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "(\u0027total\u0027,)\n[\u0027count\u0027, \u0027max\u0027, \u0027mean\u0027, \u0027stddev\u0027, \u0027min\u0027]\n[[1.7107177622476806 1.7041972138378854 1.7072109094268928 ...,\n  1.6718136501414318 1.7117314650533406 1.7169588643196783]\n [1.757315024439943 1.7667177657752413 1.7930520075627658 ...,\n  1.7135670773423017 1.7643506427439244 1.7762903676059556]\n [1.8165095432592582 1.8179725529811426 1.8401752963267506 ...,\n  1.801852009618255 1.8197862584868523 1.8411013220162151]\n ..., \n [1.9276491574391927 2.0453059888158216 2.1101580337492845 ...,\n  1.8688734923908699 1.861513392604105 1.8766429202415083]\n [1.806691244965819 1.8928226570887108 1.9740328784184913 ...,\n  2.2474603678102363 2.2318677303889025 2.157056256668753]\n [2.0563044946650937 1.9915398348956348 1.6952279559825654 ...,\n  2.454321386371165 2.408917311269399 2.3436236041729854]]\n\n[[4.481630151553614 4.364519341630388 4.316809715553947 ...,\n  4.494238719334094 4.59658528060364 4.584450428807881]\n [4.539489541747861 4.485164537745427 4.460758894436032 ...,\n  4.612108954490748 4.701272410264645 4.678712536117603]\n [4.616046072714621 4.609625378063102 4.668041125723086 ...,\n  4.695246839337309 4.733878944058793 4.733736654964333]\n ..., \n [7.185920521775062 7.179168018442746 7.1969256858878285 ...,\n  7.38509454918394 6.971068458758657 7.100928160332996]\n [7.162987186652211 7.249721531381137 7.2692473121994405 ...,\n  7.388244381308297 7.102656023652465 7.118364697897105]\n [7.435416600647976 7.467488683664677 6.9513909435253805 ...,\n  6.540938059100924 6.821611543840841 7.127380559236505]]\n"
+      },
+      "dateCreated": "Jul 9, 2016 10:08:36 PM",
+      "dateStarted": "Jul 13, 2016 2:49:46 PM",
+      "dateFinished": "Jul 13, 2016 2:50:58 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "write statistics to a netCDF file",
+      "text": "%pyspark\noutFile \u003d \u0027/tmp/trmm_precip_stats_1998_2012.nc\u0027\ninputFile \u003d urlList[0]\ntmp \u003d writeStats(inputFile, variable, stats, outFile)",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468127418181_-456054644",
+      "id": "20160709-221018_1766819391",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 3, in \u003cmodule\u003e\n  File \"\u003cstring\u003e\", line 10, in writeStats\nNameError: global name \u0027urls\u0027 is not defined\n"
+      },
+      "dateCreated": "Jul 9, 2016 10:10:18 PM",
+      "dateStarted": "Jul 13, 2016 2:50:58 PM",
+      "dateFinished": "Jul 13, 2016 2:50:58 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Entire spark program as Four lines (split-map-reduce)",
+      "text": "%pyspark\nurlsRDD \u003d sc.parallelize(urlsByKey, numSlices\u003d16)                                # partition months into tasks\nmerged \u003d urlsRDD.map(lambda urls: accumulate(urls, variable)).reduce(combine)    # map-reduce\nstats \u003d statsFromAccumulators(merged)                                            # compute total stats\nwriteStats(urls, variable, stats, outFile)                                       # write to netCDF4 file",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468126718213_459086200",
+      "id": "20160709-215838_1750987633",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 4, in \u003cmodule\u003e\nNameError: name \u0027urls\u0027 is not defined\n"
+      },
+      "dateCreated": "Jul 9, 2016 9:58:38 PM",
+      "dateStarted": "Jul 13, 2016 2:50:59 PM",
+      "dateFinished": "Jul 13, 2016 2:52:09 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\u003ch3\u003eExercise #1:\nWrite out and plot the monthly statistics, in addition to the total statistics ",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468127940831_233750872",
+      "id": "20160709-221900_1466833611",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003e\u003ch3\u003eExercise #1:\n\u003cbr  /\u003eWrite out and plot the monthly statistics, in addition to the total statistics\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 9, 2016 10:19:00 PM",
+      "dateStarted": "Jul 13, 2016 2:48:27 PM",
+      "dateFinished": "Jul 13, 2016 2:48:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Prepare smaller problem -- just Four months of data",
+      "text": "urlListFile2 \u003d \"/data/cluster-local/bdwilson/Climatology/clim/urls_trmm_daily_2012_4months.txt\"\nwith open(urlListFile2, \u0027r\u0027) as f:\n    urlList2 \u003d f.readlines()\nurlsByKey2 \u003d splitByMonth(urlList, {\u0027get\u0027: (\u0027year\u0027, \u0027month\u0027), \u0027regex\u0027: re.compile(r\u0027\\/3B42_daily.(....).(..)\u0027)})\nprint len(urlsByKey2)\nprint urlsByKey2[3]",
+      "dateUpdated": "Jul 13, 2016 2:48:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468197741890_1479991291",
+      "id": "20160710-174221_122029533",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "\u003cconsole\u003e:30: error: not found: value urlListFile2\nval $ires6 \u003d urlListFile2\n             ^\n\u003cconsole\u003e:27: error: not found: value urlListFile2\n         urlListFile2 \u003d \"/data/cluster-local/bdwilson/Climatology/clim/urls_trmm_daily_2012_4months.txt\"\n         ^\n"
+      },
+      "dateCreated": "Jul 10, 2016 5:42:21 PM",
+      "dateStarted": "Jul 13, 2016 2:50:59 PM",
+      "dateFinished": "Jul 13, 2016 2:51:01 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Exercise #1 Template:  Fill in the Blank Lines",
+      "text": "%pyspark\nurlsRDD2  \u003d sc.parallelize(urlsByKey2, numSlices\u003d4)                  # partition months into tasks\naccumRDD2 \u003d urlsRDD2.map(lambda urls: accumulate(urls, variable))     # map accumulate\n                                                                     # three blank lines (it\u0027s easy!)\n\n\nmerged2 \u003d accumRDD2.reduce(combine)                                  # merge all months\nstats2 \u003d statsFromAccumulators(merged2)                              # compute total stats\nwriteStats(urls, variable, stats2, outFile)                          # write to total netCDF4 file",
+      "dateUpdated": "Jul 13, 2016 2:48:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468195630584_-555933490",
+      "id": "20160710-170710_1924555877",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\nNameError: name \u0027urlsByKey2\u0027 is not defined\n"
+      },
+      "dateCreated": "Jul 10, 2016 5:07:10 PM",
+      "dateStarted": "Jul 13, 2016 2:51:00 PM",
+      "dateFinished": "Jul 13, 2016 2:52:09 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Exercise #1:  Hint",
+      "text": "%pyspark\nurlsRDD2  \u003d sc.parallelize(urlsByKey, numSlices\u003d4)                   # partition months into tasks\naccumRDD2 \u003d urlsRDD2.map(lambda urls: accumulate(urls, variable))     # map accumulate\nmonthlyStatsRDD2 \u003d accumRDD.map(statsFromAccumulators)               # compute monthly stats in parallel\n                                                                     # write out monthly stats\n                                                                     # plot monthly stats\nmerged2 \u003d accumRDD2.reduce(combine)                                  # merge all months\nstats2 \u003d statsFromAccumulators(merged2)                              # compute total stats\nwriteStats(urls, variable, stats2, outFile)                          # write to total netCDF4 file",
+      "dateUpdated": "Jul 13, 2016 2:48:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468196717575_-1292416217",
+      "id": "20160710-172517_1239190597",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 6, in \u003cmodule\u003e\nNameError: name \u0027urls\u0027 is not defined\n"
+      },
+      "dateCreated": "Jul 10, 2016 5:25:17 PM",
+      "dateStarted": "Jul 13, 2016 2:52:09 PM",
+      "dateFinished": "Jul 13, 2016 2:53:20 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Exercise #1:  Bad Solution (use collect)",
+      "text": "%pyspark\nurlsRDD2  \u003d sc.parallelize(urlsByKey2, numSlices\u003d4)                  # partition months into tasks\naccumRDD2 \u003d urlsRDD2.map(lambda urls: accumulate(urls, variable))    # map accumulate\nmonthlyStatsRDD2 \u003d accumRDD2.map(statsFromAccumulators)              # compute monthly stats in parallel\nmonthlyStatsList \u003d monthlyStatsRDD2.collect()                        # collect all monthly stats onto head node\nfor s in monthlyStatsList:\n   writeStats(urls, variable, stats, outFile)\n   plotStats(urls, variable)\n\nmerged2 \u003d accumRDD2.reduce(combine)                                  # merge all months\nstats2 \u003d statsFromAccumulators(merged2)                              # compute total stats\nwriteStats(urls, variable, stats2, outFile)                          # write to total netCDF4 file",
+      "dateUpdated": "Jul 13, 2016 2:48:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true,
+        "editorHide": false,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468195637987_682973292",
+      "id": "20160710-170717_1242358221",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\nNameError: name \u0027urlsByKey2\u0027 is not defined\n"
+      },
+      "dateCreated": "Jul 10, 2016 5:07:17 PM",
+      "dateStarted": "Jul 13, 2016 2:52:09 PM",
+      "dateFinished": "Jul 13, 2016 2:53:20 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Exercise #1:  Better Solution (do in Parallel)",
+      "text": "%pyspark\nurlsRDD2  \u003d sc.parallelize(urlsByKey2, numSlices\u003d4)                  # partition months into tasks\naccumRDD2 \u003d urlsRDD2.map(lambda urls: accumulate(urls, variable))    # map accumulate\nmonthlyStatsRDD2  \u003d accumRDD2.map(statsFromAccumulators)             # compute monthly stats in parallel\nmonthlyOutputRDD2 \u003d monthlyStatsRDD2.map(lambda stats: writeStats(urls, variable, stats, outFile, copyToHdfsPath\u003d\u0027/data\u0027))\nmonthlyPlotRDD2   \u003d  monthlyStatsRDD2.map(lambda stats: plotStats(urls, variable, stats, outFile, copyToHdfsPath\u003d\u0027/data\u0027))\n\nmerged2 \u003d accumRDD2.reduce(combine)                                  # merge all months\nstats2 \u003d statsFromAccumulators(merged2)                              # compute total stats\nwriteStats(urls, variable, stats2, outFile)                          # write to total netCDF4 file",
+      "dateUpdated": "Jul 13, 2016 2:48:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true,
+        "editorHide": false,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468195642824_-2125709003",
+      "id": "20160710-170722_1089889959",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\nNameError: name \u0027urlsByKey2\u0027 is not defined\n"
+      },
+      "dateCreated": "Jul 10, 2016 5:07:22 PM",
+      "dateStarted": "Jul 13, 2016 2:53:20 PM",
+      "dateFinished": "Jul 13, 2016 2:53:20 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\u003ch3\u003eExercise #2:  For the Reader\u003c/h3\u003e\nWrite out and plot the monthly and yearly statistics, in addition to the total statistics ",
+      "dateUpdated": "Jul 13, 2016 2:48:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468198576138_887052197",
+      "id": "20160710-175616_96294214",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eExercise #2:  For the Reader\u003c/h3\u003e\n\u003cp\u003eWrite out and plot the monthly and yearly statistics, in addition to the total statistics\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 10, 2016 5:56:16 PM",
+      "dateStarted": "Jul 13, 2016 2:48:28 PM",
+      "dateFinished": "Jul 13, 2016 2:48:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\u003ch3\u003eExercise #3:  Copy the Notebook and try it on your own Dataset\u003c/h3\u003e\nAgain, write out and plot the monthly and yearly statistics, in addition to the total statistics ",
+      "dateUpdated": "Jul 13, 2016 2:48:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468198661739_-1516935551",
+      "id": "20160710-175741_1673966523",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eExercise #3:  Copy the Notebook and try it on your own Dataset\u003c/h3\u003e\n\u003cp\u003eAgain, write out and plot the monthly and yearly statistics, in addition to the total statistics\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 10, 2016 5:57:41 PM",
+      "dateStarted": "Jul 13, 2016 2:48:28 PM",
+      "dateFinished": "Jul 13, 2016 2:48:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\u003ch3\u003eLessons Learned:\u003c/h3\u003e\n - Partition data as needed to main \"data locality\" for your algorithm (e.g. here monthly rather than random)\n - Write simple functions that you can pass to Map.\n - Try to use the longest pipeline of Map and Filter functions.\n - Only Reduce or ReduceByKey at the end of your pipeline.\n - Almost never use Collect (for truly BIG DATA, the result will be too big to collect).\n - Can use Collect to look at intermediate results to debug (by running on small subset of the data).\n - However, often better to write a sequential version of your code FIRST to debug.\n - HDFS is your friend.\n",
+      "dateUpdated": "Jul 13, 2016 2:48:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468198757252_1182632942",
+      "id": "20160710-175917_97440238",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eLessons Learned:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003ePartition data as needed to main \u0026ldquo;data locality\u0026rdquo; for your algorithm (e.g. here monthly rather than random)\u003c/li\u003e\n\u003cli\u003eWrite simple functions that you can pass to Map.\u003c/li\u003e\n\u003cli\u003eTry to use the longest pipeline of Map and Filter functions.\u003c/li\u003e\n\u003cli\u003eOnly Reduce or ReduceByKey at the end of your pipeline.\u003c/li\u003e\n\u003cli\u003eAlmost never use Collect (for truly BIG DATA, the result will be too big to collect).\u003c/li\u003e\n\u003cli\u003eCan use Collect to look at intermediate results to debug (by running on small subset of the data).\u003c/li\u003e\n\u003cli\u003eHowever, often better to write a sequential version of your code FIRST to debug.\u003c/li\u003e\n\u003cli\u003eHDFS is your friend.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 10, 2016 5:59:17 PM",
+      "dateStarted": "Jul 13, 2016 2:48:28 PM",
+      "dateFinished": "Jul 13, 2016 2:48:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\u003ch3\u003eAdvanced Exercise #3:  For the Reader\u003c/h3\u003e\nThink about how to parallelize not only over a long time-series, but over space and time simultaneously.\nSpatial tiles anyone?\n",
+      "dateUpdated": "Jul 13, 2016 2:48:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468199214061_-1232808618",
+      "id": "20160710-180654_2052866075",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eAdvanced Exercise #3:  For the Reader\u003c/h3\u003e\n\u003cp\u003eThink about how to parallelize not only over a long time-series, but over space and time simultaneously.\n\u003cbr  /\u003eSpatial tiles anyone?\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 10, 2016 6:06:54 PM",
+      "dateStarted": "Jul 13, 2016 2:48:28 PM",
+      "dateFinished": "Jul 13, 2016 2:48:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jul 13, 2016 2:48:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468199482565_1638758482",
+      "id": "20160710-181122_264262925",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT"
+      },
+      "dateCreated": "Jul 10, 2016 6:11:22 PM",
+      "dateStarted": "Jul 13, 2016 2:53:20 PM",
+      "dateFinished": "Jul 13, 2016 2:53:20 PM",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "101-5 Parallel statistical rollups",
+  "name": "101-3 Parallel Statistical Rollups",
   "id": "2BS76DNCS",
   "angularObjects": {
     "2BATG925A": [],
@@ -29,8 +1054,10 @@
     "2B9VX5KPM": [],
     "2BAM6HXAB": [],
     "2B9AFX9BM": [],
-    "2BBAYHPQT": []
+    "2BQMW3S3P": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }

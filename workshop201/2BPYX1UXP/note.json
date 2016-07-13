@@ -2,7 +2,7 @@
   "paragraphs": [
     {
       "title": "MCC Search",
-      "text": "%pyspark\nimport sys\nimport networkx as nx\n\nsys.path.insert(0, \u0027/path/cloudElements_code_data/code\u0027)\n\nimport iomethods\nimport mccSearch\nimport utils\nimport plotting\nimport metrics\n\n\ndef main():\n    sys.setrecursionlimit(5000)\n\n    CEGraph \u003d nx.DiGraph()\n    prunedGraph \u003d nx.DiGraph()\n    MCCList \u003d[]\n    MCSList\u003d[]\n    MCSMCCNodesList \u003d[]\n    allMCSsList \u003d[]\n    allCETRMMList \u003d[]\n    DIRS \u003d {}\n    DIRS[\u0027mainDirStr\u0027] \u003d \"/path/cloudElements_code_data/try2\" #\"/directory/to/where/to/store/outputs\"\n    DIRS[\u0027TRMMdirName\u0027] \u003d \"/path/cloudElements_code_data/datadir/TRMM\" #\"/directory/to/the/TRMM/netCDF/files\"\n    DIRS[\u0027CEoriDirName\u0027] \u003d \"/path/cloudElements_code_data/datadir/MERG\" #\"/directory/to/the/MERG/netCDF/files\"\n    #get the dates for analysis\n    startDateTime \u003d \"200609110000\" #\"yyyymmddhrmm\"\n    endDateTime \u003d \"200609111200\" #\"200609121200\"\n\n    print \"\\nworking ...\"\n    test,filelist \u003d iomethods.check_for_files(DIRS[\u0027CEoriDirName\u0027], startDateTime, endDateTime, 1, \u0027hour\u0027)\n\n    # create main directory and file structure for storing intel\n    DIRS[\u0027mainDirStr\u0027] \u003d iomethods.create_main_directory(DIRS[\u0027mainDirStr\u0027])\n\n    TRMMCEdirName \u003d DIRS[\u0027mainDirStr\u0027]+\u0027/TRMMnetcdfCEs\u0027\n    CEdirName \u003d DIRS[\u0027mainDirStr\u0027]+\u0027/MERGnetcdfCEs\u0027\n\n    mergImgs, timeList, LAT, LON \u003d iomethods.read_data(DIRS[\u0027CEoriDirName\u0027],\u0027ch4\u0027,\u0027latitude\u0027,\u0027longitude\u0027, filelist)\n    CEGraph \u003d mccSearch.find_cloud_elements(mergImgs,timeList,DIRS[\u0027mainDirStr\u0027], LAT,LON) #,DIRS[\u0027TRMMdirName\u0027])\n    print \"\\nCreated cloudElementsTabFile.txt (lat,lon,time,size,CE) at \" +DIRS[\u0027mainDirStr\u0027] + \"/textFiles\"\n\nmain()",
+      "text": "%pyspark\nimport sys\nimport networkx as nx\n\nsys.path.insert(0, \u0027/data/cluster-local/notebook_data/cloudElements_code_data/code\u0027)\n\nimport iomethods\nimport mccSearch\nimport utils\nimport plotting\nimport metrics\n\n\ndef main():\n    sys.setrecursionlimit(5000)\n\n    CEGraph \u003d nx.DiGraph()\n    prunedGraph \u003d nx.DiGraph()\n    MCCList \u003d[]\n    MCSList\u003d[]\n    MCSMCCNodesList \u003d[]\n    allMCSsList \u003d[]\n    allCETRMMList \u003d[]\n    DIRS \u003d {}\n    DIRS[\u0027mainDirStr\u0027] \u003d \"/data/cluster-local/notebook_data/cloudElements_code_data/try2\" #\"/directory/to/where/to/store/outputs\"\n    DIRS[\u0027TRMMdirName\u0027] \u003d \"/data/cluster-local/notebook_data/cloudElements_code_data/datadir/TRMM\" #\"/directory/to/the/TRMM/netCDF/files\"\n    DIRS[\u0027CEoriDirName\u0027] \u003d \"/data/cluster-local/notebook_data/cloudElements_code_data/datadir/MERG\" #\"/directory/to/the/MERG/netCDF/files\"\n    #get the dates for analysis\n    startDateTime \u003d \"200609110000\" #\"yyyymmddhrmm\"\n    endDateTime \u003d \"200609111200\" #\"200609121200\"\n\n    print \"\\nworking ...\"\n    test,filelist \u003d iomethods.check_for_files(DIRS[\u0027CEoriDirName\u0027], startDateTime, endDateTime, 1, \u0027hour\u0027)\n\n    # create main directory and file structure for storing intel\n    DIRS[\u0027mainDirStr\u0027] \u003d iomethods.create_main_directory(DIRS[\u0027mainDirStr\u0027])\n\n    TRMMCEdirName \u003d DIRS[\u0027mainDirStr\u0027]+\u0027/TRMMnetcdfCEs\u0027\n    CEdirName \u003d DIRS[\u0027mainDirStr\u0027]+\u0027/MERGnetcdfCEs\u0027\n\n    mergImgs, timeList, LAT, LON \u003d iomethods.read_data(DIRS[\u0027CEoriDirName\u0027],\u0027ch4\u0027,\u0027latitude\u0027,\u0027longitude\u0027, filelist)\n    CEGraph \u003d mccSearch.find_cloud_elements(mergImgs,timeList,DIRS[\u0027mainDirStr\u0027], LAT,LON) #,DIRS[\u0027TRMMdirName\u0027])\n    print \"\\nCreated cloudElementsTabFile.txt (lat,lon,time,size,CE) at \" +DIRS[\u0027mainDirStr\u0027] + \"/textFiles\"\n\nmain()",
       "dateUpdated": "Jul 7, 2016 10:30:49 PM",
       "config": {
         "enabled": true,
@@ -30,7 +30,7 @@
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "\nworking ...\nDirectory exists already!!!\nnumber of nodes are:  34\nnumber of edges are:  25\n********************************************************************************\n\nCreated cloudElementsTabFile.txt (lat,lon,time,size,CE) at /path/cloudElements_code_data/try2/textFiles\n"
+        "msg": "\nworking ...\nDirectory exists already!!!\nnumber of nodes are:  34\nnumber of edges are:  25\n********************************************************************************\n\nCreated cloudElementsTabFile.txt (lat,lon,time,size,CE) at /data/cluster-local/notebook_data/cloudElements_code_data/try2/textFiles\n"
       },
       "dateCreated": "Jul 7, 2016 10:30:49 PM",
       "status": "READY",
@@ -38,7 +38,7 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "%pyspark\nimport os\nos.system(\"hadoop fs -put /path/cloudElements_code_data/try2/textFiles/cloudElementsTabFile.txt  /tmp/cloudElementsTab3\")",
+      "text": "%pyspark\nimport os\nos.system(\"hadoop fs -put /data/cluster-local/notebook_data/cloudElements_code_data/try2/textFiles/cloudElementsTabFile.txt  /tmp/cloudElementsTab3\")",
       "dateUpdated": "Jul 7, 2016 10:30:49 PM",
       "config": {
         "enabled": true,
@@ -72,7 +72,7 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val cloud_elems1 \u003d sc.textFile(\"hdfs://host:port/tmp/cloudElementsTab3\")\nval cloud_elems_nospace1 \u003d cloud_elems1.filter(line \u003d\u003e !line.isEmpty)\ncase class CloudElement(lat1: Float, lon1: Float, time1: String, area1: Float, uid1: Int)\nval cloud_elements1 \u003d cloud_elems_nospace1.map(line \u003d\u003e line.split(\",\")).map(line \u003d\u003e CloudElement(line(0).toFloat,line(1).toFloat,line(2),line(3).toFloat,line(4).toInt))\nval data_frame1 \u003d cloud_elements1.toDF()\ndata_frame1.registerTempTable(\"cloud_elems_table1\")",
+      "text": "val cloud_elems1 \u003d sc.textFile(\"hdfs://localhost:9000/workshop_s3/201/cloudElementsTab3\")\nval cloud_elems_nospace1 \u003d cloud_elems1.filter(line \u003d\u003e !line.isEmpty)\ncase class CloudElement(lat1: Float, lon1: Float, time1: String, area1: Float, uid1: Int)\nval cloud_elements1 \u003d cloud_elems_nospace1.map(line \u003d\u003e line.split(\",\")).map(line \u003d\u003e CloudElement(line(0).toFloat,line(1).toFloat,line(2),line(3).toFloat,line(4).toInt))\nval data_frame1 \u003d cloud_elements1.toDF()\ndata_frame1.registerTempTable(\"cloud_elems_table1\")",
       "dateUpdated": "Jul 7, 2016 10:30:49 PM",
       "config": {
         "enabled": true,

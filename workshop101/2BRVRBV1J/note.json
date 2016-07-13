@@ -260,8 +260,8 @@
     },
     {
       "title": "Compute PI using Monte Carlo (scala)",
-      "text": "// Compute PI using Monte Carlo.\nval slices \u003d 1000\nval n \u003d math.min(100000L * slices, Int.MaxValue).toInt // avoid overflow\nval count \u003d sc.parallelize(1 until n, slices).map { i \u003d\u003e\n      val x \u003d Math.random() * 2 - 1 \n      val y \u003d Math.random() * 2 - 1\n      if (x*x + y*y \u003c 1) 1 else 0\n}.reduce(_ + _)\nprintln(\"\\nPi is roughly \" + 4.0 * count / n)",
-      "dateUpdated": "Jul 7, 2016 10:07:58 PM",
+      "text": "// Compute PI using Monte Carlo.\nval slices \u003d 1000\nval n \u003d math.min(100000L * slices, Int.MaxValue).toInt   // avoid overflow\nval count \u003d sc.parallelize(1 until n, slices).map { i \u003d\u003e\n      val x \u003d Math.random() * 2 - 1 \n      val y \u003d Math.random() * 2 - 1\n      if (x*x + y*y \u003c 1) 1 else 0\n}.reduce(_ + _)\nprintln(\"\\nPi is roughly \" + 4.0 * count / n)",
+      "dateUpdated": "Jul 10, 2016 7:38:29 PM",
       "config": {
         "enabled": true,
         "title": true,
@@ -329,7 +329,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "101-3 Simple Spark Examples",
+  "name": "101-? Simple Spark Examples",
   "id": "2BRVRBV1J",
   "angularObjects": {
     "2BATG925A": [],
@@ -347,6 +347,8 @@
     "2B9AFX9BM": [],
     "2BBAYHPQT": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default"
+  },
   "info": {}
 }
