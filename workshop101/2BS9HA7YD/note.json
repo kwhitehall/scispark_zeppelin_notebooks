@@ -1,0 +1,263 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\u003ch2\u003eParadigms of Parallel Computing in a Nutshell\u003c/h2\u003e\n\u003ch4\u003e\n - Multicore on a single node\n - GPU boards:  one or more\n - Cluster Computing\n\u003cbr\u003e\n - HPC Style\n    - Usually MPI Model codes\n    - Synchronous message-passing communication\n    - Heavy interleaving compute and communication (i.e. during every iteration in a solver)\n\n - Map-Reduce Style\n    - Massively parallel\n    - Partition data onto the cluster\n    - Compute in parallel across the chunks, using all cores\n    - Workflows constrained to Map-Filter-Reduce paradigm\n    - Made robust using replicas and task scheduler\n\u003cbr\u003e\n - HDFS:\n    - Cluster file system that chunks files (sequences of records) across the cluster\n    - Uses replicas for robustness\n    - However, HDFS chunking doesn\u0027t honor netCDF4 file structure (random access to named arrays)\n \u003cbr\u003e\n - Hadoop:\n    - 1st generation\n    - Writes to disk between each step in job\n    - Written in Java\n \u003cbr\u003e\n - Spark:\n    - 2nd generation\n    - In-memory:  only \u0027spills\u0027 to disk when necessary\n    - Lazy computation:  transformation pipelines defined and then held for later execution\n    - 10 to 100x faster than Hadoop\n    - Can persist results in memory or serialize to SSD/disk\n    - Written in Scala (another JVM language), but can use Python (PySpark gateway)\n\u003cbr\u003e",
+      "dateUpdated": "Jul 13, 2016 1:47:08 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468440084888_-1853457153",
+      "id": "20160713-130124_467587280",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eParadigms of Parallel Computing in a Nutshell\u003c/h2\u003e\n\u003cp\u003e\u003ch4\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cp\u003eMulticore on a single node\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eGPU boards:  one or more\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eCluster Computing\n\u003cbr  /\u003e\u003cbr\u003e\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eHPC Style\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eUsually MPI Model codes\u003c/li\u003e\n\u003cli\u003eSynchronous message-passing communication\u003c/li\u003e\n\u003cli\u003eHeavy interleaving compute and communication (i.e. during every iteration in a solver)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eMap-Reduce Style\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eMassively parallel\u003c/li\u003e\n\u003cli\u003ePartition data onto the cluster\u003c/li\u003e\n\u003cli\u003eCompute in parallel across the chunks, using all cores\u003c/li\u003e\n\u003cli\u003eWorkflows constrained to Map-Filter-Reduce paradigm\u003c/li\u003e\n\u003cli\u003eMade robust using replicas and task scheduler\n\u003cbr  /\u003e\u003cbr\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eHDFS:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eCluster file system that chunks files (sequences of records) across the cluster\u003c/li\u003e\n\u003cli\u003eUses replicas for robustness\u003c/li\u003e\n\u003cli\u003eHowever, HDFS chunking doesn\u0027t honor netCDF4 file structure (random access to named arrays)\n\u003cbr  /\u003e\u003cbr\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eHadoop:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e1st generation\u003c/li\u003e\n\u003cli\u003eWrites to disk between each step in job\u003c/li\u003e\n\u003cli\u003eWritten in Java\n\u003cbr  /\u003e\u003cbr\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eSpark:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e2nd generation\u003c/li\u003e\n\u003cli\u003eIn-memory:  only \u0027spills\u0027 to disk when necessary\u003c/li\u003e\n\u003cli\u003eLazy computation:  transformation pipelines defined and then held for later execution\u003c/li\u003e\n\u003cli\u003e10 to 100x faster than Hadoop\u003c/li\u003e\n\u003cli\u003eCan persist results in memory or serialize to SSD/disk\u003c/li\u003e\n\u003cli\u003eWritten in Scala (another JVM language), but can use Python (PySpark gateway)\n\u003cbr  /\u003e\u003cbr\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 13, 2016 1:01:24 PM",
+      "dateStarted": "Jul 13, 2016 1:47:08 PM",
+      "dateFinished": "Jul 13, 2016 1:47:08 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n\u003ch3\u003eMap-Reduce Idea comes from Functional Programming Languages\u003c/h3\u003e\nCompose Functions:\n - Map: map a function across a list of values and return the list of results\n - Filter: filter a list using a predicate and return the list of values that satisfied the predicate\n - Reduce: combine the values in a list into a single value using a reduction operator (e.g. add operator yields sum)\n - GroupByKey:  group values in a list that have the same key, return the list of groups\n - ReduceByKey:  return reduction result for values from each key",
+      "dateUpdated": "Jul 13, 2016 1:37:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468441967836_-1340120042",
+      "id": "20160713-133247_829480998",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eMap-Reduce Idea comes from Functional Programming Languages\u003c/h3\u003e\n\u003cp\u003eCompose Functions:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eMap: map a function across a list of values and return the list of results\u003c/li\u003e\n\u003cli\u003eFilter: filter a list using a predicate and return the list of values that satisfied the predicate\u003c/li\u003e\n\u003cli\u003eReduce: combine the values in a list into a single value using a reduction operator (e.g. add operator yields sum)\u003c/li\u003e\n\u003cli\u003eGroupByKey:  group values in a list that have the same key, return the list of groups\u003c/li\u003e\n\u003cli\u003eReduceByKey:  return reduction result for values from each key\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 13, 2016 1:32:47 PM",
+      "dateStarted": "Jul 13, 2016 1:37:18 PM",
+      "dateFinished": "Jul 13, 2016 1:37:18 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Sequential Map in Python",
+      "text": "%pyspark\nimport numpy as N\nfrom operator import add\nints \u003d N.arange(1000000) + 1\nprint ints[:100]\nsquares \u003d map(lambda i: i*i, ints)\nprint squares[:100]\nsumOfSquares \u003d reduce(add, squares)",
+      "dateUpdated": "Jul 13, 2016 1:58:08 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468440273962_-781487065",
+      "id": "20160713-130433_3851752",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "[  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18\n  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36\n  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54\n  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72\n  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90\n  91  92  93  94  95  96  97  98  99 100]\n[1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961, 1024, 1089, 1156, 1225, 1296, 1369, 1444, 1521, 1600, 1681, 1764, 1849, 1936, 2025, 2116, 2209, 2304, 2401, 2500, 2601, 2704, 2809, 2916, 3025, 3136, 3249, 3364, 3481, 3600, 3721, 3844, 3969, 4096, 4225, 4356, 4489, 4624, 4761, 4900, 5041, 5184, 5329, 5476, 5625, 5776, 5929, 6084, 6241, 6400, 6561, 6724, 6889, 7056, 7225, 7396, 7569, 7744, 7921, 8100, 8281, 8464, 8649, 8836, 9025, 9216, 9409, 9604, 9801, 10000]\n"
+      },
+      "dateCreated": "Jul 13, 2016 1:04:33 PM",
+      "dateStarted": "Jul 13, 2016 1:58:08 PM",
+      "dateFinished": "Jul 13, 2016 1:58:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Parallel Map in Python Using Multiprocessing (8 cores)",
+      "text": "%pyspark\nfrom multiprocessing import Pool\npool \u003d Pool(8)\nints \u003d N.arange(1000000) + 1\nprint ints[:100]\nsquares \u003d pool.map(lambda i: i*i, ints)\nprint squares[:100]",
+      "dateUpdated": "Jul 13, 2016 1:49:57 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468441929245_1201299685",
+      "id": "20160713-133209_831282399",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 2, in \u003cmodule\u003e\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/multiprocessing-2.6.0.2-py2.7-linux-x86_64.egg/multiprocessing/__init__.py\", line 233, in Pool\n    return Pool(processes, initializer, initargs)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/multiprocessing-2.6.0.2-py2.7-linux-x86_64.egg/multiprocessing/pool.py\", line 104, in __init__\n    w.start()\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/multiprocessing-2.6.0.2-py2.7-linux-x86_64.egg/multiprocessing/process.py\", line 109, in start\n    self._popen \u003d Popen(self)\n  File \"/data/cluster-local/anaconda/lib/python2.7/site-packages/multiprocessing-2.6.0.2-py2.7-linux-x86_64.egg/multiprocessing/forking.py\", line 90, in __init__\n    sys.stdout.flush()\nAttributeError: \u0027Logger\u0027 object has no attribute \u0027flush\u0027\n"
+      },
+      "dateCreated": "Jul 13, 2016 1:32:09 PM",
+      "dateStarted": "Jul 13, 2016 1:49:57 PM",
+      "dateFinished": "Jul 13, 2016 1:49:57 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Parallel Map and Reduce on Spark Cluster (numPartitions \u003d16)",
+      "text": "%pyspark\nimport numpy as N\nfrom operator import add\nints \u003d N.arange(1000000) + 1\nprint ints[:100]\nintsRDD \u003d sc.parallelize(ints, 16)           # split array across the cluster into 16 chunks\nsquaresRDD \u003d intsRDD.map(lambda i: i*i)      # compute squares in parallel, except Spark transformations are lazy so nothing happens yet\nprint squaresRDD",
+      "dateUpdated": "Jul 13, 2016 1:59:35 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468441925894_-1185328391",
+      "id": "20160713-133205_1484719766",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Py4JJavaError: An error occurred while calling z:org.apache.spark.api.python.PythonRDD.runJob.\n: org.apache.spark.SparkException: Job 2 cancelled part of cancelled job group zeppelin-20160713-133205_1484719766\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobCancellation(DAGScheduler.scala:1370)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply$mcVI$sp(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat scala.collection.mutable.HashSet.foreach(HashSet.scala:79)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobGroupCancelled(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1619)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1845)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1858)\n\tat org.apache.spark.api.python.PythonRDD$.runJob(PythonRDD.scala:393)\n\tat org.apache.spark.api.python.PythonRDD.runJob(PythonRDD.scala)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:231)\n\tat py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:381)\n\tat py4j.Gateway.invoke(Gateway.java:259)\n\tat py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:133)\n\tat py4j.commands.CallCommand.execute(CallCommand.java:79)\n\tat py4j.GatewayConnection.run(GatewayConnection.java:209)\n\tat java.lang.Thread.run(Thread.java:745)\n\n(\u003cclass \u0027py4j.protocol.Py4JJavaError\u0027\u003e, Py4JJavaError(u\u0027An error occurred while calling z:org.apache.spark.api.python.PythonRDD.runJob.\\n\u0027, JavaObject id\u003do149), \u003ctraceback object at 0x7f5a6b6ece60\u003e)"
+      },
+      "dateCreated": "Jul 13, 2016 1:32:05 PM",
+      "dateStarted": "Jul 13, 2016 1:58:27 PM",
+      "dateFinished": "Jul 13, 2016 1:58:29 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "sumOfSquares \u003d squaresRDD.reduce(add)\n#sumOfSquares \u003d squaresRDD.reduce(lambda x,y: x+y)\nprint sumOfSquares\nprint squares.take(100)",
+      "dateUpdated": "Jul 13, 2016 2:01:02 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468441920213_479880173",
+      "id": "20160713-133200_2028187637",
+      "dateCreated": "Jul 13, 2016 1:32:00 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468441917253_561816364",
+      "id": "20160713-133157_1604336453",
+      "dateCreated": "Jul 13, 2016 1:31:57 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468441913472_342124742",
+      "id": "20160713-133153_1894519897",
+      "dateCreated": "Jul 13, 2016 1:31:53 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468441909344_688768177",
+      "id": "20160713-133149_1413080110",
+      "dateCreated": "Jul 13, 2016 1:31:49 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "101-0:  Map-Reduce and Parallel Computing",
+  "id": "2BS9HA7YD",
+  "angularObjects": {
+    "2BRG5E386": [],
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": []
+  },
+  "config": {},
+  "info": {}
+}

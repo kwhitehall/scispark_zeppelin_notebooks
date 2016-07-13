@@ -75,7 +75,7 @@
     },
     {
       "title": "Load a Reference Dataset and one or more Model Datasets",
-      "text": "%pyspark\npath1 \u003d \"file://tmp/AFRICA_KNMI-RACMO2.2b_CTL_ERAINT_MM_50km_1989-2008_tasmax.nc\"\nvariable1 \u003d \"tasmax\"\npath2 \u003d \"file://tmp/AFRICA_UC-WRF311_CTL_ERAINT_MM_50km-rg_1989-2008_tasmax.nc\"\nvariable2 \u003d \"tasmax\"\n\ndatasets \u003d loadDatasets([(path1, variable1), (path2, variable2)], dir\u003d\u0027/tmp\u0027)\nprint datasets",
+      "text": "%pyspark\npath1 \u003d \"file://scispark1.jpl.nasa.gov/tmp/AFRICA_KNMI-RACMO2.2b_CTL_ERAINT_MM_50km_1989-2008_tasmax.nc\"\nvariable1 \u003d \"tasmax\"\npath2 \u003d \"file://scispark1.jpl.nasa.gov/tmp/AFRICA_UC-WRF311_CTL_ERAINT_MM_50km-rg_1989-2008_tasmax.nc\"\nvariable2 \u003d \"tasmax\"\n\ndatasets \u003d loadDatasets([(path1, variable1), (path2, variable2)], dir\u003d\u0027/tmp\u0027)\nprint datasets",
       "dateUpdated": "Jul 7, 2016 10:33:11 PM",
       "config": {
         "enabled": true,
@@ -328,7 +328,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "301-4 Parallel RCMES/OCW",
+  "name": "301-? Parallel RCMES/OCW",
   "id": "2BSXUM3XE",
   "angularObjects": {
     "2BATG925A": [],
