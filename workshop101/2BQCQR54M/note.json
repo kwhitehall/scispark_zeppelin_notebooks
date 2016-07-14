@@ -711,7 +711,7 @@
     },
     {
       "title": "Removing Directory if it already exists",
-      "text": "%sh\n\nif hadoop fs -test -e /tmp/scalacount; then\nhadoop fs -rm -r /tmp/scalacount\nfi\n",
+      "text": "%sh\n\nif /usr/hadoop-2.6.3/bin/hadoop fs -test -e /workshop_s3/101/scalacount; then\n/usr/hadoop-2.6.3/bin/hadoop fs -rm -r /workshop_s3/101/scalacount\nfi\n",
       "dateUpdated": "Jul 11, 2016 10:30:18 PM",
       "config": {
         "colWidth": 12.0,
@@ -937,7 +937,7 @@
     },
     {
       "title": "Obtain files from HDFS and move to local",
-      "text": "%sh\nhadoop fs -copyToLocal /tmp/csvFile/part-0000* /tmp/\ncat /tmp/part-0000* \u003e /tmp/twdat.csv\necho -e \"lat,lon,count\\n$(cat twdat.csv)\" \u003e twdat.csv",
+      "text": "%sh\n/usr/hadoop-2.6.3/bin/hadoop fs -copyToLocal /workshop_s3/101/csvFile/part-0000* /tmp/\ncat /workshop_s3/101/part-0000* \u003e /workshop_s3/101/twdat.csv\necho -e \"lat,lon,count\\n$(cat twdat.csv)\" \u003e twdat.csv",
       "dateUpdated": "Jul 11, 2016 7:00:23 PM",
       "config": {
         "colWidth": 12.0,
