@@ -1,0 +1,554 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n#Climate Model Diagnostic Analyzer\n CMDA enables diagnostic model evaluations with advanced multi-variate statistical and machine learning computing. CMDA provides an online collaborative environment where Earth scientists can easily publish their climate data analytics web services, share them within groups, and find those of others. CMDA currently supports (1) all the datasets from Obs4MIPs and a few ocean datasets from NOAA and Argo, which serve as observationbased reference data for model evaluation, (2) many of CMIP5 model outputs covering a broad range of atmosphere, ocean, and land variables from the CMIP5 specific historical runs, AMIP runs, and RCP 4.5 experiment runs, and (3) ECMWF reanalysis outputs for several environment variables in order to supplement observational datasets. Analysis capabilities currently supported by CMDA are (1) the calculation of annual and seasonal means of physical variables, (2) the calculation of time evolution of the means in any specified geographical region, (3) the calculation of correlation between two variables with a time lag if needed, (4) the calculation of difference between two variables, (5) the conditional sampling of one physical variable with respect to another variable, (6) the random-forest based feature importance ranking of a variable with respect to dependences on other variables, and (7) the regridding of datasets with specified horizontal and verticalresolutions.",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033508_2085284255",
+      "id": "20160714-170353_666929717",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch1\u003eClimate Model Diagnostic Analyzer\u003c/h1\u003e\n\u003cp\u003eCMDA enables diagnostic model evaluations with advanced multi-variate statistical and machine learning computing. CMDA provides an online collaborative environment where Earth scientists can easily publish their climate data analytics web services, share them within groups, and find those of others. CMDA currently supports (1) all the datasets from Obs4MIPs and a few ocean datasets from NOAA and Argo, which serve as observationbased reference data for model evaluation, (2) many of CMIP5 model outputs covering a broad range of atmosphere, ocean, and land variables from the CMIP5 specific historical runs, AMIP runs, and RCP 4.5 experiment runs, and (3) ECMWF reanalysis outputs for several environment variables in order to supplement observational datasets. Analysis capabilities currently supported by CMDA are (1) the calculation of annual and seasonal means of physical variables, (2) the calculation of time evolution of the means in any specified geographical region, (3) the calculation of correlation between two variables with a time lag if needed, (4) the calculation of difference between two variables, (5) the conditional sampling of one physical variable with respect to another variable, (6) the random-forest based feature importance ranking of a variable with respect to dependences on other variables, and (7) the regridding of datasets with specified horizontal and verticalresolutions.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Anomaly Calculation Web Service\nThis service calculates the anomaly of a variable by removing a reference which can be either the seasonal cycle or the the mean. The reference can be calculated from the same variable or from another variable.",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_1370599926",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eAnomaly Calculation Web Service\u003c/h3\u003e\n\u003cp\u003eThis service calculates the anomaly of a variable by removing a reference which can be either the seasonal cycle or the the mean. The reference can be calculated from the same variable or from another variable.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Time Series Generation Web Service\nTime Series service allows a user to plot one or more variables as function(s) of time. At each time point, the values are computed by averaging physical variables over a longitude and latitude box. For 3-d variables, the values are for specified pressure levels. In addition to the usual way of specifying data using source and variable names, this service allows user to specify an input file by its path. The input data file can be generated from another CMDA service or uploaded by user. It currently supports only netcdf format.",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_1763358560",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eTime Series Generation Web Service\u003c/h3\u003e\n\u003cp\u003eTime Series service allows a user to plot one or more variables as function(s) of time. At each time point, the values are computed by averaging physical variables over a longitude and latitude box. For 3-d variables, the values are for specified pressure levels. In addition to the usual way of specifying data using source and variable names, this service allows user to specify an input file by its path. The input data file can be generated from another CMDA service or uploaded by user. It currently supports only netcdf format.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Using OODT to implement Workflow\n####Brief Introduction to OODT\nApache OODT is a grid middleware framework for science data processing, information integration and retrieval.\nOODT has the following components:\n* Resource Manager - It manages the computing resources available to execute the tasks.\n* File Manager - The file manager provides a solution to collect, catalog and store files. The file manager’s ability to process any type of data makes it extremely flexible.\n* Workflow Manager - This component facilitates Workflow Management\n* Crawler - This component is responsible for monitoring the staging area where products to be ingested are placed.",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_1492989320",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eUsing OODT to implement Workflow\u003c/h2\u003e\n\u003ch4\u003eBrief Introduction to OODT\u003c/h4\u003e\n\u003cp\u003eApache OODT is a grid middleware framework for science data processing, information integration and retrieval.\n\u003cbr  /\u003eOODT has the following components:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eResource Manager - It manages the computing resources available to execute the tasks.\u003c/li\u003e\n\u003cli\u003eFile Manager - The file manager provides a solution to collect, catalog and store files. The file manager’s ability to process any type of data makes it extremely flexible.\u003c/li\u003e\n\u003cli\u003eWorkflow Manager - This component facilitates Workflow Management\u003c/li\u003e\n\u003cli\u003eCrawler - This component is responsible for monitoring the staging area where products to be ingested are placed.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Step 1: Extracting list of web services for workflow\nThe UI (where scientists can create their workflow) generates a JSON file describing the workflow construct. We parse the JSON file to extract the information required for OODT to execute it. In this step a python script is used to:\n* construct the URLs for the web service calls\n* figure out the sequence of the web service calls\n",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_1472569692",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eStep 1: Extracting list of web services for workflow\u003c/h3\u003e\n\u003cp\u003eThe UI (where scientists can create their workflow) generates a JSON file describing the workflow construct. We parse the JSON file to extract the information required for OODT to execute it. In this step a python script is used to:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003econstruct the URLs for the web service calls\u003c/li\u003e\n\u003cli\u003efigure out the sequence of the web service calls\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nimport json\nfrom pprint import pprint\n\ncolc \u003d {}\ndep \u003d {}\ncount \u003d 0\ni\u003d0\n\nwith open(\u0027/Users/malarout/Desktop/py_notebook/roy.json\u0027) as data_file:    \n    data \u003d json.load(data_file)\n\n#building a dictionary\nfor p in data[\u0027processors\u0027]:\n    temp_link \u003d data[\u0027processors\u0027][i][\u0027link\u0027]\n    params \u003d data[\u0027processors\u0027][i][\u0027parameters\u0027]\n    url \u003d temp_link+\u0027?\u0027\n\n    for key, value in params.items():\n        url +\u003d key+\u0027\u003d\u0027+value+\u0027\u0026\u0027\n \n    #print \u0027\"task\u0027,str(count),\u0027\" : \"\u0027,url[:-1],\u0027\"\\n\u0027\n    colc.update({data[\u0027processors\u0027][i][\u0027cid\u0027]:url[:-1]})\n    #print data[\u0027processors\u0027][i][\u0027cid\u0027],\":\",url[:-1]\n    i +\u003d 1\n\n#building a dependancy tree\nfor k in data[\u0027datalinks\u0027]:\n    dep_id \u003d k[\u0027sender\u0027][\u0027processor\u0027]\n    key_id \u003d k[\u0027receiver\u0027][\u0027processor\u0027]\n\n    if key_id in dep:\n        #print \"already in dict\",key_id\n        dep[key_id].append(dep_id)\n    else:\n        #print \"getting added to dict\",key_id\n        dep.update({key_id:[dep_id]})\n\n# finding the node with no dependency\nflag\u003d0\n\nfor node in colc:\n    flag \u003d 0\n    for k in dep:\n        if node \u003d\u003d k:\n            flag\u003d1\n            #\u0027 is not a source\u0027\n            break\n    if flag \u003d\u003d 0:\n        #\u0027 is the source\u0027\n        source \u003d node\n        break\n \n\n#writing into the common file\nfo \u003d open(\"/Users/malarout/Desktop/py_notebook/urls.json\", \"w+\")\n\n#fo.write(\u0027{\\n\u0027)\n#file_op \u003d \u0027{\\n\u0027\n#fo.write(\u0027{ \\n\u0027)\n#print \u0027{ \\n\u0027\n\nfile_op \u003d \u0027{\\n\u0027\nfile_op +\u003d \u0027\"task1\":\"\u0027+colc[source]+\u0027\",\\n\u0027\n\nfor d in dep:\n    if source in dep[d]:\n       file_op +\u003d \u0027\"task2\":\"\u0027+colc[d]+\u0027\"\\n\u0027\n\nfile_op +\u003d \u0027}\u0027\n\nprint file_op\n\nfo.write(file_op)\nfo.close()",
+      "dateUpdated": "Jul 14, 2016 5:06:05 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_1877265416",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 7, in \u003cmodule\u003e\nIOError: [Errno 2] No such file or directory: \u0027/Users/malarout/Desktop/py_notebook/roy.json\u0027\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "dateStarted": "Jul 14, 2016 5:06:05 PM",
+      "dateFinished": "Jul 14, 2016 5:06:05 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Step 2: Make 1st API Call (Anomaly Calculation)\nThis runs a python srcipt with a parameter as the task number. The workflow repeatedly calls the script with the parameter starting from 1 to the number of tasks in the workflow.\nAs we are starting we run the script with the task number as \u00271\u0027\nThe functions implemented here are:\n* Retrieve the URL corresponding to task1 from the file created by the parser\n* Make a GET Request\n* Parse the response from the API call and extract the information required by the next task\nDataset _____ over variable....",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_370104988",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eStep 2: Make 1st API Call (Anomaly Calculation)\u003c/h3\u003e\n\u003cp\u003eThis runs a python srcipt with a parameter as the task number. The workflow repeatedly calls the script with the parameter starting from 1 to the number of tasks in the workflow.\n\u003cbr  /\u003eAs we are starting we run the script with the task number as \u00271\u0027\n\u003cbr  /\u003eThe functions implemented here are:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eRetrieve the URL corresponding to task1 from the file created by the parser\u003c/li\u003e\n\u003cli\u003eMake a GET Request\u003c/li\u003e\n\u003cli\u003eParse the response from the API call and extract the information required by the next task\n\u003cbr  /\u003eDataset \u003cstrong\u003e\u003c/strong\u003e_ over variable\u0026hellip;.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nimport getopt, sys, os, re, errno  \nimport getpass    \nimport requests\nimport json\nimport subprocess\nimport datetime\nfrom requests.auth import HTTPBasicAuth\n\n\n#\u0027http://cmda-test.jpl.nasa.gov:8090/svc/timeSeriesWorkFlow?inputDataFile\u003dhttp://cmda-test.jpl.nasa.gov:8090/static/anomaly/597fd99118b973cda4408635976fdda3/data_anomaly.nc\u0026scale\u003d0\u0027\n# \u0027http://cmda.jpl.nasa.gov:8090/svc/anomaly?model1\u003dGFDL_ESM2G\u0026var1\u003dpr\u0026pres1\u003d-999999\u0026model2\u003dGFDL_ESM2G\u0026var2\u003dpr\u0026pres2\u003d-999999\u0026lonS\u003d0\u0026lonE\u003d360\u0026latS\u003d-90\u0026latE\u003d90\u0026startT\u003d200401\u0026endT\u003d200412\u0026purpose\u003d\u0026removeSeason\u003d0\u0026useVar2\u003d0\u0026useTime2\u003d0\u0026startT2\u003d200401\u0026endT2\u003d200412\u0027\n\n\ndef getURL(url_num):\n\twith open(\u0027/Users/malarout/Desktop/py_notebook/urls.json\u0027) as data_file:    \n\t    data \u003d json.load(data_file)\n\n\tkey_name \u003d \u0027task\u0027+ str(url_num)\n\t\n\tif url_num \u003d\u003d \u00271\u0027:\t\t\t#if it is the first api call then url_cmda is the url of task1\n\t\turl_cmda \u003d data[key_name]\n\t\t\n\telse:\t\t\t\t# if not the first api call then append the dataURL to the url of task[i]\n\t\twith open(\u0027data.txt\u0027, \u0027r\u0027) as content_file:\n\t    \t\tparam \u003d content_file.read()\n\t\turl_cmda \u003d data[key_name]+\u0027\u0026inputDataFile\u003d\u0027+param\n\treturn url_cmda\n\n\ndef apicall(url):\n\tresponse \u003d requests.get(url) #making REST call\n\treturn response.content\n\ndef extractDataURL (response):\n\tres_json \u003d json.dumps(response)\n\tdata \u003d json.loads(response)\n\tdataURL \u003d data[\u0027dataUrl\u0027]\n\tprint \u0027Data URL extracted from response: \u0027,dataURL\n\t#for work around purpose until the metadata passing works\n\tf \u003d open(\u0027/Users/malarout/Desktop/py_notebook/data.txt\u0027,\u0027w+\u0027) \n\tf.write(dataURL)\n\tf.close\n\ndef main(argv):\n   #get the URL for the call\n   url \u003d getURL(\u00271\u0027)\n   #make api call, pass the number argv[1] as parameter to the function, returns the json response\n   print \"URL for API Call: \",url\n   response \u003d apicall(url)\n   print \"API response: \\n\",response\n   #write dataURL to the file\n   extractDataURL(response)\n\n   \n\nif __name__ \u003d\u003d \"__main__\":\n   main(sys.argv[1:])\n",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_1241891604",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "URL for API Call:  http://cmda-test.jpl.nasa.gov:8090/svc/anomaly?useTime2\u003d0\u0026timeE2\u003d200512\u0026var1\u003drlut\u0026latS\u003d-90\u0026var2\u003dpr\u0026model2\u003dGFDL_ESM2G\u0026model1\u003dNCAR_CAM5\u0026timeS2\u003d200101\u0026lonE\u003d360\u0026useVar2\u003d0\u0026timeS\u003d200101\u0026latE\u003d90\u0026tag\u003d1464763302730\u0026purpose\u003d\u0026timeE\u003d200512\u0026pres2\u003d-999999\u0026pres1\u003d-999999\u0026removeSeason\u003d0\u0026lonS\u003d0\nAPI response: \n{\n  \"dataUrl\": \"http://cmda-test.jpl.nasa.gov:8090/static/anomaly/1464763302730/data_anomaly.nc\", \n  \"message\": \" Current size of FERRET memory cache: 100 MegaWords  (1 word \u003d 4 bytes)\\n *** NOTE: regarding /home/svc/install/ferret-6.1/go/climatological_axes.cdf ...\\n *** NOTE: Climatological axes SEASONAL_REG, MONTH_REG, and MONTH_IRREG defined\\ncmacDir:  /home/svc/new_github/JPL-WebService/JPL_CMDA/services\\nconfigFile:  /home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/data.cfg\\ntemp1:  /mnt/data_2015\\n\\na.lat1E\u003dargDict[k]\\na.useTime2\u003dargDict[k]\\na.lon1S\u003dargDict[k]\\na.monthE2\u003dargDict[k]\\na.center\u003dargDict[k]\\na.monthE\u003dargDict[k]\\na.varName\u003dargDict[k]\\na.yearS2\u003dargDict[k]\\na.monthS\u003dargDict[k]\\na.queryString\u003dargDict[k]\\na.useVar2\u003dargDict[k]\\na.yearS\u003dargDict[k]\\na.monthS2\u003dargDict[k]\\na.lon1E\u003dargDict[k]\\na.lat1S\u003dargDict[k]\\na.yearE\u003dargDict[k]\\na.model\u003dargDict[k]\\na.removeSeason\u003dargDict[k]\\na.yearE2\u003dargDict[k]\\na.pres\u003dargDict[k]\\na.outDir\u003dargDict[k]\\nin calc_anomaly2  \\n2002 2005 1 12\\nfileNc:  [u\u0027/mnt/data_2015/des/ncar_cam5/rlut.nc\u0027]\\nvariable  0\\nncar cam5 rlut\\n/mnt/data_2015/des/ncar_cam5/rlut.nc\\n/mnt/data_2015/des/ncar_cam5/rlut.nc\\nfileNc:  [u\u0027/mnt/data_2015/des/ncar_cam5/rlut.nc\u0027]\\nvariable  1\\nncar cam5 rlut\\n/mnt/data_2015/des/ncar_cam5/rlut.nc\\n/mnt/data_2015/des/ncar_cam5/rlut.nc\\n\u003ctype \u0027int\u0027\u003e \u003ctype \u0027int\u0027\u003e\\n/home/svc/install/bin/ferret -gif -script /home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/static/anomaly/1464763302730/tmpg1b8Bn.jnl\\ndata1.shape:  (60, 192, 289)\\ndataFile: /home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/static/anomaly/1464763302730/data_anomaly.nc\\nfigFile: /home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/static/anomaly/1464763302730/theMean.png\\n\", \n  \"success\": true, \n  \"url\": \"http://cmda-test.jpl.nasa.gov:8090/static/anomaly/1464763302730/theMean.png\"\n}\nData URL extracted from response:  http://cmda-test.jpl.nasa.gov:8090/static/anomaly/1464763302730/data_anomaly.nc\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n![](http://cmda-test.jpl.nasa.gov:8090/static/anomaly/1464763302730/theMean.png)",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_1078623235",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003e\u003cimg src\u003d\"http://cmda-test.jpl.nasa.gov:8090/static/anomaly/1464763302730/theMean.png\" alt\u003d\"\" /\u003e\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Step 3: Make 2nd API Call (Time Series Generation)\n#####This runs a python srcipt with a parameter \u00272\u0027.\n#####The functions implemented here are the same as before but there are minor changes as this task needs to utilize information from previous API call.\n* Retrieve the URL corresponding to task2 and append the dataURL extracted as a parameter\n* Make a GET Request\n* Parse the response from the API call and extract the information required by the next task",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_1511246318",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eStep 3: Make 2nd API Call (Time Series Generation)\u003c/h3\u003e\n\u003ch5\u003eThis runs a python srcipt with a parameter \u00272\u0027.\u003c/h5\u003e\n\u003ch5\u003eThe functions implemented here are the same as before but there are minor changes as this task needs to utilize information from previous API call.\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003eRetrieve the URL corresponding to task2 and append the dataURL extracted as a parameter\u003c/li\u003e\n\u003cli\u003eMake a GET Request\u003c/li\u003e\n\u003cli\u003eParse the response from the API call and extract the information required by the next task\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nimport getopt, sys, os, re, errno  \nimport getpass    \nimport requests\nimport json\nimport subprocess\nimport datetime\nfrom requests.auth import HTTPBasicAuth\n\ndef getURL(url_num):\n\twith open(\u0027/Users/malarout/Desktop/py_notebook/urls.json\u0027) as data_file:    \n\t    data \u003d json.load(data_file)\n\n\tkey_name \u003d \u0027task\u0027+ str(url_num)\n\t\n\tif url_num \u003d\u003d \u00271\u0027:\t\t\t#if it is the first api call then url_cmda is the url of task1\n\t\turl_cmda \u003d data[key_name]\n\t\t\n\telse:\t\t\t\t# if not the first api call then append the dataURL to the url of task[i]\n\t\twith open(\u0027/Users/malarout/Desktop/py_notebook/data.txt\u0027, \u0027r\u0027) as content_file:\n\t    \t\tparam \u003d content_file.read()\n\t\turl_cmda \u003d data[key_name]+\u0027\u0026inputDataFile\u003d\u0027+param\n\treturn url_cmda\n\n\ndef apicall(url):\n\tresponse \u003d requests.get(url) #making REST call\n\treturn response.content\n\ndef extractDataURL (response):\n\tres_json \u003d json.dumps(response)\n\tdata \u003d json.loads(response)\n\tdataURL \u003d data[\u0027url\u0027]\n\tprint \u0027Data URL extracted from response: \u0027,dataURL\n\t#for work around purpose until the metadata passing works\n\tf \u003d open(\u0027/Users/malarout/Desktop/py_notebook/data.txt\u0027,\u0027w+\u0027) \n\tf.write(dataURL)\n\tf.close\n\ndef main(argv):\n   #get the URL for the call\n   url \u003d getURL(\u00272\u0027)\n   #make api call, pass the number argv[1] as parameter to the function, returns the json response\n   print \"URL for API Call: \",url\n   response \u003d apicall(url)\n   print \"API response: \\n\",response\n   #write dataURL to the file\n   extractDataURL(response)\n\n   \n\nif __name__ \u003d\u003d \"__main__\":\n   main(sys.argv[1:])\n",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_1227773557",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "URL for API Call:  http://cmda-test.jpl.nasa.gov:8090/svc/timeSeriesWorkFlow?scale\u003d0\u0026purpose\u003dMODIS_LAI\u0026inputDataFile\u003dhttp://cmda-test.jpl.nasa.gov:8090/static/anomaly/1464763302730/data_anomaly.nc\nAPI response: \n{\n  \"dataUrl\": \"http://cmda-test.jpl.nasa.gov:8090/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087/NCAR_CAM5_rlut_200101-200512.nc\", \n  \"message\": \"octaveWrapper:\\n/home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087/data_anomaly.nc\\n\\n/home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087\\n0\\nnVars \u003d  1\\nfigFile: NCAR_CAM5_rlut_200101-200512.jpeg\\nfigFilePath: /home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087/NCAR_CAM5_rlut_200101-200512.jpeg\\ndataFile: NCAR_CAM5_rlut_200101-200512.nc\\ndataFilePath: /home/svc/new_github/JPL-WebService/JPL_CMDA/services/svc/svc/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087/NCAR_CAM5_rlut_200101-200512.nc\\nnumber of month \u003d 60\\n+-----------------------------------------------------------------------------+\\n|                                                                             |\\n|                                                                             |\\n|   ++-------------+--------------+-------------+-------------+------------+  |\\n| 4 +----------------------------------------------------------------DD---++  |\\n|   |:      DD     :      D- D    :      D      :             :      ||   ||  |\\n| 3 |+......|.|...........|.D|...........||............D.............|.|..|+  |\\n|   |:      | |    :      |  |    :      |D     :      |D     :      | |  ||  |\\n| 2 |+.....|...D.........|....|.........|..D..........|..D..........|..D..|+  |\\n|   |:     D   |   :     D    |   :     D  |    :     D  |    :     |   | ||  |\\n| 1 |+.....|....|........|....|........|....|.........|..|..........D...|.|+  |\\n|   |:     |    D  :    |     D   :    |    D   :    |    |   :     |    D||  |\\n| 0 |+....|.....|.......D.....|.......D.....|........D....|........D.....||+  |\\n|   |:    |     |  :    |     |   :   |     |   :   +     D   :    |     |||  |\\n|-1 |+....D......|......|......|....DD.......|.....D......|.....D-|.......|+  |\\n|   |:  DD       | :-D |       |  : |        |  : D        |  : | D       ||  |\\n|   |: |         | D  DD       |  :|         D  D |        |  :|          ||  |\\n|-2 |+.|.........D.|...........D...D..........|.||..........|..D..........D+  |\\n|   |DD           |:            D-D           ||:D          DDD           ||  |\\n|-3 |+............D+..............+............D+.............+...........|D  |\\n|   +---------------------------------------------------------------------++  |\\n|  2001          2002           2003          2004          2005              |\\n|                                    Year                                     |\\n+-----------------------------------------------------------------------------+\\n\\n  scalar structure containing the fields:\\n\\n    Name \u003d /\\n    Format \u003d classic\\n    Dimensions \u003d\\n\\n      1x2 struct array containing the fields:\\n\\n        Name\\n        Length\\n        Unlimited\\n\\n    Variables \u003d\\n\\n      1x3 struct array containing the fields:\\n\\n        Name\\n        Datatype\\n        Dimensions\\n        Attributes\\n\\n\", \n  \"success\": true, \n  \"url\": \"http://cmda-test.jpl.nasa.gov:8090/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087/NCAR_CAM5_rlut_200101-200512.jpeg\"\n}\nData URL extracted from response:  http://cmda-test.jpl.nasa.gov:8090/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087/NCAR_CAM5_rlut_200101-200512.jpeg\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_19808476",
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Final Result\n#####The graph generated from the Time Series Generation",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_61090847",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eFinal Result\u003c/h2\u003e\n\u003ch5\u003eThe graph generated from the Time Series Generation\u003c/h5\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n![](http://cmda-test.jpl.nasa.gov:8090/static/timeSeriesWorkFlow/a506ca3df6a29b45a277b2f1aa79692f/NCAR_CAM5_rlut_200101-200512.jpeg)",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_256682263",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003cp\u003e\u003cimg src\u003d\"http://cmda-test.jpl.nasa.gov:8090/static/timeSeriesWorkFlow/a506ca3df6a29b45a277b2f1aa79692f/NCAR_CAM5_rlut_200101-200512.jpeg\" alt\u003d\"\" /\u003e\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nimport getopt, sys, os, errno  \nimport getpass    \nimport requests\nimport json\nimport subprocess\nfrom PIL import Image\nfrom io import BytesIO\nfrom requests.auth import HTTPBasicAuth\n\n\nf \u003d open(\u0027/Users/malarout/Desktop/py_notebook/data.txt\u0027)\nimgurl \u003d f.read()\n\nresponse \u003d requests.get(imgurl)\nimg \u003d Image.open(BytesIO(response.content))\n",
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_1911631065",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468541033509_2084899506",
+      "id": "20160714-170353_280466688",
+      "dateCreated": "Jul 14, 2016 5:03:53 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "301-4  CMDA Workflow Example",
+  "id": "2BQUYTBP3",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2B9VMB5BB": [],
+    "2BQ1G4MF1": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2B9AHSVAD": [],
+    "2BA8C2CJ4": [],
+    "2B9U51XQ6": [],
+    "2B9AFX9BM": [],
+    "2B9VX5KPM": [],
+    "2BCTKA5P2": [],
+    "2BCZV9QGQ": [],
+    "2BAM6HXAB": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}
