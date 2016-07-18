@@ -108,8 +108,8 @@
     },
     {
       "title": "Driver File contains time-Sorted List of URL\u0027s or Local Paths (using OPeNDAP to pull variables would Lengthen I/O time)",
-      "text": "%pyspark\nvariable \u003d \u0027r\u0027\nurlListFile \u003d \"/data/cluster-local/bdwilson/Climatology/clim/urls_trmm_daily_1998_2012.txt\"\nwith open(urlListFile, \u0027r\u0027) as f:\n    urlList \u003d f.readlines()\nprint \u0027\u0027.join(urlList[:20])",
-      "dateUpdated": "Jul 13, 2016 6:47:02 PM",
+      "text": "%pyspark\nvariable \u003d \u0027r\u0027\nurlListFile \u003d \"/data/Climatology/clim/urls_trmm_daily_1998_2012.txt\"\nwith open(urlListFile, \u0027r\u0027) as f:\n    urlList \u003d f.readlines()\nprint \u0027\u0027.join(urlList[:20])",
+      "dateUpdated": "Jul 18, 2016 3:27:46 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -123,7 +123,7 @@
         },
         "enabled": true,
         "editorMode": "ace/mode/scala",
-        "tableHide": false,
+        "tableHide": true,
         "title": true,
         "editorHide": false
       },
@@ -585,7 +585,7 @@
     },
     {
       "title": "write statistics to a netCDF file",
-      "text": "%pyspark\noutFile \u003d \u0027/home/workshop_s3/101/trmm_precip_stats_1998_2012.nc\u0027\ninputFile \u003d urlList[0]\nprint inputFile\ntmp \u003d writeStats(inputFile, variable, stats, outFile)",
+      "text": "%pyspark\noutFile \u003d \u0027/tmp/trmm_precip_stats_1998_2012.nc\u0027\ninputFile \u003d urlList[0]\nprint inputFile\ntmp \u003d writeStats(inputFile, variable, stats, outFile)",
       "dateUpdated": "Jul 13, 2016 6:47:03 PM",
       "config": {
         "colWidth": 12.0,
@@ -622,7 +622,7 @@
     {
       "title": "Entire spark program as Four lines (split-map-reduce)",
       "text": "%pyspark\nurlsRDD \u003d sc.parallelize(urlsByKey, numSlices\u003d16)                                # partition months into tasks\nmerged \u003d urlsRDD.map(lambda urls: accumulate(urls, variable)).reduce(combine)    # map-reduce\nstats \u003d statsFromAccumulators(merged)                                            # compute total stats\nwriteStats(urlList[0], variable, stats, outFile)                                       # write to netCDF4 file",
-      "dateUpdated": "Jul 13, 2016 6:47:03 PM",
+      "dateUpdated": "Jul 18, 2016 3:29:10 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -647,17 +647,17 @@
       "result": {
         "code": "ERROR",
         "type": "TEXT",
-        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 4, in \u003cmodule\u003e\n  File \"\u003cstring\u003e\", line 14, in writeStats\n  File \"netCDF4/_netCDF4.pyx\", line 1747, in netCDF4._netCDF4.Dataset.__init__ (netCDF4/_netCDF4.c:11574)\nRuntimeError: No such file or directory\n"
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 225, in \u003cmodule\u003e\n    eval(compiledCode)\n  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\nNameError: name \u0027urlsByKey\u0027 is not defined\n"
       },
       "dateCreated": "Jul 9, 2016 9:58:38 PM",
-      "dateStarted": "Jul 13, 2016 7:03:47 PM",
-      "dateFinished": "Jul 13, 2016 7:04:10 PM",
+      "dateStarted": "Jul 18, 2016 3:29:11 AM",
+      "dateFinished": "Jul 18, 2016 3:29:39 AM",
       "status": "ERROR",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n\u003ch3\u003eExercise #1:\nWrite out and plot the monthly statistics, in addition to the total statistics ",
-      "dateUpdated": "Jul 13, 2016 6:47:03 PM",
+      "dateUpdated": "Jul 18, 2016 3:29:52 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -670,7 +670,8 @@
           "scatter": {}
         },
         "enabled": true,
-        "editorMode": "ace/mode/markdown"
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
       },
       "settings": {
         "params": {},
@@ -691,7 +692,7 @@
     },
     {
       "title": "Prepare smaller problem -- just Four months of data",
-      "text": "urlListFile2 \u003d \"/home/workshop/urls_trmm_daily_2012.txt\"\nwith open(urlListFile2, \u0027r\u0027) as f:\n    urlList2 \u003d f.readlines()\nurlsByKey2 \u003d splitByMonth(urlList, {\u0027get\u0027: (\u0027year\u0027, \u0027month\u0027), \u0027regex\u0027: re.compile(r\u0027\\/3B42_daily.(....).(..)\u0027)})\nprint len(urlsByKey2)\nprint urlsByKey2[3]",
+      "text": "urlListFile2 \u003d \"/data/cluster-local/bdwilson/Climatology/clim/urls_trmm_daily_2012.txt\"\nwith open(urlListFile2, \u0027r\u0027) as f:\n    urlList2 \u003d f.readlines()\nurlsByKey2 \u003d splitByMonth(urlList, {\u0027get\u0027: (\u0027year\u0027, \u0027month\u0027), \u0027regex\u0027: re.compile(r\u0027\\/3B42_daily.(....).(..)\u0027)})\nprint len(urlsByKey2)\nprint urlsByKey2[3]",
       "dateUpdated": "Jul 14, 2016 6:14:02 PM",
       "config": {
         "colWidth": 12.0,
@@ -875,7 +876,7 @@
     },
     {
       "text": "%md\n\u003ch3\u003eExercise #2:  For the Reader\u003c/h3\u003e\nWrite out and plot the monthly and yearly statistics, in addition to the total statistics ",
-      "dateUpdated": "Jul 13, 2016 6:47:04 PM",
+      "dateUpdated": "Jul 18, 2016 3:30:02 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -888,7 +889,8 @@
           "scatter": {}
         },
         "enabled": true,
-        "editorMode": "ace/mode/markdown"
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
       },
       "settings": {
         "params": {},
@@ -1079,7 +1081,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "101-3 Parallel Statistical Rollups",
+  "name": "101-4 Parallel Statistical Rollups",
   "id": "2BS76DNCS",
   "angularObjects": {
     "2BATG925A": [],
