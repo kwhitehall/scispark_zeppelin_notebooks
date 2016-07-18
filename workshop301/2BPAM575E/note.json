@@ -520,8 +520,8 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "%md\n####Exercise 1 - Write intermediate results to HDFS\nSince this is an advanced class, we\u0027ve decided to have exercises out that we are currently tackling at JPL. \nThe motivation behind this is to have our advanced users be active participants in open-source and contribute back to the software they use!\nThe first exercise involves writing a lambda expression to write an RDD of SciTensors to the Hadoop Distributed File System.\n\n",
-      "dateUpdated": "Jul 14, 2016 9:50:34 AM",
+      "text": "\n\n",
+      "dateUpdated": "Jul 15, 2016 11:43:09 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -534,8 +534,8 @@
           "scatter": {}
         },
         "enabled": true,
-        "editorHide": true,
-        "editorMode": "ace/mode/markdown"
+        "editorHide": false,
+        "editorMode": "ace/mode/scala"
       },
       "settings": {
         "params": {},
@@ -556,7 +556,7 @@
     },
     {
       "text": "%md\n####Exercise 2 - Parallelism Across all Three Dimensions\nRewrite the PDF clustering algorithm given above, but rather than splitting across the lattitude or longitude dimension\nsplit our cube of (time, lat, lon) into smaller cubes. This is particularly challenging since we are aggregating results\nalong the time dimension. \n\nHint: Use accumulators\n",
-      "dateUpdated": "Jul 14, 2016 9:50:37 AM",
+      "dateUpdated": "Jul 15, 2016 11:43:51 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -570,7 +570,7 @@
         },
         "enabled": true,
         "editorMode": "ace/mode/markdown",
-        "editorHide": true
+        "editorHide": false
       },
       "settings": {
         "params": {},
@@ -602,7 +602,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "301-3 PDF clustering using sciTensor (scala implementation)",
+  "name": "301-2 PDF clustering using Scala",
   "id": "2BPAM575E",
   "angularObjects": {
     "2BATG925A": [],
@@ -617,8 +617,7 @@
     "2B9U51XQ6": [],
     "2B9VX5KPM": [],
     "2BAM6HXAB": [],
-    "2B9AFX9BM": [],
-    "2BRD5SR1F": []
+    "2B9AFX9BM": []
   },
   "config": {
     "looknfeel": "default"

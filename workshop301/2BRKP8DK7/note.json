@@ -2,7 +2,7 @@
   "paragraphs": [
     {
       "text": "%md\n###Overview\nk-means clustering has often been used for applications in Machine Learning, but its use in Earth Science is relatively new. In this notebook we will apply pyspark\u0027s mllib implementation of k-means clustering to group individual grid points together in a dataset based on similar climate regimes. We will do so for this particular example using the standard deviation and skewness of surface air temperature time series. By the end of this notebook, we will reproduce some of the figures from a peer-reviewed journal article (see below).\n\n####Useful Reference\nLoikith, P. C., B. R. Lintner, J. Kim, H. Lee, J. D. Neelin, and D. E. Waliser, 2013: Classifying reanalysis surface temperature probability density functions (PDFs) over North America with cluster analysis, Geophys. Res. Lett., 40, doi:10.1002/grl.50688. ([PDF](http://onlinelibrary.wiley.com/doi/10.1002/grl.50688/pdf))",
-      "dateUpdated": "Jul 14, 2016 9:54:02 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -31,14 +31,14 @@
         "msg": "\u003ch3\u003eOverview\u003c/h3\u003e\n\u003cp\u003ek-means clustering has often been used for applications in Machine Learning, but its use in Earth Science is relatively new. In this notebook we will apply pyspark\u0027s mllib implementation of k-means clustering to group individual grid points together in a dataset based on similar climate regimes. We will do so for this particular example using the standard deviation and skewness of surface air temperature time series. By the end of this notebook, we will reproduce some of the figures from a peer-reviewed journal article (see below).\u003c/p\u003e\n\u003ch4\u003eUseful Reference\u003c/h4\u003e\n\u003cp\u003eLoikith, P. C., B. R. Lintner, J. Kim, H. Lee, J. D. Neelin, and D. E. Waliser, 2013: Classifying reanalysis surface temperature probability density functions (PDFs) over North America with cluster analysis, Geophys. Res. Lett., 40, doi:10.1002/grl.50688. (\u003ca href\u003d\"http://onlinelibrary.wiley.com/doi/10.1002/grl.50688/pdf\"\u003ePDF\u003c/a\u003e)\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 5, 2016 4:21:10 PM",
-      "dateStarted": "Jul 14, 2016 9:54:02 PM",
-      "dateFinished": "Jul 14, 2016 9:54:02 PM",
+      "dateStarted": "Jul 15, 2016 3:15:16 PM",
+      "dateFinished": "Jul 15, 2016 3:15:16 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n####Accessing the data\nFor this example we will be using the NASA MERRA reanalysis daily mean surface air temperature dataset. The spatial resolution is 0.5 degrees latitude by 0.67 degrees longitude, with a temporal coverage of 1979-2011. The raw data has already been subset into one quarter of the globe primarily spanning North America and includes only days falling in January. We will use the netCDF4 python library to directly access the data as follows:",
-      "dateUpdated": "Jul 14, 2016 9:54:02 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -66,15 +66,15 @@
         "msg": "\u003ch4\u003eAccessing the data\u003c/h4\u003e\n\u003cp\u003eFor this example we will be using the NASA MERRA reanalysis daily mean surface air temperature dataset. The spatial resolution is 0.5 degrees latitude by 0.67 degrees longitude, with a temporal coverage of 1979-2011. The raw data has already been subset into one quarter of the globe primarily spanning North America and includes only days falling in January. We will use the netCDF4 python library to directly access the data as follows:\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 5, 2016 3:55:31 PM",
-      "dateStarted": "Jul 14, 2016 9:54:02 PM",
-      "dateFinished": "Jul 14, 2016 9:54:02 PM",
+      "dateStarted": "Jul 15, 2016 3:15:16 PM",
+      "dateFinished": "Jul 15, 2016 3:15:16 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Step 1: Load the Data from The netcdf File",
       "text": "%pyspark\nfrom netCDF4 import Dataset\nnc \u003d Dataset(\u0027/home/workshop/pdf_clustering/tas_MERRA_NA_daily_January_1979-2011.nc\u0027)\ntas \u003d nc.variables[\u0027tasjan\u0027][:]\nlats \u003d nc.variables[\u0027lat\u0027][:]\nlons \u003d nc.variables[\u0027lon\u0027][:]\nprint \u0027Dataset shape:\u0027, tas.shape, \u0027Number of grid points:\u0027, lons.size * lats.size, ",
-      "dateUpdated": "Jul 14, 2016 10:12:40 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -98,19 +98,19 @@
       "jobName": "paragraph_1467389809044_-443456417",
       "id": "20160701-091649_1829403351",
       "result": {
-        "code": "SUCCESS",
+        "code": "ERROR",
         "type": "TEXT",
-        "msg": " Dataset shape: (1023, 181, 286) Number of grid points: 51766"
+        "msg": ""
       },
       "dateCreated": "Jul 1, 2016 9:16:49 AM",
-      "dateStarted": "Jul 14, 2016 10:12:40 PM",
-      "dateFinished": "Jul 14, 2016 10:12:44 PM",
-      "status": "FINISHED",
+      "dateStarted": "Jul 15, 2016 3:15:16 PM",
+      "dateFinished": "Jul 15, 2016 3:15:20 PM",
+      "status": "ERROR",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n####Preparing the data\nBefore applying kmeans clustering, we must properly prepare the data first. This entails converting the raw temperature values to anomalies (deviations from the mean climatological state) and then removing longterm linear trends.",
-      "dateUpdated": "Jul 14, 2016 9:54:02 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -138,15 +138,15 @@
         "msg": "\u003ch4\u003ePreparing the data\u003c/h4\u003e\n\u003cp\u003eBefore applying kmeans clustering, we must properly prepare the data first. This entails converting the raw temperature values to anomalies (deviations from the mean climatological state) and then removing longterm linear trends.\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 5, 2016 3:56:09 PM",
-      "dateStarted": "Jul 14, 2016 9:54:02 PM",
-      "dateFinished": "Jul 14, 2016 9:54:03 PM",
+      "dateStarted": "Jul 15, 2016 3:15:17 PM",
+      "dateFinished": "Jul 15, 2016 3:15:17 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Step 2: Calculate temperature anomalies and Remove Longterm Linear Trends ",
       "text": "%pyspark\nimport numpy as np\nimport scipy.signal as signal\n\ndef detrend_daily_data(data, years, month):\n    \u0027\u0027\u0027\n    Detrend a daily climate time series for one month.\n    This will remove the climatology for each day as well as directly remove\n    longterm linear trends at each grid point.\n\n    Input:\n        data - 3D numpy array with dimensions (days, lats, lons)\n        years - 1D numpy array of years spanning the time series\n        month - The month for the given time series (1-Jan, 12-Dec)\n\n    Output:\n        detrended_data - Detrended time series (days, lats, lons)\n\n    Note: February (month\u003d2) not supported yet.\n    \u0027\u0027\u0027\n    # Reshape the data based on the month\n    days_by_month \u003d [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]\n    mdays \u003d days_by_month[month-1]\n    nyears \u003d len(years)\n\n    # TODO: Support for Feb if desired\n    if month \u003d\u003d 2:\n        raise ValueError(\u0027February (month\u003d2) not currently supported\u0027)\n\n    # Reshape to (year, day of year, lat, lon) to easily calculate\n    # daily climatology\n    data \u003d data.reshape(nyears, mdays, *data.shape[1:])\n\n    # Subtract daily climatology from original data to obtain anomalies\n    clim \u003d data.mean(axis\u003d0)\n    data -\u003d clim\n\n    # Remove longterm linear trends\n    data \u003d data.reshape(mdays*nyears, *data.shape[2:])\n    detrended_data \u003d signal.detrend(data, axis\u003d0)\n    return detrended_data\n\nyears \u003d np.arange(1979, 2012)\nmonth \u003d 1\ndetrended_data \u003d detrend_daily_data(tas, years, month)\nprint detrended_data.shape",
-      "dateUpdated": "Jul 14, 2016 9:58:09 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -168,20 +168,17 @@
       },
       "jobName": "paragraph_1467389809045_-443841166",
       "id": "20160701-091649_885270909",
-      "result": {
-        "code": "SUCCESS",
-        "type": "TEXT",
-        "msg": "(1023, 181, 286)\n"
-      },
+      "result": "org.apache.thrift.transport.TTransportException",
       "dateCreated": "Jul 1, 2016 9:16:49 AM",
-      "dateStarted": "Jul 14, 2016 9:58:09 PM",
-      "dateFinished": "Jul 14, 2016 9:58:13 PM",
-      "status": "FINISHED",
+      "dateStarted": "Jul 15, 2016 2:09:03 PM",
+      "dateFinished": "Jul 15, 2016 2:57:42 PM",
+      "status": "ABORT",
+      "errorMessage": "org.apache.thrift.transport.TTransportException\n\tat org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:132)\n\tat org.apache.thrift.transport.TTransport.readAll(TTransport.java:86)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:429)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:318)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:219)\n\tat org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.recv_interpret(RemoteInterpreterService.java:220)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.interpret(RemoteInterpreterService.java:205)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:208)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:211)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:169)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:322)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n####Determining the inputs For k-means\nWe may choose to use an arbitrary number of variables defined at each grid point as our input for k-means clustering. In this example we will use two PDF moments (Standard Deviation and Skewness) as our input, which are calculated from the detrended anomaly timeseries at each grid point below:",
-      "dateUpdated": "Jul 14, 2016 9:54:02 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -209,15 +206,15 @@
         "msg": "\u003ch4\u003eDetermining the inputs For k-means\u003c/h4\u003e\n\u003cp\u003eWe may choose to use an arbitrary number of variables defined at each grid point as our input for k-means clustering. In this example we will use two PDF moments (Standard Deviation and Skewness) as our input, which are calculated from the detrended anomaly timeseries at each grid point below:\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 5, 2016 3:58:32 PM",
-      "dateStarted": "Jul 14, 2016 9:54:03 PM",
-      "dateFinished": "Jul 14, 2016 9:54:03 PM",
+      "dateStarted": "Jul 15, 2016 3:15:17 PM",
+      "dateFinished": "Jul 15, 2016 3:15:17 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Step 3: Calculate the PDF moments",
       "text": "%pyspark\nfrom scipy.stats import stats\n\ndef calc_moments(data):\n    \u0027\u0027\u0027\n    Determine standard deviation and skewness of input data\n\n    Input:\n        data - 3D numpy array with dimensions (days, lats, lons)\n\n    Output:\n        std, skew - 2nd and 3rd PDF moments respectively for\n        each grid point (lats, lons)\n    \u0027\u0027\u0027\n    std \u003d np.std(data, axis\u003d0)\n    skew \u003d stats.skew(data, axis\u003d0)\n    return std, skew\n    \nstd, sk \u003d calc_moments(detrended_data)\nprint std.shape, sk.shape",
-      "dateUpdated": "Jul 14, 2016 9:58:34 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -239,20 +236,17 @@
       },
       "jobName": "paragraph_1467389809045_-443841166",
       "id": "20160701-091649_595605022",
-      "result": {
-        "code": "SUCCESS",
-        "type": "TEXT",
-        "msg": "(181, 286) (181, 286)\n"
-      },
+      "result": "org.apache.thrift.transport.TTransportException",
       "dateCreated": "Jul 1, 2016 9:16:49 AM",
-      "dateStarted": "Jul 14, 2016 9:58:34 PM",
-      "dateFinished": "Jul 14, 2016 9:58:36 PM",
-      "status": "FINISHED",
+      "dateStarted": "Jul 15, 2016 2:09:07 PM",
+      "dateFinished": "Jul 15, 2016 2:57:42 PM",
+      "status": "ABORT",
+      "errorMessage": "org.apache.thrift.transport.TTransportException\n\tat org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:132)\n\tat org.apache.thrift.transport.TTransport.readAll(TTransport.java:86)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:429)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:318)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:219)\n\tat org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.recv_interpret(RemoteInterpreterService.java:220)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.interpret(RemoteInterpreterService.java:205)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:208)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:211)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:169)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:322)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n####Perform k-means clustering on the PDF moments\nWe are now finally ready to perform k-means clustering using the PDF moments calculated in the previous step as our input. The choice of k is in fact an arbitrary one, but for our purposes we will find that k\u003d5 should produce the most physically meaningful clusters. Here we will use pyspark\u0027s mllib implementation of k-means clustering to get the job done.",
-      "dateUpdated": "Jul 14, 2016 9:54:02 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -280,15 +274,15 @@
         "msg": "\u003ch4\u003ePerform k-means clustering on the PDF moments\u003c/h4\u003e\n\u003cp\u003eWe are now finally ready to perform k-means clustering using the PDF moments calculated in the previous step as our input. The choice of k is in fact an arbitrary one, but for our purposes we will find that k\u003d5 should produce the most physically meaningful clusters. Here we will use pyspark\u0027s mllib implementation of k-means clustering to get the job done.\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 5, 2016 4:17:20 PM",
-      "dateStarted": "Jul 14, 2016 9:54:03 PM",
-      "dateFinished": "Jul 14, 2016 9:54:03 PM",
+      "dateStarted": "Jul 15, 2016 3:15:17 PM",
+      "dateFinished": "Jul 15, 2016 3:15:17 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Step 4: Perform K-means clustering on the PDF Moments",
       "text": "%pyspark\nfrom pyspark.mllib.clustering import KMeans\n\ndef kmeans_clustering(k, m1, m2, **kwargs):\n    \u0027\u0027\u0027\n    Perform k-means clustering\n\n    Input:\n        k - Number of clusters (int)\n        m1, m2 - The PDF moments for each grid point (lat, lon) or (grid points)\n        (Optional) kwargs - kwargs - see pyspark.mllib.clustering.KMeans.train() for more options\n\n    Output:\n        centroids - locations of cluster centroids in m1, m2 space (k, 2)\n        labels - index array which assigns each grid point to a centroid\n    \u0027\u0027\u0027\n    # Ensure moments are 1D before clustering. The input to kmeans must\n    # have a shape of (m, n) where m is the number of grid points and\n    # n is the number of dimensions (in this case 1 for each moment)\n    m1 \u003d m1.ravel()\n    m2 \u003d m2.ravel()\n\n    # Place processed moments into input array\n    input_array \u003d np.array(zip(m1, m2))\n    rdd \u003d sc.parallelize(input_array)\n    model \u003d KMeans.train(rdd, k, **kwargs)\n    centroids \u003d np.array(model.centers)\n    temp_labels \u003d np.array(model.predict(rdd).collect())\n    \n    # Sort centroids and labels by centroid distance to origin\n    dist \u003d (centroids**2).sum(axis\u003d1)\n    sortidx \u003d np.argsort(dist)\n    centroids \u003d centroids[sortidx]\n    labels \u003d np.zeros_like(temp_labels)\n    for i in range(k):\n        labels[temp_labels\u003d\u003dsortidx[i]] \u003d i\n    return centroids, labels\n    \nk \u003d 5\ncentroids, labels \u003d kmeans_clustering(k, std, sk, maxIterations\u003d300,\n                                      initializationMode\u003d\u0027kmeans||\u0027,\n                                      seed\u003d0)\nprint centroids.shape, labels.shape",
-      "dateUpdated": "Jul 14, 2016 9:59:10 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -313,13 +307,13 @@
       "dateCreated": "Jul 1, 2016 9:16:49 AM",
       "dateStarted": "Jul 14, 2016 9:59:10 PM",
       "dateFinished": "Jul 14, 2016 9:59:59 PM",
-      "status": "FINISHED",
+      "status": "ABORT",
       "errorMessage": "",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n####Visualizing the results\nThere are two outputs from k-means clustering. First we have `centroids`, which are a set of points defined in n-dimensional space representing the locations of the cluster centroids. In this case, we entered n\u003d2 input variables into k-means with k\u003d5, so this variable is an array of 5 points denoting (Standard Deviation, Skewness). The `labels` array contains the cluster number assigned to each grid point which are denoted by the respective indices of the centroids array (eg 0-4). We will now produce a figure which contains (1) The cluster numbers color coded on a map (2) A scatter plot of the clusters over the entire grid with the centroid locations denoted, and (3) contour maps of standard deviation and skewness. The resulting figure should be consistent with Loikith et al., 2013.",
-      "dateUpdated": "Jul 14, 2016 9:54:02 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -347,15 +341,15 @@
         "msg": "\u003ch4\u003eVisualizing the results\u003c/h4\u003e\n\u003cp\u003eThere are two outputs from k-means clustering. First we have \u003ccode\u003ecentroids\u003c/code\u003e, which are a set of points defined in n-dimensional space representing the locations of the cluster centroids. In this case, we entered n\u003d2 input variables into k-means with k\u003d5, so this variable is an array of 5 points denoting (Standard Deviation, Skewness). The \u003ccode\u003elabels\u003c/code\u003e array contains the cluster number assigned to each grid point which are denoted by the respective indices of the centroids array (eg 0-4). We will now produce a figure which contains (1) The cluster numbers color coded on a map (2) A scatter plot of the clusters over the entire grid with the centroid locations denoted, and (3) contour maps of standard deviation and skewness. The resulting figure should be consistent with Loikith et al., 2013.\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 5, 2016 4:17:32 PM",
-      "dateStarted": "Jul 14, 2016 9:54:03 PM",
-      "dateFinished": "Jul 14, 2016 9:54:04 PM",
+      "dateStarted": "Jul 15, 2016 3:15:17 PM",
+      "dateFinished": "Jul 15, 2016 3:15:17 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Step 5: Visualize the results",
       "text": "%pyspark\nimport matplotlib as mpl\nmpl.use(\u0027Agg\u0027)\nimport matplotlib.pyplot as plt\nimport cStringIO\nimport base64\nfrom mpl_toolkits.basemap import Basemap\n\ndef show(p):\n    img \u003d cStringIO.StringIO()\n    p.savefig(img, format\u003d\u0027png\u0027)\n    imgStr \u003d \"data:image/png;base64,\"\n    imgStr +\u003d base64.b64encode(img.getvalue().strip())\n    print \"%html \u003cimg src\u003d\u0027\" + imgStr + \"\u0027\u003e\" \n\ndef visualize_clusters(centroids, labels, moments, lats, lons, ptitle\u003d\u0027\u0027, cmap\u003d\u0027rainbow_r\u0027):\n    \u0027\u0027\u0027\n    Visualize the k clusters on a map.\n\n    Input:\n        centroids - locations of cluster centroids (k, 2)\n        labels - group number for each grid point (gridpoints)\n        moments - dict where values are moment numpy arrays\n                  and keys are the name of each moment (eg. \u0027Skewness\u0027)\n        lats, lons - 1 or 2D numpy arrays of lat/lon information\n        (Optional) title - Plot title (string)\n    \u0027\u0027\u0027\n    if lats.ndim \u003d\u003d 1:\n        nx, ny \u003d len(lons), len(lats)\n    else:\n        nx, ny \u003d lons.shape[1], lats.shape[0]\n\n    # Reshape so clusters are on a 2D grid\n    clusters \u003d labels.reshape(ny, nx) + 1\n\n    # Make Plots\n    fig, plot_grid \u003d plt.subplots(nrows\u003d2, ncols\u003d2)\n    fig.set_size_inches((11, 7))\n    plt.subplots_adjust(wspace\u003d0.2, hspace\u003d0.2)\n\n    # Set up the color scaling\n    cmap \u003d plt.get_cmap(cmap)\n    norm \u003d mpl.colors.BoundaryNorm(1 + np.arange(k+1), cmap.N)\n\n    # Upper Left: Map of clusters\n    lon_min \u003d lons.min()\n    lon_max \u003d lons.max()\n    lat_min \u003d lats.min()\n    lat_max \u003d lats.max()\n    m \u003d Basemap(projection\u003d\u0027cyl\u0027, llcrnrlat\u003dlat_min, urcrnrlat\u003dlat_max,\n                llcrnrlon\u003dlon_min, urcrnrlon\u003dlon_max, resolution\u003d\u0027l\u0027)\n\n    m.ax \u003d plot_grid[0, 0]\n    if lats.ndim \u003d\u003d 1:\n        lons, lats \u003d np.meshgrid(lons, lats)\n    x, y \u003d m(lons, lats)\n    clevs \u003d 0.5 + np.arange(k+1)\n    m.drawcoastlines(linewidth\u003d1)\n    m.drawcountries(linewidth\u003d.75)\n    m.contourf(x, y, clusters, levels\u003dclevs, cmap\u003dcmap, norm\u003dnorm, alpha\u003d0.5)\n    m.ax.set_title(\u0027Clusters\u0027)\n\n    # Upper Right: Scatter Plot of clusters\n    ax \u003d plot_grid[0,1]\n    m1, m2 \u003d moments.values()\n    m1 \u003d m1.ravel()\n    m2 \u003d m2.ravel()\n    name1, name2 \u003d moments.keys()\n    clusters \u003d clusters.ravel()\n    ax.scatter(m1, m2, s\u003d.5, edgecolor\u003d\u0027none\u0027, c\u003dclusters, marker\u003d\u0027o\u0027,\n               cmap\u003dcmap, norm\u003dnorm, alpha\u003d0.5)\n    ax.set_title(\u0027Cluster Legend\u0027)\n    ax.set_aspect(\u0027equal\u0027)\n\n    # Label each cluster centroid\n    for i in 1 + np.arange(k):\n        xm \u003d m1[clusters\u003d\u003di].mean()\n        ym \u003d m2[clusters\u003d\u003di].mean()\n        ax.plot(xm, ym, marker\u003d\u0027$%d$\u0027 %(i), markersize\u003d12, color\u003d\u0027k\u0027)\n    ax.set_xlabel(name1)\n    ax.set_ylabel(name2)\n\n    # Bottom: Plot moments\n    for ax, moment, name in zip(plot_grid[1, :], moments.values(),\n                                moments.keys()):\n        m.ax \u003d ax\n        m.drawcoastlines(linewidth\u003d1)\n        m.drawcountries(linewidth\u003d.75)\n        cs \u003d m.contourf(x, y, moment, 20)\n        m.colorbar(cs, location\u003d\u0027bottom\u0027, ax\u003dax)\n        m.ax.set_title(name)\n\n    # Title and save the figure\n    fig.suptitle(ptitle)\n    show(plt)\n\nmoments \u003d {\u0027Standard Deviation\u0027:std, \u0027Skewness\u0027:sk}\ntitle \u003d \u0027MERRA Jan. Surface Temperature (1979-2011)\u0027\nvisualize_clusters(centroids, labels, moments, lats, lons, ptitle\u003dtitle)",
-      "dateUpdated": "Jul 14, 2016 9:54:02 PM",
+      "dateUpdated": "Jul 18, 2016 3:35:02 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -381,13 +375,13 @@
       "dateCreated": "Jul 1, 2016 9:16:49 AM",
       "dateStarted": "Jul 14, 2016 9:54:10 PM",
       "dateFinished": "Jul 14, 2016 9:55:19 PM",
-      "status": "FINISHED",
+      "status": "ABORT",
       "errorMessage": "",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n####Probability Density Functions (PDFs) of each cluster\nGiven these results so far, are the shapes of the underlying distributions for each cluster consistent with what we expect? To find out, we will approximate the PDFs using histograms with 152 bins. Following Loikith et al. 2013, we will also apply a base 10 logarithm to the bin counts to weigh the tails of the distributions more heavily. The following code can be used to define these histograms at each gridpoint. Note that the solid lines are the mean probabilities for each bin while the shaded area denotes one standard deviation from the mean.",
-      "dateUpdated": "Jul 14, 2016 9:54:02 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -415,15 +409,15 @@
         "msg": "\u003ch4\u003eProbability Density Functions (PDFs) of each cluster\u003c/h4\u003e\n\u003cp\u003eGiven these results so far, are the shapes of the underlying distributions for each cluster consistent with what we expect? To find out, we will approximate the PDFs using histograms with 152 bins. Following Loikith et al. 2013, we will also apply a base 10 logarithm to the bin counts to weigh the tails of the distributions more heavily. The following code can be used to define these histograms at each gridpoint. Note that the solid lines are the mean probabilities for each bin while the shaded area denotes one standard deviation from the mean.\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 7, 2016 3:39:58 PM",
-      "dateStarted": "Jul 14, 2016 9:54:04 PM",
-      "dateFinished": "Jul 14, 2016 9:54:04 PM",
+      "dateStarted": "Jul 15, 2016 3:15:17 PM",
+      "dateFinished": "Jul 15, 2016 3:15:17 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Generate histograms",
       "text": "%pyspark\ndef make_histograms(data, nbins, logarithmic\u003dTrue, probabilities\u003dTrue):\n    \u0027\u0027\u0027\n    Make histograms of time series at each grid point\n    \n    Input:\n        data - input gridded data, dimensions (time, lat, lon)\n        nbins - Number of equally spaced bins in the histogram\n        (Optional) logarithmic - Take log10 of bin counts if True\n        (Optional) probabilitis - Divide bin counts by length of time series\n                                  if True\n    Output:\n        hist - histogram bin counts at each grid point, \n               shape (# of grid points, # of bins)\n        bins - Bin edges array\n    \u0027\u0027\u0027\n    hist \u003d []\n    bins \u003d np.histogram(data, bins\u003d152)[1]\n    ndays \u003d float(data.shape[0])\n    for i in range(len(lats)):\n        for j in range(len(lons)):\n            hist.append(np.histogram(data[:, i, j], bins\u003dbins, density\u003dFalse)[0])\n    \n    hist \u003d np.array(hist, dtype\u003d\u0027float32\u0027)\n    \n    # We may divide the bin counts by the total number of days in the time series\n    # to get a probability associated with each bin\n    if probabilities:\n        hist /\u003d ndays\n        \n    if logarithmic:\n        hist \u003d np.log10(hist)\n        \n        # Because log10(0) is -inf, we also need to set the bin count to a valid value\n        hist[np.isinf(hist)] \u003d -(np.log10(ndays) + 0.5)\n        \n    return hist, bins\n\nhist, bins \u003d make_histograms(detrended_data, 152)\nprint hist.shape",
-      "dateUpdated": "Jul 14, 2016 10:01:57 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -448,14 +442,14 @@
       "dateCreated": "Jul 12, 2016 6:40:52 PM",
       "dateStarted": "Jul 14, 2016 10:01:57 PM",
       "dateFinished": "Jul 14, 2016 10:02:09 PM",
-      "status": "FINISHED",
+      "status": "ABORT",
       "errorMessage": "",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Plot Histograms",
       "text": "%pyspark\ndef visualize_histograms(centroids, labels, hist, bins, units\u003d\u0027K\u0027, ptitle\u003d\u0027\u0027, cmap\u003d\u0027rainbow_r\u0027):\n    \u0027\u0027\u0027\n    Plot PDFs for each cluster\n\n    Input:\n        centroids - locations of cluster centroids (k, 2)\n        labels - group number for each grid point (gridpoints)\n        hist - Array containing histogram info for each grid point (gridpoints, nbins)\n        bins - Bin edges array (nbins)\n        (Optional) units - Units of the source data (string)\n        (Optional) ptitle - Plot title (string)\n    \u0027\u0027\u0027\n    clusters \u003d labels + 1\n    k \u003d centroids.shape[0]\n\n    # Set up the color scaling\n    cmap \u003d plt.get_cmap(cmap)\n    norm \u003d mpl.colors.Normalize(vmin\u003d1, vmax\u003dk)\n    plt.figure(figsize\u003d(8.5, 5.5))\n\n    # Cluster PDFs\n    anom \u003d 0.5*(bins + np.roll(bins, -1))[:-1]\n    colorpicker \u003d mpl.cm.ScalarMappable(norm\u003dnorm, cmap\u003dcmap)\n    for i in range(1, k+1):\n        vals \u003d hist[clusters\u003d\u003di]\n        pdf \u003d vals.mean(axis\u003d0)\n        std \u003d vals.std(axis\u003d0)\n        color \u003d colorpicker.to_rgba(i)\n        plt.plot(anom, pdf, color\u003dcolor)\n        plt.fill_between(anom, pdf-std, pdf+std, facecolor\u003dcolor,\n                        edgecolor\u003dcolor, alpha\u003d0.35)\n                        \n    plt.xlabel(\u0027Anomaly [%s]\u0027 %units)\n    plt.ylabel(r\u0027$\\log_{10}$ Probability\u0027)\n    plt.xlim(xmin\u003d-30, xmax\u003d30)\n    plt.ylim(ymin\u003d-3.5, ymax\u003d0)\n    plt.title(\u0027Cluster PDFs - %s\u0027 %ptitle)\n    show(plt)\n\nvisualize_histograms(centroids, labels, hist, bins, ptitle\u003d\u0027MERRA\u0027)",
-      "dateUpdated": "Jul 14, 2016 9:54:02 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:17 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -487,7 +481,7 @@
     },
     {
       "text": "%md\n###Exercise 1: Use histogram bin counts as the main input to k-means\n\nSo far we have demonstrated how to perform k-means clustering using two aspects of PDF shape (standard deviation and skewness) as our main inputs. What if we instead wanted to account for *all* aspects of PDF shape to determine the clusters? Create a modified version of the `kmeans_clustering()` wrapper shown above that accepts the bin counts of a histogram at each gridpoint as an input instead of the two moments, and use it to perform k-means clustering with the provided MERRA data and k\u003d5 clusters. You may use the logarithmic bin counts at each grid point that are already generated in the variable `hist`. Plot your results using calls to `visualize_clusters()` and `visualize_histograms()`. Are these results similar to those shown when using two moments as inputs to k-means instead? To get started, you may use the template in the cell below. The code to visualize the clusters and the mean PDFs is also included in the denoted cells.",
-      "dateUpdated": "Jul 14, 2016 9:54:03 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:17 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -515,15 +509,15 @@
         "msg": "\u003ch3\u003eExercise 1: Use histogram bin counts as the main input to k-means\u003c/h3\u003e\n\u003cp\u003eSo far we have demonstrated how to perform k-means clustering using two aspects of PDF shape (standard deviation and skewness) as our main inputs. What if we instead wanted to account for \u003cem\u003eall\u003c/em\u003e aspects of PDF shape to determine the clusters? Create a modified version of the \u003ccode\u003ekmeans_clustering()\u003c/code\u003e wrapper shown above that accepts the bin counts of a histogram at each gridpoint as an input instead of the two moments, and use it to perform k-means clustering with the provided MERRA data and k\u003d5 clusters. You may use the logarithmic bin counts at each grid point that are already generated in the variable \u003ccode\u003ehist\u003c/code\u003e. Plot your results using calls to \u003ccode\u003evisualize_clusters()\u003c/code\u003e and \u003ccode\u003evisualize_histograms()\u003c/code\u003e. Are these results similar to those shown when using two moments as inputs to k-means instead? To get started, you may use the template in the cell below. The code to visualize the clusters and the mean PDFs is also included in the denoted cells.\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 5, 2016 11:46:18 AM",
-      "dateStarted": "Jul 14, 2016 9:54:04 PM",
-      "dateFinished": "Jul 14, 2016 9:54:04 PM",
+      "dateStarted": "Jul 15, 2016 3:15:17 PM",
+      "dateFinished": "Jul 15, 2016 3:15:17 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Exercise 1 Template",
       "text": "%md\n```\ndef kmeans_clustering2(k, hist, **kwargs):\n    \u0027\u0027\u0027\n    Perform k-means clustering\n\n    Input:\n        k - Number of clusters (int)\n        hist - Histogram bin counts, shape (# of gridpoints, # of bins)\n        (Optional) kwargs - see pyspark.mllib.clustering.KMeans.train() for more options\n\n    Output:\n        centroids - locations of cluster centroids in m1, m2 space (k, # of bins)\n        labels - index array which assigns each grid point to a centroid\n    \u0027\u0027\u0027\n    # Perform any necessary processing on the input array (hist) and\n    # store the result in a variable called input_array:\n    # input_array \u003d ... \n    rdd \u003d sc.parallelize(input_array)\n    model \u003d KMeans.train(rdd, k, **kwargs)\n    centroids \u003d np.array(model.centers)\n    temp_labels \u003d np.array(model.predict(rdd).collect())\n    \n    # Sort centroids and labels by centroid distance to origin\n    dist \u003d (centroids**2).sum(axis\u003d1)\n    sortidx \u003d np.argsort(dist)\n    centoids \u003d centroids[sortidx]\n    labels \u003d np.zeros_like(temp_labels)\n    for i in range(k):\n        labels[temp_labels\u003d\u003dsortidx[i]] \u003d i\n    return centroids, labels\n\ncentroids2, labels2 \u003d kmeans_clustering2(k, hist, maxIterations\u003d300,\n                                         initializationMode\u003d\u0027kmeans\u0027,\n                                         seed\u003d0)\n```",
-      "dateUpdated": "Jul 14, 2016 10:01:26 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:17 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -553,15 +547,15 @@
         "msg": "\u003cpre\u003e\u003ccode\u003edef kmeans_clustering2(k, hist, **kwargs):\n    \u0027\u0027\u0027\n    Perform k-means clustering\n\n    Input:\n        k - Number of clusters (int)\n        hist - Histogram bin counts, shape (# of gridpoints, # of bins)\n        (Optional) kwargs - see pyspark.mllib.clustering.KMeans.train() for more options\n\n    Output:\n        centroids - locations of cluster centroids in m1, m2 space (k, # of bins)\n        labels - index array which assigns each grid point to a centroid\n    \u0027\u0027\u0027\n    # Perform any necessary processing on the input array (hist) and\n    # store the result in a variable called input_array:\n    # input_array \u003d ... \n    rdd \u003d sc.parallelize(input_array)\n    model \u003d KMeans.train(rdd, k, **kwargs)\n    centroids \u003d np.array(model.centers)\n    temp_labels \u003d np.array(model.predict(rdd).collect())\n\n    # Sort centroids and labels by centroid distance to origin\n    dist \u003d (centroids**2).sum(axis\u003d1)\n    sortidx \u003d np.argsort(dist)\n    centoids \u003d centroids[sortidx]\n    labels \u003d np.zeros_like(temp_labels)\n    for i in range(k):\n        labels[temp_labels\u003d\u003dsortidx[i]] \u003d i\n    return centroids, labels\n\ncentroids2, labels2 \u003d kmeans_clustering2(k, hist, maxIterations\u003d300,\n                                         initializationMode\u003d\u0027kmeans\u0027,\n                                         seed\u003d0)\n\u003c/code\u003e\u003c/pre\u003e\n"
       },
       "dateCreated": "Jul 7, 2016 3:55:02 PM",
-      "dateStarted": "Jul 14, 2016 9:54:04 PM",
-      "dateFinished": "Jul 14, 2016 9:54:05 PM",
+      "dateStarted": "Jul 15, 2016 3:15:17 PM",
+      "dateFinished": "Jul 15, 2016 3:15:17 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Exercise 1 Hint",
       "text": "%md\nRemember that the input to pyspark\u0027s mllib implementation of kmeans must have a shape of (m, n) where m is the number of grid points and n is the number of input variables. In the previous example, we used n\u003d2 input variables (the PDF moments aka standard deviation and skewness). If our input variables were histogram bin counts defined at each gridpoint, what must our shape be? Does `hist` conform to this shape? ",
-      "dateUpdated": "Jul 14, 2016 9:54:03 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:17 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -591,15 +585,15 @@
         "msg": "\u003cp\u003eRemember that the input to pyspark\u0027s mllib implementation of kmeans must have a shape of (m, n) where m is the number of grid points and n is the number of input variables. In the previous example, we used n\u003d2 input variables (the PDF moments aka standard deviation and skewness). If our input variables were histogram bin counts defined at each gridpoint, what must our shape be? Does \u003ccode\u003ehist\u003c/code\u003e conform to this shape?\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 12, 2016 10:08:44 AM",
-      "dateStarted": "Jul 14, 2016 9:54:05 PM",
-      "dateFinished": "Jul 14, 2016 9:54:05 PM",
+      "dateStarted": "Jul 15, 2016 3:15:17 PM",
+      "dateFinished": "Jul 15, 2016 3:15:17 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Exercise 1 Solution",
       "text": "%pyspark\ndef kmeans_clustering2(k, hist, **kwargs):\n    \u0027\u0027\u0027\n    Perform k-means clustering\n\n    Input:\n        k - Number of clusters (int)\n        hist - Histogram bin counts, shape (# of gridpoints, # of bins)\n        (Optional) kwargs - see pyspark.mllib.clustering.KMeans.train() for more options\n\n    Output:\n        centroids - locations of cluster centroids in m1, m2 space (k, # of bins)\n        labels - index array which assigns each grid point to a centroid\n    \u0027\u0027\u0027\n    input_array \u003d hist\n    rdd \u003d sc.parallelize(input_array)\n    model \u003d KMeans.train(rdd, k, **kwargs)\n    centroids \u003d np.array(model.centers)\n    temp_labels \u003d np.array(model.predict(rdd).collect())\n    \n    # Sort centroids and labels by centroid distance to origin\n    dist \u003d (centroids**2).sum(axis\u003d1)\n    sortidx \u003d np.argsort(dist)\n    centoids \u003d centroids[sortidx]\n    labels \u003d np.zeros_like(temp_labels)\n    for i in range(k):\n        labels[temp_labels\u003d\u003dsortidx[i]] \u003d i\n    return centroids, labels\n\ncentroids2, labels2 \u003d kmeans_clustering2(k, hist, maxIterations\u003d300,\n                                         initializationMode\u003d\u0027kmeans\u0027,\n                                         seed\u003d0)",
-      "dateUpdated": "Jul 14, 2016 9:54:03 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:17 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -637,7 +631,7 @@
     {
       "title": "Plot The Cluster Information",
       "text": "%pyspark\nvisualize_clusters(centroids2, labels2, moments, lats, lons, ptitle\u003dtitle, cmap\u003d\u0027rainbow\u0027)",
-      "dateUpdated": "Jul 14, 2016 9:54:03 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:17 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -671,7 +665,7 @@
     {
       "title": "Plot The Mean Cluster PDFs",
       "text": "%pyspark\nvisualize_histograms(centroids2, labels2, hist, bins, ptitle\u003d\u0027MERRA\u0027, cmap\u003d\u0027rainbow\u0027)",
-      "dateUpdated": "Jul 14, 2016 10:08:08 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:17 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -705,7 +699,7 @@
     {
       "title": "Exercise 1 Discussion",
       "text": "%md \nThe purpose of this exercise was to test whether you understood the basic concepts of k-means. The use of histogram bin counts instead of PDF moments as inputs seems like a much more complex problem, but as it turns out the solution is simply a matter of realizing that `hist`, which has shape (# of grid points, # of bins) could be passed directly into kmeans without any additional processing. The resulting plots should be almost identical to the previous example with PDF moments as inputs, indicating the consistency between both methods. As it turns out, Loikith et al. 2013 actually used the histogram approach whereas the PDF moments approach was later developed to allow for more simplified physical interpretations of the results.\"\"\" ",
-      "dateUpdated": "Jul 14, 2016 9:54:04 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:17 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -735,14 +729,14 @@
         "msg": "\u003cp\u003eThe purpose of this exercise was to test whether you understood the basic concepts of k-means. The use of histogram bin counts instead of PDF moments as inputs seems like a much more complex problem, but as it turns out the solution is simply a matter of realizing that \u003ccode\u003ehist\u003c/code\u003e, which has shape (# of grid points, # of bins) could be passed directly into kmeans without any additional processing. The resulting plots should be almost identical to the previous example with PDF moments as inputs, indicating the consistency between both methods. As it turns out, Loikith et al. 2013 actually used the histogram approach whereas the PDF moments approach was later developed to allow for more simplified physical interpretations of the results.\u0026ldquo;\u0026ldquo;\u0026rdquo;\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 12, 2016 7:19:26 PM",
-      "dateStarted": "Jul 14, 2016 9:54:05 PM",
-      "dateFinished": "Jul 14, 2016 9:54:05 PM",
+      "dateStarted": "Jul 15, 2016 3:15:18 PM",
+      "dateFinished": "Jul 15, 2016 3:15:18 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n###Exercise 2: Experiment with different values of k\nIn this notebook we have only shown results for clustering done using k\u003d5. In fact, the choice of k is an arbitrary one, and in practice we must often test different values of k. Rerun the previous exercise and/or example using different values of k, preferably between 3 and 8 inclusive. Why do you think Loikith et al. chose k\u003d5?",
-      "dateUpdated": "Jul 14, 2016 9:54:04 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:18 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -770,15 +764,15 @@
         "msg": "\u003ch3\u003eExercise 2: Experiment with different values of k\u003c/h3\u003e\n\u003cp\u003eIn this notebook we have only shown results for clustering done using k\u003d5. In fact, the choice of k is an arbitrary one, and in practice we must often test different values of k. Rerun the previous exercise and/or example using different values of k, preferably between 3 and 8 inclusive. Why do you think Loikith et al. chose k\u003d5?\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 11, 2016 9:57:04 PM",
-      "dateStarted": "Jul 14, 2016 9:54:05 PM",
-      "dateFinished": "Jul 14, 2016 9:54:06 PM",
+      "dateStarted": "Jul 15, 2016 3:15:18 PM",
+      "dateFinished": "Jul 15, 2016 3:15:18 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Exercise 2 Discussion",
       "text": "%md\nYou should find that using too few or too many clusters creates some difficulty in physically interpreting the results. With k\u003d5 each cluster is in fact physically explainable. With too many clusters the differences between each of them become more difficult to both physically and statistically distinguish, and with too few clusters the you may overlook some important physical features. The point of this exercise is to demonstrate that users should not blindly pick one value of k if they were to apply clustering to their own data. It is necessary to test several different values of k, which could be seen as a drawback to the clustering approach for PDF visualization.",
-      "dateUpdated": "Jul 14, 2016 9:54:04 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:18 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -808,14 +802,14 @@
         "msg": "\u003cp\u003eYou should find that using too few or too many clusters creates some difficulty in physically interpreting the results. With k\u003d5 each cluster is in fact physically explainable. With too many clusters the differences between each of them become more difficult to both physically and statistically distinguish, and with too few clusters the you may overlook some important physical features. The point of this exercise is to demonstrate that users should not blindly pick one value of k if they were to apply clustering to their own data. It is necessary to test several different values of k, which could be seen as a drawback to the clustering approach for PDF visualization.\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 12, 2016 10:44:25 AM",
-      "dateStarted": "Jul 14, 2016 9:54:06 PM",
-      "dateFinished": "Jul 14, 2016 9:54:06 PM",
+      "dateStarted": "Jul 15, 2016 3:15:18 PM",
+      "dateFinished": "Jul 15, 2016 3:15:18 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n###Lessons Learned\n - k-means can be used to group sets of points together into clusters by similar characteristics\n - The number of characteristics to use can range from a few (PDF moments) to many (histogram bin counts)\n - Although seemingly more complex, results from the histogram bin count method were consistent with the moments-based method\n - Increases in running time due to large increases in the size of the problem from moments to histogram bins are mitigated due to parallelism\n - A drawback is that the choice of k (number of clusters) is arbitrary",
-      "dateUpdated": "Jul 14, 2016 10:07:58 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:18 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -843,14 +837,14 @@
         "msg": "\u003ch3\u003eLessons Learned\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003ek-means can be used to group sets of points together into clusters by similar characteristics\u003c/li\u003e\n\u003cli\u003eThe number of characteristics to use can range from a few (PDF moments) to many (histogram bin counts)\u003c/li\u003e\n\u003cli\u003eAlthough seemingly more complex, results from the histogram bin count method were consistent with the moments-based method\u003c/li\u003e\n\u003cli\u003eIncreases in running time due to large increases in the size of the problem from moments to histogram bins are mitigated due to parallelism\u003c/li\u003e\n\u003cli\u003eA drawback is that the choice of k (number of clusters) is arbitrary\u003c/li\u003e\n\u003c/ul\u003e\n"
       },
       "dateCreated": "Jul 11, 2016 10:43:54 PM",
-      "dateStarted": "Jul 14, 2016 10:07:56 PM",
-      "dateFinished": "Jul 14, 2016 10:07:56 PM",
+      "dateStarted": "Jul 15, 2016 3:15:18 PM",
+      "dateFinished": "Jul 15, 2016 3:15:18 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n###Additional SciSpark use cases for cluster analysis of climate data\nIt should be noted that the examples shown here only demonstrated the use of spark in the computation of k-means. Additionally the input data from our netcdf file was already temporally subsetted for the month of January and spatially subsetted to include primarily North America outside of this notebook. In practice, greatly speeding up these operations in particular would be the greatest benefit from applying SciSpark to this problem since often times reanalysis datasets are defined within individual netcdf files for each year, month, day, or even hour! For the MERRA dataset used in this problem, the raw data was in fact split over 12,052 daily netcdf files, which can be quite difficult to process sequentially!",
-      "dateUpdated": "Jul 14, 2016 9:54:04 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:18 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -873,18 +867,18 @@
       "jobName": "paragraph_1468346717106_-622444571",
       "id": "20160712-110517_1830281348",
       "result": {
-        "code": "SUCCESS",
-        "type": "HTML",
-        "msg": "\u003ch3\u003eAdditional SciSpark use cases for cluster analysis of climate data\u003c/h3\u003e\n\u003cp\u003eIt should be noted that the examples shown here only demonstrated the use of spark in the computation of k-means. Additionally the input data from our netcdf file was already temporally subsetted for the month of January and spatially subsetted to include primarily North America outside of this notebook. In practice, greatly speeding up these operations in particular would be the greatest benefit from applying SciSpark to this problem since often times reanalysis datasets are defined within individual netcdf files for each year, month, day, or even hour! For the MERRA dataset used in this problem, the raw data was in fact split over 12,052 daily netcdf files, which can be quite difficult to process sequentially!\u003c/p\u003e\n"
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": ""
       },
       "dateCreated": "Jul 12, 2016 11:05:17 AM",
-      "dateStarted": "Jul 14, 2016 9:54:06 PM",
-      "dateFinished": "Jul 14, 2016 9:54:07 PM",
-      "status": "FINISHED",
+      "dateStarted": "Jul 15, 2016 3:15:18 PM",
+      "dateFinished": "Jul 15, 2016 3:15:18 PM",
+      "status": "ERROR",
       "progressUpdateIntervalMs": 500
     },
     {
-      "dateUpdated": "Jul 14, 2016 9:54:04 PM",
+      "dateUpdated": "Jul 15, 2016 3:15:18 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -916,23 +910,23 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "301-2 PDF Clustering",
+  "name": "301-1 PDF Clustering using PySpark",
   "id": "2BRKP8DK7",
   "angularObjects": {
     "2BATG925A": [],
+    "2BCTKA5P2": [],
     "2B9VMB5BB": [],
-    "2BQ1G4MF1": [],
     "2BAA8ZT1F": [],
     "2BCYFRWUC": [],
     "2BCC68R3T": [],
-    "2B9AHSVAD": [],
     "2BA8C2CJ4": [],
-    "2B9U51XQ6": [],
-    "2B9AFX9BM": [],
-    "2B9VX5KPM": [],
-    "2BCTKA5P2": [],
+    "2B9AHSVAD": [],
     "2BCZV9QGQ": [],
-    "2BAM6HXAB": []
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": [],
+    "2BS4GY9JZ": []
   },
   "config": {
     "looknfeel": "default"

@@ -746,8 +746,8 @@
     },
     {
       "title": "Exercises",
-      "text": "%md\n1. Find the top 3 deadliest events by year. \n2. Inspect the cleaning functions, can they be made better?",
-      "dateUpdated": "Jul 15, 2016 4:36:02 AM",
+      "text": "%md\n1. Find the top 3 deadliest events by year. \n2. Inspect the cleaning functions, how can they be improved?",
+      "dateUpdated": "Jul 18, 2016 3:19:32 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -773,11 +773,11 @@
       "result": {
         "code": "SUCCESS",
         "type": "HTML",
-        "msg": "\u003col\u003e\n\u003cli\u003eFind the top 3 deadliest events by year.\u003c/li\u003e\n\u003cli\u003eInspect the cleaning functions, can they be made better?\u003c/li\u003e\n\u003c/ol\u003e\n"
+        "msg": "\u003col\u003e\n\u003cli\u003eFind the top 3 deadliest events by year.\u003c/li\u003e\n\u003cli\u003eInspect the cleaning functions, how can they be improved?\u003c/li\u003e\n\u003c/ol\u003e\n"
       },
       "dateCreated": "Jul 14, 2016 7:55:49 PM",
-      "dateStarted": "Jul 15, 2016 4:35:59 AM",
-      "dateFinished": "Jul 15, 2016 4:35:59 AM",
+      "dateStarted": "Jul 18, 2016 3:19:30 AM",
+      "dateFinished": "Jul 18, 2016 3:19:30 AM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },

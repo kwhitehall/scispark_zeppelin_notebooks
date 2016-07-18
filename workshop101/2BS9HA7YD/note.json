@@ -2,7 +2,7 @@
   "paragraphs": [
     {
       "text": "%md\n\u003ch2\u003eParadigms of Parallel Computing in a Nutshell\u003c/h2\u003e\n\u003ch4\u003e\n - Multicore on a single node\n - GPU boards:  one or more\n - Cluster Computing\n\u003cbr\u003e\n - HPC Style\n    - Usually MPI Model codes (solvers)\n    - Synchronous message-passing communication\n    - Heavy interleaving of compute and communication (i.e. during every iteration in a solver)\n\u003cbr\u003e\n - Map-Reduce Style for Big Data\n    - Massively parallel\n    - Partition data onto the cluster\n    - Compute in parallel across the chunks, using all cores\n    - Workflows constrained to Map-Filter-Reduce paradigm\n    - Made robust using replicas and task scheduler\n\u003cbr\u003e\n - HDFS:\n    - Cluster file system that chunks files (sequences of records) across the cluster\n    - Uses replicas for robustness\n    - However, HDFS chunking doesn\u0027t honor netCDF4 file structure (random access to named arrays)\n \u003cbr\u003e\n - Hadoop:\n    - 1st generation\n    - Writes to disk between each step in job\n    - Written in Java\n \u003cbr\u003e\n - Spark:\n    - 2nd generation\n    - In-memory:  only \u0027spills\u0027 to disk when necessary\n    - Lazy computation:  transformation pipelines defined and then held for later execution\n    - 10 to 100x faster than Hadoop\n    - Can persist results in memory or serialize to SSD/disk\n    - Written in Scala (another JVM language), but can use Python (PySpark gateway)\n\u003cbr\u003e",
-      "dateUpdated": "Jul 14, 2016 4:11:13 PM",
+      "dateUpdated": "Jul 15, 2016 4:30:40 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -30,14 +30,14 @@
         "msg": "\u003ch2\u003eParadigms of Parallel Computing in a Nutshell\u003c/h2\u003e\n\u003cp\u003e\u003ch4\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eMulticore on a single node\u003c/li\u003e\n\u003cli\u003eGPU boards:  one or more\u003c/li\u003e\n\u003cli\u003eCluster Computing\n\u003cbr  /\u003e\u003cbr\u003e\u003c/li\u003e\n\u003cli\u003eHPC Style\u003cul\u003e\n\u003cli\u003eUsually MPI Model codes (solvers)\u003c/li\u003e\n\u003cli\u003eSynchronous message-passing communication\u003c/li\u003e\n\u003cli\u003eHeavy interleaving of compute and communication (i.e. during every iteration in a solver)\n\u003cbr  /\u003e\u003cbr\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eMap-Reduce Style for Big Data\u003cul\u003e\n\u003cli\u003eMassively parallel\u003c/li\u003e\n\u003cli\u003ePartition data onto the cluster\u003c/li\u003e\n\u003cli\u003eCompute in parallel across the chunks, using all cores\u003c/li\u003e\n\u003cli\u003eWorkflows constrained to Map-Filter-Reduce paradigm\u003c/li\u003e\n\u003cli\u003eMade robust using replicas and task scheduler\n\u003cbr  /\u003e\u003cbr\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eHDFS:\u003cul\u003e\n\u003cli\u003eCluster file system that chunks files (sequences of records) across the cluster\u003c/li\u003e\n\u003cli\u003eUses replicas for robustness\u003c/li\u003e\n\u003cli\u003eHowever, HDFS chunking doesn\u0027t honor netCDF4 file structure (random access to named arrays)\n\u003cbr  /\u003e\u003cbr\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eHadoop:\u003cul\u003e\n\u003cli\u003e1st generation\u003c/li\u003e\n\u003cli\u003eWrites to disk between each step in job\u003c/li\u003e\n\u003cli\u003eWritten in Java\n\u003cbr  /\u003e\u003cbr\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eSpark:\u003cul\u003e\n\u003cli\u003e2nd generation\u003c/li\u003e\n\u003cli\u003eIn-memory:  only \u0027spills\u0027 to disk when necessary\u003c/li\u003e\n\u003cli\u003eLazy computation:  transformation pipelines defined and then held for later execution\u003c/li\u003e\n\u003cli\u003e10 to 100x faster than Hadoop\u003c/li\u003e\n\u003cli\u003eCan persist results in memory or serialize to SSD/disk\u003c/li\u003e\n\u003cli\u003eWritten in Scala (another JVM language), but can use Python (PySpark gateway)\n\u003cbr  /\u003e\u003cbr\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n"
       },
       "dateCreated": "Jul 13, 2016 1:01:24 PM",
-      "dateStarted": "Jul 14, 2016 4:11:13 PM",
-      "dateFinished": "Jul 14, 2016 4:11:13 PM",
+      "dateStarted": "Jul 15, 2016 4:30:40 PM",
+      "dateFinished": "Jul 15, 2016 4:30:41 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%md\n\u003ch3\u003eMap-Reduce Idea comes from Functional Programming Languages\u003c/h3\u003e\nCompose Pipelines Using Functions:\n - \u003cb\u003eMap\u003c/b\u003e:  map a function across a list of values and return the list of results\n - \u003cb\u003eFilter\u003c/b\u003e:  filter a list using a predicate and return the list of values that satisfied the predicate\n - \u003cb\u003eReduce\u003c/b\u003e:  combine the values in a list into a single value using a reduction operator (e.g. add operator yields sum)\n - \u003cb\u003eGroupByKey\u003c/b\u003e:  group values in a list that have the same key, return the list of groups\n - \u003cb\u003eReduceByKey\u003c/b\u003e:  return reduction result for values from each key",
-      "dateUpdated": "Jul 14, 2016 4:11:13 PM",
+      "dateUpdated": "Jul 15, 2016 4:30:40 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -65,15 +65,15 @@
         "msg": "\u003ch3\u003eMap-Reduce Idea comes from Functional Programming Languages\u003c/h3\u003e\n\u003cp\u003eCompose Pipelines Using Functions:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cb\u003eMap\u003c/b\u003e:  map a function across a list of values and return the list of results\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eFilter\u003c/b\u003e:  filter a list using a predicate and return the list of values that satisfied the predicate\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eReduce\u003c/b\u003e:  combine the values in a list into a single value using a reduction operator (e.g. add operator yields sum)\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eGroupByKey\u003c/b\u003e:  group values in a list that have the same key, return the list of groups\u003c/li\u003e\n\u003cli\u003e\u003cb\u003eReduceByKey\u003c/b\u003e:  return reduction result for values from each key\u003c/li\u003e\n\u003c/ul\u003e\n"
       },
       "dateCreated": "Jul 13, 2016 1:32:47 PM",
-      "dateStarted": "Jul 14, 2016 4:11:13 PM",
-      "dateFinished": "Jul 14, 2016 4:11:13 PM",
+      "dateStarted": "Jul 15, 2016 4:30:41 PM",
+      "dateFinished": "Jul 15, 2016 4:30:41 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Sequential Map-Reduce in Python",
       "text": "%pyspark\nimport numpy as N\nfrom operator import add\n\nints \u003d N.arange(1000000) + 1\nprint ints[:100]\n\nsquares \u003d map(lambda i: i*i, ints)\nprint squares[:100]\nsumOfSquares \u003d reduce(add, squares)\n\nprint \u0027\\nsum:\u0027, sumOfSquares",
-      "dateUpdated": "Jul 14, 2016 4:18:01 PM",
+      "dateUpdated": "Jul 15, 2016 4:30:41 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -101,15 +101,15 @@
         "msg": "[  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18\n  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36\n  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54\n  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72\n  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90\n  91  92  93  94  95  96  97  98  99 100]\n[1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961, 1024, 1089, 1156, 1225, 1296, 1369, 1444, 1521, 1600, 1681, 1764, 1849, 1936, 2025, 2116, 2209, 2304, 2401, 2500, 2601, 2704, 2809, 2916, 3025, 3136, 3249, 3364, 3481, 3600, 3721, 3844, 3969, 4096, 4225, 4356, 4489, 4624, 4761, 4900, 5041, 5184, 5329, 5476, 5625, 5776, 5929, 6084, 6241, 6400, 6561, 6724, 6889, 7056, 7225, 7396, 7569, 7744, 7921, 8100, 8281, 8464, 8649, 8836, 9025, 9216, 9409, 9604, 9801, 10000]\n\nsum: 333333833333500000\n"
       },
       "dateCreated": "Jul 13, 2016 1:04:33 PM",
-      "dateStarted": "Jul 14, 2016 4:18:01 PM",
-      "dateFinished": "Jul 14, 2016 4:18:01 PM",
+      "dateStarted": "Jul 15, 2016 4:30:41 PM",
+      "dateFinished": "Jul 15, 2016 4:30:41 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Parallel Map in Python Using Multiprocessing (8 cores on a single node)",
       "text": "%md\nfrom multiprocessing import Pool\npool \u003d Pool(8)\n\nints \u003d N.arange(10000000) + 1\nprint ints[:100]\nsquares \u003d pool.map(lambda i: i*i, ints)\nprint squares[:100]",
-      "dateUpdated": "Jul 14, 2016 4:11:13 PM",
+      "dateUpdated": "Jul 15, 2016 4:30:41 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -138,15 +138,15 @@
         "msg": "\u003cp\u003efrom multiprocessing import Pool\n\u003cbr  /\u003epool \u003d Pool(8)\u003c/p\u003e\n\u003cp\u003eints \u003d N.arange(10000000) + 1\n\u003cbr  /\u003eprint ints[:100]\n\u003cbr  /\u003esquares \u003d pool.map(lambda i: i*i, ints)\n\u003cbr  /\u003eprint squares[:100]\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 13, 2016 1:32:09 PM",
-      "dateStarted": "Jul 14, 2016 4:11:13 PM",
-      "dateFinished": "Jul 14, 2016 4:11:13 PM",
+      "dateStarted": "Jul 15, 2016 4:30:41 PM",
+      "dateFinished": "Jul 15, 2016 4:30:41 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Parallel Map and Reduce on Spark Cluster (numPartitions \u003d16)",
       "text": "%pyspark\nimport numpy as N\n\nints \u003d N.arange(1000000) + 1\nprint ints[:100]\nintsRDD \u003d sc.parallelize(ints, 16)           # split array across the cluster into 16 chunks\nsquaresRDD \u003d intsRDD.map(lambda i: i*i)      # compute squares in 16 parallel tasks, except Spark transformations are lazy so nothing happens yet\n#print squaresRDD[:100]                      # won\u0027t work, nothing has run yet",
-      "dateUpdated": "Jul 14, 2016 4:18:18 PM",
+      "dateUpdated": "Jul 15, 2016 4:30:41 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -174,15 +174,15 @@
         "msg": "[  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18\n  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36\n  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54\n  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72\n  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90\n  91  92  93  94  95  96  97  98  99 100]\n"
       },
       "dateCreated": "Jul 13, 2016 1:32:05 PM",
-      "dateStarted": "Jul 14, 2016 4:18:18 PM",
-      "dateFinished": "Jul 14, 2016 4:18:18 PM",
+      "dateStarted": "Jul 15, 2016 4:30:41 PM",
+      "dateFinished": "Jul 15, 2016 4:30:41 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Drive computation by an action  --  Reduce()",
       "text": "%pyspark\nfrom operator import add\n\nsumOfSquares \u003d squaresRDD.reduce(add)\nprint \u0027\\nsum:\u0027, sumOfSquares",
-      "dateUpdated": "Jul 15, 2016 4:03:59 AM",
+      "dateUpdated": "Jul 15, 2016 4:30:41 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -210,15 +210,15 @@
         "msg": "\nsum: 333333833333500000\n"
       },
       "dateCreated": "Jul 13, 2016 6:56:57 PM",
-      "dateStarted": "Jul 15, 2016 4:03:59 AM",
-      "dateFinished": "Jul 15, 2016 4:03:59 AM",
+      "dateStarted": "Jul 15, 2016 4:30:41 PM",
+      "dateFinished": "Jul 15, 2016 4:30:42 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Collecting Squares takes a While as Huge array as gathered onto the head node",
       "text": "%pyspark\nsquares \u003d squaresRDD.collect()\nprint squares[len(ints)-100:-1]",
-      "dateUpdated": "Jul 15, 2016 4:04:28 AM",
+      "dateUpdated": "Jul 15, 2016 4:30:41 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -246,14 +246,14 @@
         "msg": "[999802009801, 999804009604, 999806009409, 999808009216, 999810009025, 999812008836, 999814008649, 999816008464, 999818008281, 999820008100, 999822007921, 999824007744, 999826007569, 999828007396, 999830007225, 999832007056, 999834006889, 999836006724, 999838006561, 999840006400, 999842006241, 999844006084, 999846005929, 999848005776, 999850005625, 999852005476, 999854005329, 999856005184, 999858005041, 999860004900, 999862004761, 999864004624, 999866004489, 999868004356, 999870004225, 999872004096, 999874003969, 999876003844, 999878003721, 999880003600, 999882003481, 999884003364, 999886003249, 999888003136, 999890003025, 999892002916, 999894002809, 999896002704, 999898002601, 999900002500, 999902002401, 999904002304, 999906002209, 999908002116, 999910002025, 999912001936, 999914001849, 999916001764, 999918001681, 999920001600, 999922001521, 999924001444, 999926001369, 999928001296, 999930001225, 999932001156, 999934001089, 999936001024, 999938000961, 999940000900, 999942000841, 999944000784, 999946000729, 999948000676, 999950000625, 999952000576, 999954000529, 999956000484, 999958000441, 999960000400, 999962000361, 999964000324, 999966000289, 999968000256, 999970000225, 999972000196, 999974000169, 999976000144, 999978000121, 999980000100, 999982000081, 999984000064, 999986000049, 999988000036, 999990000025, 999992000016, 999994000009, 999996000004, 999998000001]\n"
       },
       "dateCreated": "Jul 14, 2016 2:25:16 PM",
-      "dateStarted": "Jul 15, 2016 4:04:28 AM",
-      "dateFinished": "Jul 15, 2016 4:04:32 AM",
+      "dateStarted": "Jul 15, 2016 4:30:42 PM",
+      "dateFinished": "Jul 15, 2016 4:30:44 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "%pyspark\nfrom operator import add\n\nsumOfSquares \u003d squaresRDD.reduce(add)\n#sumOfSquares \u003d squaresRDD.reduce(lambda x,y: x+y)\nprint sumOfSquares",
-      "dateUpdated": "Jul 15, 2016 4:04:40 AM",
+      "dateUpdated": "Jul 15, 2016 4:30:41 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -280,15 +280,15 @@
         "msg": "333333833333500000\n"
       },
       "dateCreated": "Jul 13, 2016 1:32:00 PM",
-      "dateStarted": "Jul 15, 2016 4:04:40 AM",
-      "dateFinished": "Jul 15, 2016 4:04:41 AM",
+      "dateStarted": "Jul 15, 2016 4:30:43 PM",
+      "dateFinished": "Jul 15, 2016 4:30:44 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Word Count Example (scala)",
-      "text": "// Create a Scala Spark Context.\r//val conf \u003d new SparkConf().setAppName(\"wordCount\")\r//val sc \u003d new SparkContext(conf)\r\r// Load text file and split across cluster.\rval input \u003d sc.textFile(\"/usr/share/dict/words\");\r\r// Split lines into words.\rval words \u003d input.flatMap(line \u003d\u003e line.split(\" \"));\r\r// Transform into pairs and count.\rval counts \u003d words.map(word \u003d\u003e (word, 1)).reduceByKey{_ + _};\r\r// Examine top word.\rcounts.first();\r\r// Save the word count back out to a text file, causing evaluation.\rcounts.saveAsTextFile(\"/tmp/wordCounts100\");",
-      "dateUpdated": "Jul 15, 2016 4:04:46 AM",
+      "text": "// Create a Scala Spark Context.\r//val conf \u003d new SparkConf().setAppName(\"wordCount\")\r//val sc \u003d new SparkContext(conf)\r\r// Load text file and split across cluster.\rval input \u003d sc.textFile(\"/usr/share/dict/words\");\r\r// Split lines into words.\rval words \u003d input.flatMap(line \u003d\u003e line.split(\" \"));\r\r// Transform into pairs and count.\rval counts \u003d words.map(word \u003d\u003e (word, 1)).reduceByKey{_ + _};\r\r// Examine top word.\rcounts.first();\r\r// Save the word count back out to a text file, causing evaluation.\rcounts.saveAsTextFile(\"/tmp/wordCounts101\");",
+      "dateUpdated": "Jul 15, 2016 4:31:31 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -317,15 +317,15 @@
         "msg": "input: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[21] at textFile at \u003cconsole\u003e:34\nwords: org.apache.spark.rdd.RDD[String] \u003d MapPartitionsRDD[22] at flatMap at \u003cconsole\u003e:37\ncounts: org.apache.spark.rdd.RDD[(String, Int)] \u003d ShuffledRDD[24] at reduceByKey at \u003cconsole\u003e:40\n"
       },
       "dateCreated": "Jul 13, 2016 1:31:53 PM",
-      "dateStarted": "Jul 15, 2016 4:04:46 AM",
-      "dateFinished": "Jul 15, 2016 4:04:56 AM",
+      "dateStarted": "Jul 15, 2016 4:31:31 PM",
+      "dateFinished": "Jul 15, 2016 4:31:36 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Word Count Example (Python)",
-      "text": "%pyspark\n#    sc \u003d SparkContext(appName\u003d\"PythonWordCount\")\n\nlines \u003d sc.textFile(\"/usr/share/dict/words\")\ncounts \u003d lines.flatMap(lambda x: x.split(\u0027 \u0027)) \\\n              .map(lambda x: (x, 1)) \\\n              .reduceByKey(lambda x,y: x + y)\n\noutput \u003d counts.collect()\nfor (word, count) in output:\n    print(\"%s: %i\" % (word, count))",
-      "dateUpdated": "Jul 15, 2016 4:05:06 AM",
+      "text": "%pyspark\n#    sc \u003d SparkContext(appName\u003d\"PythonWordCount\")\n\nlines \u003d sc.textFile(\"/usr/share/dict/words\")\ncounts \u003d lines.flatMap(lambda x: x.split(\u0027 \u0027)) \\\n              .map(lambda x: (x, 1)) \\\n              .reduceByKey(lambda x,y: x + y)\n\noutput \u003d counts.collect()\n#for (word, count) in output:\n#    print(\"%s: %i\" % (word, count))",
+      "dateUpdated": "Jul 15, 2016 4:31:43 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -339,7 +339,8 @@
         },
         "enabled": true,
         "editorMode": "ace/mode/scala",
-        "title": true
+        "title": true,
+        "editorHide": false
       },
       "settings": {
         "params": {},
@@ -347,24 +348,46 @@
       },
       "jobName": "paragraph_1468441909344_688768177",
       "id": "20160713-133149_1413080110",
-      "result": "org.apache.thrift.transport.TTransportException",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "Traceback (most recent call last):\n  File \"/tmp/zeppelin_pyspark.py\", line 227, in \u003cmodule\u003e\n    intp.setStatementsFinished(output.get(), False)\nAttributeError: \u0027list\u0027 object has no attribute \u0027get\u0027\n"
+      },
       "dateCreated": "Jul 13, 2016 1:31:49 PM",
-      "dateStarted": "Jul 15, 2016 4:05:06 AM",
-      "dateFinished": "Jul 15, 2016 4:11:36 AM",
-      "status": "FINISHED",
-      "errorMessage": "org.apache.thrift.transport.TTransportException\n\tat org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:132)\n\tat org.apache.thrift.transport.TTransport.readAll(TTransport.java:86)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:429)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:318)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:219)\n\tat org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.recv_interpret(RemoteInterpreterService.java:220)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.interpret(RemoteInterpreterService.java:205)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:208)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:211)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:169)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:322)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n",
+      "dateStarted": "Jul 15, 2016 4:30:44 PM",
+      "dateFinished": "Jul 15, 2016 4:30:50 PM",
+      "status": "ERROR",
       "progressUpdateIntervalMs": 500
     },
     {
-      "config": {},
+      "dateUpdated": "Jul 15, 2016 4:30:41 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
       "settings": {
         "params": {},
         "forms": {}
       },
       "jobName": "paragraph_1468537873242_-1421618771",
       "id": "20160714-161113_704310219",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT"
+      },
       "dateCreated": "Jul 14, 2016 4:11:13 PM",
-      "status": "READY",
+      "dateStarted": "Jul 15, 2016 4:30:45 PM",
+      "dateFinished": "Jul 15, 2016 4:30:50 PM",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     }
   ],
