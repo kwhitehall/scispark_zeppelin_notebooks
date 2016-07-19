@@ -105,7 +105,7 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val SciSc \u003d new SciSparkContext(sc)\nval tasjanRDD \u003d SciSc.NetcdfDFSFile(\"hdfs://localhost:9000/workshop_s3/301/pdf_clustering/\", List(\"tasjan\", \"lat\", \"lon\"))",
+      "text": "val SciSc \u003d new SciSparkContext(sc)\nval tasjanRDD \u003d SciSc.NetcdfDFSFile(\"hdfs://localhost:9000/workshop_s3/301/pdf_clustering\", List(\"tasjan\", \"lat\", \"lon\"))",
       "dateUpdated": "Jul 14, 2016 11:42:32 AM",
       "config": {
         "colWidth": 12.0,
