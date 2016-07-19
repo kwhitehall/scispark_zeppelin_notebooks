@@ -111,7 +111,7 @@
     },
     {
       "title": "Load the csv data",
-      "text": "val inputds \u003d sc.textFile(\"hdfs://localhost:9000/workshop_s3/101/StormEvents_details1990-2006.csv\")\nval ds1 \u003d inputds.map{ line \u003d\u003e\n    val reader \u003d new CSVReader(new StringReader(line));\n    reader.readNext();\n}\nds1.first()\nval resultds1 \u003d ds1.mapPartitionsWithIndex{(idx, iter) \u003d\u003e if (idx \u003d\u003d 0) iter.drop(1) else iter}",
+      "text": "val inputds \u003d sc.textFile(\"hdfs://localhost:9000/workshop_s3/101/StormEvents_details-ftp_v1.0_d2016_c20160419.csv\")\nval ds1 \u003d inputds.map{ line \u003d\u003e\n    val reader \u003d new CSVReader(new StringReader(line));\n    reader.readNext();\n}\nds1.first()\nval resultds1 \u003d ds1.mapPartitionsWithIndex{(idx, iter) \u003d\u003e if (idx \u003d\u003d 0) iter.drop(1) else iter}",
       "dateUpdated": "Jul 15, 2016 4:28:55 AM",
       "config": {
         "enabled": true,
@@ -703,44 +703,6 @@
       "dateCreated": "Jul 14, 2016 7:08:46 PM",
       "dateStarted": "Jul 14, 2016 7:34:27 PM",
       "dateFinished": "Jul 14, 2016 7:36:26 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "title": "Deadliest in 2000",
-      "text": "val deathsByYr \u003d sqlContext.sql(\"SELECT YEAR(beginDate) as beginYr, eventType, deaths FROM stormData WHERE YEAR(beginDate) \u003d2000\").toDF()\ndeathsByYr.registerTempTable(\"2000deadliest\")",
-      "dateUpdated": "Jul 15, 2016 4:36:16 AM",
-      "config": {
-        "colWidth": 12.0,
-        "graph": {
-          "mode": "table",
-          "height": 300.0,
-          "optionOpen": false,
-          "keys": [],
-          "values": [],
-          "groups": [],
-          "scatter": {}
-        },
-        "enabled": true,
-        "editorMode": "ace/mode/scala",
-        "tableHide": true,
-        "title": true,
-        "editorHide": false
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "jobName": "paragraph_1468456977855_-400617865",
-      "id": "20160713-174257_1114720950",
-      "result": {
-        "code": "SUCCESS",
-        "type": "TEXT",
-        "msg": "deathsByYr: org.apache.spark.sql.DataFrame \u003d [beginYr: int, eventType: string, deaths: int]\n"
-      },
-      "dateCreated": "Jul 13, 2016 5:42:57 PM",
-      "dateStarted": "Jul 14, 2016 8:04:04 PM",
-      "dateFinished": "Jul 14, 2016 8:04:05 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },

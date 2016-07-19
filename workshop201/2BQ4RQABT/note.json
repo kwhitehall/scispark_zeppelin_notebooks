@@ -250,7 +250,7 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "OpenDapTRMMURLGenerator.run(false, \"hdfs://localhost:9000/workshop_s3/201/\",\"TRMM3hrly2010.txt\", \"201006150000\", \"201006150900\", 2, List(\"precipitation,1,1439,1,399\", \"nlon,1,1439\", \"nlat,1,399\"))\n\nval sRDD7 \u003d dssc44.NetcdfFile(\"hdfs://localhost:9000/workshop_s3/201/trmm/TRMM3hrly2010.txt\", List(\"precipitation\", \"nlat\", \"nlon\"), 3)\n\n// parse the date out from the openDap URL\nval labeled7 \u003d sRDD7.map(p1 \u003d\u003e {\n    val filename \u003d p1.metaData(\"SOURCE\").split(\"/\").last.split(\"\\\\.\")\n    val fileDate \u003d (filename(1) + filename(2)).toInt\n    p1.insertDictionary((\"Date\", fileDate.toString))\n    p1\n})",
+      "text": "OpenDapTRMMURLGenerator.run(false, \"hdfs://localhost:9000/workshop_s3/201/\",\"TRMM3hrly2010.txt\", \"201006150000\", \"201006150900\", 2, List(\"precipitation,1,1439,1,399\", \"nlon,1,1439\", \"nlat,1,399\"))\n\nval sRDD7 \u003d dssc44.NetcdfFile(\"hdfs://localhost:9000/user/root/TRMM3hrly2010.txt\", List(\"precipitation\", \"nlat\", \"nlon\"), 3)\n\n// parse the date out from the openDap URL\nval labeled7 \u003d sRDD7.map(p1 \u003d\u003e {\n    val filename \u003d p1.metaData(\"SOURCE\").split(\"/\").last.split(\"\\\\.\")\n    val fileDate \u003d (filename(1) + filename(2)).toInt\n    p1.insertDictionary((\"Date\", fileDate.toString))\n    p1\n})",
       "dateUpdated": "Jul 18, 2016 3:46:58 AM",
       "config": {
         "colWidth": 12.0,
@@ -317,78 +317,6 @@
       "dateCreated": "Jul 18, 2016 3:47:36 AM",
       "dateStarted": "Jul 18, 2016 3:48:08 AM",
       "dateFinished": "Jul 18, 2016 3:48:30 AM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "title": "Make consecutive frames",
-      "text": "val consecTRMM7 \u003d labeled7.flatMap(p \u003d\u003e {\n    List((p.metaData(\"Date\").toInt, p), (p.metaData(\"Date\").toInt + 3, p))\n}).groupBy(_._1)\n    .map(p \u003d\u003e p._2.map(e \u003d\u003e e._2).toList)\n    .filter(p \u003d\u003e p.size \u003e 1)\n    .map(p \u003d\u003e p.sortBy(_.metaData(\"Date\").toInt))\n    .map(p \u003d\u003e (p(0), p(1)))\n",
-      "dateUpdated": "Jul 4, 2016 9:39:20 AM",
-      "config": {
-        "colWidth": 12.0,
-        "graph": {
-          "mode": "table",
-          "height": 300.0,
-          "optionOpen": false,
-          "keys": [],
-          "values": [],
-          "groups": [],
-          "scatter": {}
-        },
-        "enabled": true,
-        "editorMode": "ace/mode/scala",
-        "title": true
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "jobName": "paragraph_1467650216533_-94388505",
-      "id": "20160704-093656_1040762362",
-      "result": {
-        "code": "SUCCESS",
-        "type": "TEXT",
-        "msg": "consecTRMM7: org.apache.spark.rdd.RDD[(org.dia.core.SciTensor, org.dia.core.SciTensor)] \u003d MapPartitionsRDD[62] at map at \u003cconsole\u003e:100\n"
-      },
-      "dateCreated": "Jul 4, 2016 9:36:56 AM",
-      "dateStarted": "Jul 4, 2016 9:39:20 AM",
-      "dateFinished": "Jul 4, 2016 9:39:21 AM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "title": "Mask And Find The Area At Each Mask",
-      "text": "val componentFrameRDD7 \u003d labeled7.map({t \u003d\u003e {\n    def netcdf_write(filename:String, varData:Array[Double]){\n    import java.util\n    import ucar.ma2.{ArrayInt, ArrayDouble, DataType}\n    import ucar.nc2.{NetcdfFileWriter, Dimension, Attribute, Variable }\n    import scala.reflect.ClassTag\n    import scala.collection.JavaConversions._\n    import collection.mutable._\n\n    try{\n        val lats \u003d -50.0 to 50.0 by 0.25 \n        val lons \u003d -180.0 to 180.0 by 0.25\n        \n        val location \u003d \"/home/workshop/\"+filename\n        val datafile \u003d NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, location, null)\n        \n       \n        // Create netCDF dimensions\n        val latDim \u003d datafile.addDimension(null, \"latitudes\", lats.length)\n        val lonDim \u003d datafile.addDimension(null, \"longitudes\", lons.length)\n        val xDim \u003d datafile.addDimension(null, \"rr\", varData.length)\n        \n        // add data\n        val dims \u003d new util.ArrayList[Dimension]()\n        val latDims \u003d new util.ArrayList[Dimension]()\n        val lonDims \u003d new util.ArrayList[Dimension]()\n        \n        dims.add(xDim) \n        latDims.add(latDim)\n        lonDims.add(lonDim)\n        \n        println(\"dims \"+dims)\n        var rr \u003d datafile.addVariable(null, \"precipitation\", DataType.DOUBLE, dims)\n        var latDimVar \u003d datafile.addVariable(null, \"lat\", DataType.DOUBLE, latDims)\n        var lonDimVar \u003d datafile.addVariable(null, \"lon\", DataType.DOUBLE, lonDims)\n        \n        // datafile.create()\n        \n        rr.addAttribute(new Attribute(\"units\", \"mm\"))   // add a 1D attribute of length 3\n        // rr.addAttribute(new Attribute(\"data\", varData))\n        \n        val latData \u003d new ArrayDouble.D1(lats.length)\n        val lonData \u003d new ArrayDouble.D1(lons.length)\n        val rrData \u003d new ArrayDouble.D1(lons.length)\n        \n        for(i \u003c- 0 until varData.length){ rrData.set(i, varData(i))}\n        for(i \u003c- 0 until lats.length){ latData.set(i, lats(i))}\n        for(i \u003c- 0 until lons.length){ lonData.set(i, lons(i))}\n       \n        datafile.create()\n        datafile.write(rr, rrData)\n        datafile.write(latDimVar, latData)\n        datafile.write(lonDimVar, lonData)\n       \n        datafile.close()\n       }\n    }\n    val maskValue \u003d List(2.0, 5.0, 10.0, 40.0) // the precip ranges\n    val areaMax \u003d 8 //5000.0 squared_kilometers or 8 boxes\n    var area \u003d 0\n    // var arrayList \u003d mutable.MutableList[(Double, Double)]()\n    // var arrayList \u003d mutable.MutableList[AbstractTensor]()\n     var arrayList \u003d mutable.MutableList[(String, List[(Double, Int)])]()\n    \n    for (i \u003c- 0 to maskValue.length-1){ \n        val thisName \u003d \"mask_at_\"+maskValue(i).toString\n        val mData \u003d t(\"precipitation\").tensor\n        t.insertVar( thisName, mData)\n        var maskedData \u003d t(thisName)\n        \n        if (i \u003d\u003d maskValue.length-1){\n            maskedData \u003d t(thisName).setMask(-9999.0) \u003e maskValue(i)\n        }else{\n            maskedData \u003d t(thisName).mask(p \u003d\u003e p \u003e\u003d maskValue(i) \u0026\u0026 p \u003c maskValue(i+1))\n        }\n         \n        val (areas, _) \u003d MCCOps.labelConnectedComponents(maskedData.tensor) // find area\n         // flatten the array, and count the values\n        var labels \u003d List.fromArray(areas.data)\n        val dataShape \u003d areas.shape\n        val labelCounts \u003d labels.map(k \u003d\u003e  (k,1))//(k.toInt.toString,1))\n        val lcs \u003d labelCounts.groupBy{case (key, value) \u003d\u003e key}.map(r\u003d\u003e (r._1, r._2.length)).toList\n        //filter the pairs that didn\u0027t meet the areaMax\n        val filtered \u003d lcs.filter(_._2 \u003e\u003d areaMax)\n        val toBeRemoved \u003d lcs.filter(_._2 \u003c areaMax)\n        // remove those that didn\u0027t from the original array\n        val filterLabels \u003d toBeRemoved.map(x \u003d\u003e {\n            val z \u003d x._1\n            if (z !\u003d -9999.0 ){ labels.map{case `z` \u003d\u003e -9999.0; case x \u003d\u003e x} }\n        })\n        \n        //(re)shape areas to the correct shape\n        //write function to compare the indices in the labelled-array to that in the original array, and mask accordingly\n        // val saveInter \u003d filterLabels.map{t \u003d\u003e netcdf_write(filename, varData)}\n        //save intermediate netcdf\n        netcdf_write(\"/home/workshop/\"+t.metaData(\"Date\")+\"_\"+maskValue(i).toString+\".nc\", t(thisName).data)\n        arrayList +\u003d ((thisName, filtered))\n        }\n            \n    arrayList\n}\n})\n",
-      "dateUpdated": "Jul 15, 2016 11:54:49 AM",
-      "config": {
-        "colWidth": 12.0,
-        "graph": {
-          "mode": "table",
-          "height": 300.0,
-          "optionOpen": false,
-          "keys": [],
-          "values": [],
-          "groups": [],
-          "scatter": {}
-        },
-        "enabled": true,
-        "editorMode": "ace/mode/scala",
-        "title": true
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "jobName": "paragraph_1467650453343_-1280063666",
-      "id": "20160704-094053_267825298",
-      "result": {
-        "code": "SUCCESS",
-        "type": "TEXT",
-        "msg": "warning: there were 1 deprecation warning(s); re-run with -deprecation for details\ncomponentFrameRDD7: org.apache.spark.rdd.RDD[scala.collection.mutable.MutableList[(String, List[(Double, Int)])]] \u003d MapPartitionsRDD[4] at map at \u003cconsole\u003e:47\n"
-      },
-      "dateCreated": "Jul 4, 2016 9:40:53 AM",
-      "dateStarted": "Jul 15, 2016 10:35:43 AM",
-      "dateFinished": "Jul 15, 2016 10:35:50 AM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
