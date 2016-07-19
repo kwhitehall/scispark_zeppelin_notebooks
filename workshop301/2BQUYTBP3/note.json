@@ -1,8 +1,8 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n#Climate Model Diagnostic Analyzer\n#####CMDA is a web-based information system designed for the climate modelling and model analysis community to analyse climate data from models and observations. CMDA provides tools to diagnostically analyse climate data for model validation and improvement, and to systematically manage analysis provenance for sharing results with other investigators.",
-      "dateUpdated": "Jul 15, 2016 12:02:59 PM",
+      "text": "%md\n#Climate Model Diagnostic Analyzer\n####CMDA is a web-based information system designed for the climate modelling and model analysis community to analyse climate data from models and observations. CMDA provides tools to diagnostically analyse climate data for model validation and improvement, and to systematically manage analysis provenance for sharing results with other investigators.",
+      "dateUpdated": "Jul 18, 2016 12:04:42 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -27,11 +27,11 @@
       "result": {
         "code": "SUCCESS",
         "type": "HTML",
-        "msg": "\u003ch1\u003eClimate Model Diagnostic Analyzer\u003c/h1\u003e\n\u003ch5\u003eCMDA is a web-based information system designed for the climate modelling and model analysis community to analyse climate data from models and observations. CMDA provides tools to diagnostically analyse climate data for model validation and improvement, and to systematically manage analysis provenance for sharing results with other investigators.\u003c/h5\u003e\n"
+        "msg": "\u003ch1\u003eClimate Model Diagnostic Analyzer\u003c/h1\u003e\n\u003ch4\u003eCMDA is a web-based information system designed for the climate modelling and model analysis community to analyse climate data from models and observations. CMDA provides tools to diagnostically analyse climate data for model validation and improvement, and to systematically manage analysis provenance for sharing results with other investigators.\u003c/h4\u003e\n"
       },
       "dateCreated": "Jul 14, 2016 5:03:53 PM",
-      "dateStarted": "Jul 15, 2016 12:02:54 PM",
-      "dateFinished": "Jul 15, 2016 12:02:54 PM",
+      "dateStarted": "Jul 18, 2016 12:04:34 PM",
+      "dateFinished": "Jul 18, 2016 12:04:34 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -177,7 +177,7 @@
     },
     {
       "text": "%pyspark\nimport json\nfrom pprint import pprint\n\ncolc \u003d {}\ndep \u003d {}\ncount \u003d 0\ni\u003d0\n\nwith open(\u0027/home/workshop/CMDA/roy.json\u0027) as data_file:    \n    data \u003d json.load(data_file)\n\n#building a dictionary\nfor p in data[\u0027processors\u0027]:\n    temp_link \u003d data[\u0027processors\u0027][i][\u0027link\u0027]\n    params \u003d data[\u0027processors\u0027][i][\u0027parameters\u0027]\n    url \u003d temp_link+\u0027?\u0027\n\n    for key, value in params.items():\n        url +\u003d key+\u0027\u003d\u0027+value+\u0027\u0026\u0027\n \n    #print \u0027\"task\u0027,str(count),\u0027\" : \"\u0027,url[:-1],\u0027\"\\n\u0027\n    colc.update({data[\u0027processors\u0027][i][\u0027cid\u0027]:url[:-1]})\n    #print data[\u0027processors\u0027][i][\u0027cid\u0027],\":\",url[:-1]\n    i +\u003d 1\n\n#building a dependancy tree\nfor k in data[\u0027datalinks\u0027]:\n    dep_id \u003d k[\u0027sender\u0027][\u0027processor\u0027]\n    key_id \u003d k[\u0027receiver\u0027][\u0027processor\u0027]\n\n    if key_id in dep:\n        #print \"already in dict\",key_id\n        dep[key_id].append(dep_id)\n    else:\n        #print \"getting added to dict\",key_id\n        dep.update({key_id:[dep_id]})\n\n# finding the node with no dependency\nflag\u003d0\n\nfor node in colc:\n    flag \u003d 0\n    for k in dep:\n        if node \u003d\u003d k:\n            flag\u003d1\n            #\u0027 is not a source\u0027\n            break\n    if flag \u003d\u003d 0:\n        #\u0027 is the source\u0027\n        source \u003d node\n        break\n \n\n#writing into the common file\nfo \u003d open(\"/home/workshop/CMDA/urls.json\", \"w+\")\n\n#fo.write(\u0027{\\n\u0027)\n#file_op \u003d \u0027{\\n\u0027\n#fo.write(\u0027{ \\n\u0027)\n#print \u0027{ \\n\u0027\n\nfile_op \u003d \u0027{\\n\u0027\nfile_op +\u003d \u0027\"task1\":\"\u0027+colc[source]+\u0027\",\\n\u0027\n\nfor d in dep:\n    if source in dep[d]:\n       file_op +\u003d \u0027\"task2\":\"\u0027+colc[d]+\u0027\"\\n\u0027\n\nfile_op +\u003d \u0027}\u0027\n\nprint file_op\n\nfo.write(file_op)\nfo.close()",
-      "dateUpdated": "Jul 15, 2016 4:34:47 PM",
+      "dateUpdated": "Jul 18, 2016 11:42:14 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -190,7 +190,8 @@
           "scatter": {}
         },
         "enabled": true,
-        "editorHide": true
+        "editorHide": true,
+        "editorMode": "ace/mode/scala"
       },
       "settings": {
         "params": {},
@@ -210,8 +211,8 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "%md\n###Step 2: Make 1st API Call (Anomaly Calculation)\nThis runs a python srcipt with a parameter as the task number. The workflow repeatedly calls the script with the parameter starting from 1 to the number of tasks in the workflow.\nAs we are starting we run the script with the task number as \u00271\u0027\nThe functions implemented here are:\n* Retrieve the URL corresponding to task1 from the file created by the parser\n* Make a GET Request\n* Parse the response from the API call and extract the information required by the next task\nDataset _____ over variable....",
-      "dateUpdated": "Jul 15, 2016 4:35:01 PM",
+      "text": "%md\n###Step 2: Make 1st API Call (Anomaly Calculation)\nThis runs a python srcipt with a parameter as the task number. The workflow repeatedly calls the script with the parameter starting from 1 to the number of tasks in the workflow.\nAs we are starting we run the script with the task number as \u00271\u0027\nThe functions implemented here are:\n* Retrieve the URL corresponding to task1 from the file created by the parser\n* Make a GET Request\n* Parse the response from the API call and extract the information required by the next task\n\nModel is NCAR_CAM5 (Historical) over the period Jan 2001 - Dec 2005\nVariable is \u0027pr\u0027 i.e. Precipitation Flux (in kg m-2 s-1)\nThe lat and long ranges are:\nLatitude: -90 to 90\nLongitude: 0 to 360\nThe anomaly is calculated by removing the seasonal cycle.",
+      "dateUpdated": "Jul 18, 2016 11:59:46 AM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -236,11 +237,11 @@
       "result": {
         "code": "SUCCESS",
         "type": "HTML",
-        "msg": "\u003ch3\u003eStep 2: Make 1st API Call (Anomaly Calculation)\u003c/h3\u003e\n\u003cp\u003eThis runs a python srcipt with a parameter as the task number. The workflow repeatedly calls the script with the parameter starting from 1 to the number of tasks in the workflow.\n\u003cbr  /\u003eAs we are starting we run the script with the task number as \u00271\u0027\n\u003cbr  /\u003eThe functions implemented here are:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eRetrieve the URL corresponding to task1 from the file created by the parser\u003c/li\u003e\n\u003cli\u003eMake a GET Request\u003c/li\u003e\n\u003cli\u003eParse the response from the API call and extract the information required by the next task\n\u003cbr  /\u003eDataset \u003cstrong\u003e\u003c/strong\u003e_ over variable\u0026hellip;.\u003c/li\u003e\n\u003c/ul\u003e\n"
+        "msg": "\u003ch3\u003eStep 2: Make 1st API Call (Anomaly Calculation)\u003c/h3\u003e\n\u003cp\u003eThis runs a python srcipt with a parameter as the task number. The workflow repeatedly calls the script with the parameter starting from 1 to the number of tasks in the workflow.\n\u003cbr  /\u003eAs we are starting we run the script with the task number as \u00271\u0027\n\u003cbr  /\u003eThe functions implemented here are:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eRetrieve the URL corresponding to task1 from the file created by the parser\u003c/li\u003e\n\u003cli\u003eMake a GET Request\u003c/li\u003e\n\u003cli\u003eParse the response from the API call and extract the information required by the next task\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eModel is NCAR_CAM5 (Historical) over the period Jan 2001 - Dec 2005\n\u003cbr  /\u003eVariable is \u0027pr\u0027 i.e. Precipitation Flux (in kg m-2 s-1)\n\u003cbr  /\u003eThe lat and long ranges are:\n\u003cbr  /\u003eLatitude: -90 to 90\n\u003cbr  /\u003eLongitude: 0 to 360\n\u003cbr  /\u003eThe anomaly is calculated by removing the seasonal cycle.\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 14, 2016 5:03:53 PM",
-      "dateStarted": "Jul 15, 2016 4:35:01 PM",
-      "dateFinished": "Jul 15, 2016 4:35:01 PM",
+      "dateStarted": "Jul 18, 2016 11:59:40 AM",
+      "dateFinished": "Jul 18, 2016 11:59:40 AM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -350,42 +351,8 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "%md\n##Final Result\n#####The graph generated from the Time Series Generation",
-      "dateUpdated": "Jul 14, 2016 5:03:53 PM",
-      "config": {
-        "colWidth": 12.0,
-        "graph": {
-          "mode": "table",
-          "height": 300.0,
-          "optionOpen": false,
-          "keys": [],
-          "values": [],
-          "groups": [],
-          "scatter": {}
-        },
-        "enabled": true,
-        "editorMode": "ace/mode/markdown",
-        "editorHide": true
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "jobName": "paragraph_1468541033509_2084899506",
-      "id": "20160714-170353_61090847",
-      "result": {
-        "code": "SUCCESS",
-        "type": "HTML",
-        "msg": "\u003ch2\u003eFinal Result\u003c/h2\u003e\n\u003ch5\u003eThe graph generated from the Time Series Generation\u003c/h5\u003e\n"
-      },
-      "dateCreated": "Jul 14, 2016 5:03:53 PM",
-      "status": "READY",
-      "errorMessage": "",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "%md\n![](http://cmda-test.jpl.nasa.gov:8090/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087/NCAR_CAM5_pr_200101-200512.jpeg)",
-      "dateUpdated": "Jul 15, 2016 4:36:16 PM",
+      "text": "%md\n##Final Result\n#####The graph generated from the Time Series Generation\n![](http://cmda-test.jpl.nasa.gov:8090/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087/NCAR_CAM5_pr_200101-200512.jpeg)",
+      "dateUpdated": "Jul 18, 2016 12:05:59 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -410,16 +377,16 @@
       "result": {
         "code": "SUCCESS",
         "type": "HTML",
-        "msg": "\u003cp\u003e\u003cimg src\u003d\"http://cmda-test.jpl.nasa.gov:8090/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087/NCAR_CAM5_pr_200101-200512.jpeg\" alt\u003d\"\" /\u003e\u003c/p\u003e\n"
+        "msg": "\u003ch2\u003eFinal Result\u003c/h2\u003e\n\u003ch5\u003eThe graph generated from the Time Series Generation\u003c/h5\u003e\n\u003cp\u003e\u003cimg src\u003d\"http://cmda-test.jpl.nasa.gov:8090/static/timeSeriesWorkFlow/85369fea1382ce3feddec10f7da0e087/NCAR_CAM5_pr_200101-200512.jpeg\" alt\u003d\"\" /\u003e\u003c/p\u003e\n"
       },
       "dateCreated": "Jul 14, 2016 5:03:53 PM",
-      "dateStarted": "Jul 15, 2016 4:36:16 PM",
-      "dateFinished": "Jul 15, 2016 4:36:16 PM",
+      "dateStarted": "Jul 18, 2016 12:05:54 PM",
+      "dateFinished": "Jul 18, 2016 12:05:54 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "dateUpdated": "Jul 15, 2016 12:48:29 PM",
+      "dateUpdated": "Jul 18, 2016 12:05:28 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -432,7 +399,7 @@
           "scatter": {}
         },
         "enabled": true,
-        "editorHide": true
+        "editorHide": false
       },
       "settings": {
         "params": {},

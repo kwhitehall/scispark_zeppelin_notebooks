@@ -2,7 +2,7 @@
   "paragraphs": [
     {
       "text": "%md\n###Summary of some Lessons Learned and/or Spark Idioms\nWe go over simple examples of some Spark idioms you saw today:\n - Using Re-Keying and GroupByKey to Replicate Data -- Pairs of two time epochs\n - Use Accumulators instead of Multiple Reduces or Collects\n - In Spark shells or Notebooks, Global Varables won\u0027t be pulled into Lambda expressions, so use Literals\n - Must make an SQLContext to use Sparl SQL or DataFrames\n",
-      "dateUpdated": "Jul 18, 2016 3:38:46 AM",
+      "dateUpdated": "Jul 18, 2016 4:29:08 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -16,7 +16,7 @@
         },
         "enabled": true,
         "editorMode": "ace/mode/markdown",
-        "editorHide": true
+        "editorHide": false
       },
       "settings": {
         "params": {},
@@ -345,7 +345,7 @@
     {
       "title": "Can\u0027t define Variables outside of map task in Shell",
       "text": "var k \u003d \"Hello\"\nval renamedSC \u003d sc\nval rdd \u003d renamedSC.parallelize(0 to 5)\n",
-      "dateUpdated": "Jul 17, 2016 10:13:50 PM",
+      "dateUpdated": "Jul 18, 2016 5:15:16 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -370,11 +370,11 @@
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "k: String \u003d Hello\nrenamedSC: org.apache.spark.SparkContext \u003d org.apache.spark.SparkContext@29984948\nrdd: org.apache.spark.rdd.RDD[Int] \u003d ParallelCollectionRDD[307] at parallelize at \u003cconsole\u003e:69\n"
+        "msg": "k: String \u003d Hello\nrenamedSC: org.apache.spark.SparkContext \u003d org.apache.spark.SparkContext@7d40872f\nrdd: org.apache.spark.rdd.RDD[Int] \u003d ParallelCollectionRDD[0] at parallelize at \u003cconsole\u003e:31\n"
       },
       "dateCreated": "Jul 15, 2016 1:19:46 PM",
-      "dateStarted": "Jul 17, 2016 10:13:50 PM",
-      "dateFinished": "Jul 17, 2016 10:13:51 PM",
+      "dateStarted": "Jul 18, 2016 5:15:16 PM",
+      "dateFinished": "Jul 18, 2016 5:15:45 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -617,7 +617,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "301-? Lessons Learned",
+  "name": "301-6 Spark Idioms / Lessons Learned",
   "id": "2BRWB7B2D",
   "angularObjects": {
     "2BATG925A": [],
