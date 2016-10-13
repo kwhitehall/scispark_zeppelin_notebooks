@@ -1,0 +1,626 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n###Overview\nThe previous notebook showed the workflow for using kmeans clustering in PySpark. This notebook demonstrates means clustering using the SciSpark api written in scala.\n\n####Useful Reference\nLoikith, P. C., B. R. Lintner, J. Kim, H. Lee, J. D. Neelin, and D. E. Waliser, 2013: Classifying reanalysis surface temperature probability density functions (PDFs) over North America with cluster analysis, Geophys. Res. Lett., 40, doi:10.1002/grl.50688. ([PDF](http://onlinelibrary.wiley.com/doi/10.1002/grl.50688/pdf))",
+      "dateUpdated": "Jul 14, 2016 11:32:21 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468489391051_164973638",
+      "id": "20160714-024311_1772659173",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eOverview\u003c/h3\u003e\n\u003cp\u003eThe previous notebook showed the workflow for using kmeans clustering in PySpark. This notebook demonstrates means clustering using the SciSpark api written in scala.\u003c/p\u003e\n\u003ch4\u003eUseful Reference\u003c/h4\u003e\n\u003cp\u003eLoikith, P. C., B. R. Lintner, J. Kim, H. Lee, J. D. Neelin, and D. E. Waliser, 2013: Classifying reanalysis surface temperature probability density functions (PDFs) over North America with cluster analysis, Geophys. Res. Lett., 40, doi:10.1002/grl.50688. (\u003ca href\u003d\"http://onlinelibrary.wiley.com/doi/10.1002/grl.50688/pdf\"\u003ePDF\u003c/a\u003e)\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 2:43:11 AM",
+      "dateStarted": "Jul 14, 2016 11:32:21 AM",
+      "dateFinished": "Jul 14, 2016 11:32:21 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\nimport java.util\n\nimport org.dia.core.SciSparkContext\nimport org.apache.spark.mllib.clustering.KMeans\nimport org.apache.spark.mllib.linalg.Vectors\nimport ucar.ma2.{ArrayInt, ArrayDouble, DataType}\nimport ucar.nc2.{Dimension, NetcdfFileWriter}",
+      "dateUpdated": "Jul 14, 2016 11:39:55 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1467956353206_518923638",
+      "id": "20160707-223913_960634928",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import java.util\nimport org.dia.core.SciSparkContext\nimport org.apache.spark.mllib.clustering.KMeans\nimport org.apache.spark.mllib.linalg.Vectors\nimport ucar.ma2.{ArrayInt, ArrayDouble, DataType}\nimport ucar.nc2.{Dimension, NetcdfFileWriter}\n"
+      },
+      "dateCreated": "Jul 7, 2016 10:39:13 PM",
+      "dateStarted": "Jul 14, 2016 11:39:56 AM",
+      "dateFinished": "Jul 14, 2016 11:39:57 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n####Accessing the data\nFor this example we will be again using the NASA MERRA reanalysis daily mean surface air temperature dataset. The difference will be that the data now lies in a directory on HDFS. We the SciSparkContext\u0027s NetcdfDFSFile to read netcdf files off of HDFS.\n\nThe spatial resolution is 0.5 degrees latitude by 0.67 degrees longitude, with a temporal coverage of 1979-2011. The raw data has already been subset into one quarter of the globe primarily spanning North America and includes only days falling in January. \nAn exercise left to the users, is to actually do the subsetting using a sequence of maps and reduces the original netcdf dataset. ",
+      "dateUpdated": "Jul 14, 2016 2:48:30 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468489561095_-1596377823",
+      "id": "20160714-024601_1960003000",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch4\u003eAccessing the data\u003c/h4\u003e\n\u003cp\u003eFor this example we will be again using the NASA MERRA reanalysis daily mean surface air temperature dataset. The difference will be that the data now lies in a directory on HDFS. We the SciSparkContext\u0027s NetcdfDFSFile to read netcdf files off of HDFS.\u003c/p\u003e\n\u003cp\u003eThe spatial resolution is 0.5 degrees latitude by 0.67 degrees longitude, with a temporal coverage of 1979-2011. The raw data has already been subset into one quarter of the globe primarily spanning North America and includes only days falling in January.\n\u003cbr  /\u003eAn exercise left to the users, is to actually do the subsetting using a sequence of maps and reduces the original netcdf dataset.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 2:46:01 AM",
+      "dateStarted": "Jul 14, 2016 2:47:54 AM",
+      "dateFinished": "Jul 14, 2016 2:47:54 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val SciSc \u003d new SciSparkContext(sc)\nval tasjanRDD \u003d SciSc.NetcdfDFSFile(\"hdfs://localhost:9000/workshop_s3/301/pdf_clustering\", List(\"tasjan\", \"lat\", \"lon\"))",
+      "dateUpdated": "Jul 14, 2016 11:42:32 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468478612780_1916583333",
+      "id": "20160713-234332_1910387795",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "SciSc: org.dia.core.SciSparkContext \u003d org.dia.core.SciSparkContext@7a352e18\ntasjanRDD: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[1] at map at SciSparkContext.scala:142\n"
+      },
+      "dateCreated": "Jul 13, 2016 11:43:32 PM",
+      "dateStarted": "Jul 14, 2016 11:42:32 AM",
+      "dateFinished": "Jul 14, 2016 11:42:35 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n####Data Prep using SciSpark\nWe follow a similar steps using SciSpark to detrend the dataset. Note that these lambda function inside the map function, is quite a bit more verbose.\nThis is primarily because nd4j (our backend array and linear algebra library) does not support broadcast operations in the version we are using.\nInstead we had to rely on a for loop to subtract the mean-grid from each year.",
+      "dateUpdated": "Jul 14, 2016 10:25:17 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468489694725_-2115972728",
+      "id": "20160714-024814_1392720894",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch4\u003eData Prep using SciSpark\u003c/h4\u003e\n\u003cp\u003eWe follow a similar steps using SciSpark to detrend the dataset. Note that these lambda function inside the map function, is quite a bit more verbose.\n\u003cbr  /\u003eThis is primarily because nd4j (our backend array and linear algebra library) does not support broadcast operations in the version we are using.\n\u003cbr  /\u003eInstead we had to rely on a for loop to subtract the mean-grid from each year.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 2:48:14 AM",
+      "dateStarted": "Jul 14, 2016 10:25:17 AM",
+      "dateFinished": "Jul 14, 2016 10:25:17 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val detrendedRDD \u003d tasjanRDD.map(p \u003d\u003e {\n     val (nyears, mdays, lat, lon) \u003d (33, 31, 181, 286)\n     var data \u003d p(\"tasjan\").copy\n     data \u003d data.reshape(Array(nyears, mdays, lat, lon))\n     val clim \u003d data.mean(0).reshape(Array(1, mdays, lat, lon))\n\n      // broadcast subtract\n      // Since subtraction is now done in place by default\n      // The results are in the \u0027data\u0027 array\n      for(i \u003c- 0 until nyears){\n        data(i -\u003e (i + 1)) - clim\n      }\n      \n      data \u003d data.reshape(Array(nyears*mdays, lat, lon))\n      val detrended \u003d data.detrend(Array(0))\n      detrended.insertVar(\"lat\", p(\"lat\").tensor)\n      detrended.insertVar(\"lon\", p(\"lon\").tensor)\n      detrended\n})",
+      "dateUpdated": "Jul 14, 2016 2:33:55 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468478819976_2094797050",
+      "id": "20160713-234659_330514895",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "detrendedRDD: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[3] at map at \u003cconsole\u003e:46\n"
+      },
+      "dateCreated": "Jul 13, 2016 11:46:59 PM",
+      "dateStarted": "Jul 14, 2016 11:44:21 AM",
+      "dateFinished": "Jul 14, 2016 11:44:21 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n####Calculating Standard Deviation and Skewness \nThe SciTensor datastructure allows us to take the standard deviation and skewness along a dimension.\nWe can also insert it back into the SciTensor dictionary.\nAt the end we do a collect operation to bring our computed data back to the head node.\nThis is also our first \"action\" call on an RDD, so it will execute the DAG of operations we have built.",
+      "dateUpdated": "Jul 14, 2016 9:50:49 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468489941266_1012985405",
+      "id": "20160714-025221_965190014",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch4\u003eCalculating Standard Deviation and Skewness\u003c/h4\u003e\n\u003cp\u003eThe SciTensor datastructure allows us to take the standard deviation and skewness along a dimension.\n\u003cbr  /\u003eWe can also insert it back into the SciTensor dictionary.\n\u003cbr  /\u003eAt the end we do a collect operation to bring our computed data back to the head node.\n\u003cbr  /\u003eThis is also our first \u0026ldquo;action\u0026rdquo; call on an RDD, so it will execute the DAG of operations we have built.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 2:52:21 AM",
+      "dateStarted": "Jul 14, 2016 9:50:48 AM",
+      "dateFinished": "Jul 14, 2016 9:50:48 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val calc_moments \u003d detrendedRDD.map(p \u003d\u003e {\n    print(p)\n    val std \u003d p.std(Array(0)).tensor\n    val skw \u003d p.skew(Array(0)).tensor\n    p.insertVar(\"std\", std)\n    p.insertVar(\"skw\", skw)\n    p\n}).collect",
+      "dateUpdated": "Jul 15, 2016 5:34:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468479301076_1274634988",
+      "id": "20160713-235501_248894512",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "org.apache.spark.SparkException: Job 1 cancelled part of cancelled job group zeppelin-20160713-235501_248894512\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobCancellation(DAGScheduler.scala:1370)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply$mcVI$sp(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat scala.collection.mutable.HashSet.foreach(HashSet.scala:79)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobGroupCancelled(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1619)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1845)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1858)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1929)\n\tat org.apache.spark.rdd.RDD$$anonfun$collect$1.apply(RDD.scala:927)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.collect(RDD.scala:926)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:55)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:60)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:62)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:64)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:66)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:68)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:70)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:72)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:74)\n\tat \u003cinit\u003e(\u003cconsole\u003e:76)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:80)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:709)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:674)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:667)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:300)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:169)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:134)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\n"
+      },
+      "dateCreated": "Jul 13, 2016 11:55:01 PM",
+      "dateStarted": "Jul 14, 2016 11:53:55 AM",
+      "dateFinished": "Jul 14, 2016 12:14:19 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val std \u003d calc_moments(0)(\"std\").tensor.data\nval skw \u003d calc_moments(0)(\"skw\").tensor.data\nval latarr \u003d calc_moments(0)(\"lat\").tensor.data\nval lonarr \u003d calc_moments(0)(\"lon\").tensor.data\nval zipped \u003d std.zip(skw)",
+      "dateUpdated": "Jul 14, 2016 2:12:11 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468479440705_-485795901",
+      "id": "20160713-235720_2107843937",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "std: Array[Double] \u003d Array(0.9312619566917419, 0.9514510631561279, 0.9730148315429688, 0.9897913336753845, 1.0122638940811157, 1.0370433330535889, 1.0586366653442383, 1.081893801689148, 1.106020212173462, 1.1202558279037476, 1.1387754678726196, 1.1597118377685547, 1.1763218641281128, 1.198982834815979, 1.2233158349990845, 1.2377744913101196, 1.248396635055542, 1.256223440170288, 1.2637519836425781, 1.2697588205337524, 1.271867036819458, 1.2765227556228638, 1.2801520824432373, 1.2899084091186523, 1.3003020286560059, 1.3136838674545288, 1.3272287845611572, 1.3346818685531616, 1.3412237167358398, 1.3453145027160645, 1.3479011058807373, 1.3512910604476929, 1.3533315658569336, 1.3575356006622314, 1.3615899085998535, 1.3667821884155273, 1.3797235488891602, 1.3902050256729126, 1.40222525596618...skw: Array[Double] \u003d Array(-0.3206995129585266, -0.32171255350112915, -0.3246679902076721, -0.3266597390174866, -0.31683558225631714, -0.3184007704257965, -0.31531772017478943, -0.29232120513916016, -0.26591548323631287, -0.2548559010028839, -0.2589159607887268, -0.26025310158729553, -0.2565259337425232, -0.23873551189899445, -0.22089675068855286, -0.21844328939914703, -0.20906691253185272, -0.20090770721435547, -0.1820758581161499, -0.15438644587993622, -0.13020294904708862, -0.11531107872724533, -0.10375318676233292, -0.07471214979887009, -0.04286213964223862, -0.014333387836813927, 0.021314313635230064, 0.04233443737030029, 0.06167544424533844, 0.08315477520227432, 0.08403053879737854, 0.08389413356781006, 0.0817038044333458, 0.08540500700473785, 0.08595003932714462, 0.08310230076313...latarr: Array[Double] \u003d Array(0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5, 12.0, 12.5, 13.0, 13.5, 14.0, 14.5, 15.0, 15.5, 16.0, 16.5, 17.0, 17.5, 18.0, 18.5, 19.0, 19.5, 20.0, 20.5, 21.0, 21.5, 22.0, 22.5, 23.0, 23.5, 24.0, 24.5, 25.0, 25.5, 26.0, 26.5, 27.0, 27.5, 28.0, 28.5, 29.0, 29.5, 30.0, 30.5, 31.0, 31.5, 32.0, 32.5, 33.0, 33.5, 34.0, 34.5, 35.0, 35.5, 36.0, 36.5, 37.0, 37.5, 38.0, 38.5, 39.0, 39.5, 40.0, 40.5, 41.0, 41.5, 42.0, 42.5, 43.0, 43.5, 44.0, 44.5, 45.0, 45.5, 46.0, 46.5, 47.0, 47.5, 48.0, 48.5, 49.0, 49.5, 50.0, 50.5, 51.0, 51.5, 52.0, 52.5, 53.0, 53.5, 54.0, 54.5, 55.0, 55.5, 56.0, 56.5, 57.0, 57.5, 58.0, 58.5, 59.0, 59.5, 60.0, 60.5, 61.0, 61.5, 62.0, 62.5, 63.0, 63.5, 64.0, 64.5, 65.0, 6...lonarr: Array[Double] \u003d Array(-180.0, -179.3333282470703, -178.6666717529297, -178.0, -177.3333282470703, -176.6666717529297, -176.0, -175.3333282470703, -174.6666717529297, -174.0, -173.3333282470703, -172.6666717529297, -172.0, -171.3333282470703, -170.6666717529297, -170.0, -169.3333282470703, -168.6666717529297, -168.0, -167.3333282470703, -166.6666717529297, -166.0, -165.3333282470703, -164.6666717529297, -164.0, -163.3333282470703, -162.6666717529297, -162.0, -161.3333282470703, -160.6666717529297, -160.0, -159.3333282470703, -158.6666717529297, -158.0, -157.3333282470703, -156.6666717529297, -156.0, -155.3333282470703, -154.6666717529297, -154.0, -153.3333282470703, -152.6666717529297, -152.0, -151.3333282470703, -150.6666717529297, -150.0, -149.3333282470703, -148.6666717529297,...zipped: Array[(Double, Double)] \u003d Array((0.9312619566917419,-0.3206995129585266), (0.9514510631561279,-0.32171255350112915), (0.9730148315429688,-0.3246679902076721), (0.9897913336753845,-0.3266597390174866), (1.0122638940811157,-0.31683558225631714), (1.0370433330535889,-0.3184007704257965), (1.0586366653442383,-0.31531772017478943), (1.081893801689148,-0.29232120513916016), (1.106020212173462,-0.26591548323631287), (1.1202558279037476,-0.2548559010028839), (1.1387754678726196,-0.2589159607887268), (1.1597118377685547,-0.26025310158729553), (1.1763218641281128,-0.2565259337425232), (1.198982834815979,-0.23873551189899445), (1.2233158349990845,-0.22089675068855286), (1.2377744913101196,-0.21844328939914703), (1.248396635055542,-0.20906691253185272), (1.256223440170288,-0.200907707214355..."
+      },
+      "dateCreated": "Jul 13, 2016 11:57:20 PM",
+      "dateStarted": "Jul 14, 2016 12:14:44 AM",
+      "dateFinished": "Jul 14, 2016 12:14:46 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n####Perform k-means clustering on the PDF moments\nWe now perform kmeans. Note that this is the same parallel kmeans implementation that Pyspark uses.\nThis is because Pyspark interfaces with Mllib\u0027s scala api for Kmeans clustering.",
+      "dateUpdated": "Jul 14, 2016 2:59:15 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468490251615_-1996506812",
+      "id": "20160714-025731_944206020",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch4\u003ePerform k-means clustering on the PDF moments\u003c/h4\u003e\n\u003cp\u003eWe now perform kmeans. Note that this is the same parallel kmeans implementation that Pyspark uses.\n\u003cbr  /\u003eThis is because Pyspark interfaces with Mllib\u0027s scala api for Kmeans clustering.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 2:57:31 AM",
+      "dateStarted": "Jul 14, 2016 2:59:15 AM",
+      "dateFinished": "Jul 14, 2016 2:59:15 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val numClusters \u003d 5\nval iter \u003d 300\n\nval vectors \u003d sc.parallelize(zipped).map{ case (std_i, sk_i) \u003d\u003e Vectors.dense(std_i, sk_i)}\n\nval clusters \u003d new KMeans().setSeed(0).setMaxIterations(iter).setK(numClusters).run(vectors)\nval centers \u003d clusters.clusterCenters.toList\nval prd \u003d clusters.predict(vectors).collect",
+      "dateUpdated": "Jul 14, 2016 2:12:11 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468480484490_2092664224",
+      "id": "20160714-001444_1368461478",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "numClusters: Int \u003d 5\niter: Int \u003d 300\nvectors: org.apache.spark.rdd.RDD[org.apache.spark.mllib.linalg.Vector] \u003d MapPartitionsRDD[11] at map at \u003cconsole\u003e:52\nclusters: org.apache.spark.mllib.clustering.KMeansModel \u003d org.apache.spark.mllib.clustering.KMeansModel@4ae16e6b\ncenters: List[org.apache.spark.mllib.linalg.Vector] \u003d List([1.010199623941234,-0.09137536452893319], [5.295125866566383,0.044982454882166435], [8.68486209674801,-0.03588275126728295], [2.595526661945238,-0.41097352187065395], [6.600114715000944,0.2600150500953204])\nprd: Array[Int] \u003d Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,..."
+      },
+      "dateCreated": "Jul 14, 2016 12:14:44 AM",
+      "dateStarted": "Jul 14, 2016 12:15:39 AM",
+      "dateFinished": "Jul 14, 2016 12:15:51 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n####Record and Visualize\nWe now record our results and write it into NetCDF files. \nThese pieces of code are quite verbose, and will be soon abstracted into the sRDD and SciTensor.\nWe then read the NetCDF file from python and use matplotlib to visualize our results.",
+      "dateUpdated": "Jul 14, 2016 3:01:35 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468490345004_-416222130",
+      "id": "20160714-025905_1120488003",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch4\u003eRecord and Visualize\u003c/h4\u003e\n\u003cp\u003eWe now record our results and write it into NetCDF files.\n\u003cbr  /\u003eThese pieces of code are quite verbose, and will be soon abstracted into the sRDD and SciTensor.\n\u003cbr  /\u003eWe then read the NetCDF file from python and use matplotlib to visualize our results.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 2:59:05 AM",
+      "dateStarted": "Jul 14, 2016 3:01:35 AM",
+      "dateFinished": "Jul 14, 2016 3:01:35 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val writer \u003d NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, \"results\", null)\nval xDim \u003d writer.addDimension(null, \"len\", std.length)\nval centerDim \u003d writer.addDimension(null, \"len_centers\", centers.length)\nval latDim \u003d writer.addDimension(null, \"latDim\", latarr.length)\nval lonDim \u003d writer.addDimension(null, \"lonDim\", lonarr.length)\nval dims \u003d new util.ArrayList[Dimension]()\nval cDim \u003d new util.ArrayList[Dimension]()\nval latDims \u003d new util.ArrayList[Dimension]()\nval lonDims \u003d new util.ArrayList[Dimension]()\ndims.add(xDim)\ncDim.add(centerDim)\nlatDims.add(latDim)\nlonDims.add(lonDim)\nval std_var \u003d writer.addVariable(null, \"std\", DataType.DOUBLE, dims)\nval skw_var \u003d writer.addVariable(null, \"skw\", DataType.DOUBLE, dims)\nval prd_var \u003d writer.addVariable(null, \"prediction\", DataType.INT, dims)\nval cnt_std_var \u003d writer.addVariable(null, \"centers_std\", DataType.DOUBLE, cDim)\nval cnt_skw_var \u003d writer.addVariable(null, \"centers_skw\", DataType.DOUBLE, cDim)\nval lat_dim_var \u003d writer.addVariable(null, \"lat\", DataType.DOUBLE, latDims)\nval lon_dim_var \u003d writer.addVariable(null, \"lon\", DataType.DOUBLE, lonDims)\nwriter.create()\n\nval stddataOut \u003d new ArrayDouble.D1(std.length)\nval skwdataOut \u003d new ArrayDouble.D1(skw.length)\nval prdDataOut \u003d new ArrayInt.D1(prd.length)\nval cnt_stdDataOut \u003d new ArrayDouble.D1(centers.length)\nval cnt_skwDataOut \u003d new ArrayDouble.D1(centers.length)\nval latdataOut \u003d new ArrayDouble.D1(latarr.length)\nval londataOut \u003d new ArrayDouble.D1(lonarr.length)\nassert(std.length \u003d\u003d skw.length \u0026\u0026 skw.length \u003d\u003d prd.length)\nfor(i \u003c- 0 until std.length){\n    stddataOut.set(i, std(i))\n    skwdataOut.set(i, skw(i))\n    prdDataOut.set(i, prd(i))\n}\n\nfor(i \u003c- 0 until centers.length){\n    cnt_stdDataOut.set(i, centers(i)(0))\n    cnt_skwDataOut.set(i, centers(i)(1))\n}\n\nfor(i \u003c- 0 until latarr.length){\n    latdataOut.set(i, latarr(i))\n}\n\nfor(i \u003c- 0 until lonarr.length){\n    londataOut.set(i, lonarr(i))\n}\n    \nwriter.write(std_var, stddataOut)\nwriter.write(skw_var, skwdataOut)\nwriter.write(prd_var, prdDataOut)\nwriter.write(lat_dim_var, latdataOut)\nwriter.write(lon_dim_var, londataOut)\nwriter.write(cnt_std_var, cnt_stdDataOut)\nwriter.write(cnt_skw_var, cnt_skwDataOut)\n\nwriter.close()",
+      "dateUpdated": "Jul 14, 2016 2:12:11 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468480525934_2118704556",
+      "id": "20160714-001525_1398423639",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "writer: ucar.nc2.NetcdfFileWriter \u003d ucar.nc2.NetcdfFileWriter@118bc11e\nxDim: ucar.nc2.Dimension \u003d len \u003d 51766;\ncenterDim: ucar.nc2.Dimension \u003d len_centers \u003d 5;\nlatDim: ucar.nc2.Dimension \u003d latDim \u003d 181;\nlonDim: ucar.nc2.Dimension \u003d lonDim \u003d 286;\ndims: java.util.ArrayList[ucar.nc2.Dimension] \u003d []\ncDim: java.util.ArrayList[ucar.nc2.Dimension] \u003d []\nlatDims: java.util.ArrayList[ucar.nc2.Dimension] \u003d []\nlonDims: java.util.ArrayList[ucar.nc2.Dimension] \u003d []\nres52: Boolean \u003d true\nres53: Boolean \u003d true\nres54: Boolean \u003d true\nres55: Boolean \u003d true\nstd_var: ucar.nc2.Variable \u003d \ndouble std(len\u003d51766);\n\nskw_var: ucar.nc2.Variable \u003d \ndouble skw(len\u003d51766);\n\nprd_var: ucar.nc2.Variable \u003d \nint prediction(len\u003d51766);\n\ncnt_std_var: ucar.nc2.Variable \u003d \ndouble centers_std(len_centers\u003d5);\n\ncnt_skw_var: ucar.nc2.Variable \u003d \ndouble centers_skw(len_centers\u003d5);\n\nlat_dim_var: ucar.nc2.Variable \u003d \ndouble lat(latDim\u003d181);\n\nlon_dim_var: ucar.nc2.Variable \u003d \ndouble lon(lonDim\u003d286);\n\nstddataOut: ucar.ma2.ArrayDouble.D1 \u003d 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0...skwdataOut: ucar.ma2.ArrayDouble.D1 \u003d 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0...prdDataOut: ucar.ma2.ArrayInt.D1 \u003d 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ...cnt_stdDataOut: ucar.ma2.ArrayDouble.D1 \u003d 0.0 0.0 0.0 0.0 0.0 \ncnt_skwDataOut: ucar.ma2.ArrayDouble.D1 \u003d 0.0 0.0 0.0 0.0 0.0 \nlatdataOut: ucar.ma2.ArrayDouble.D1 \u003d 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 \nlondataOut: ucar.ma2.ArrayDouble.D1 \u003d 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0..."
+      },
+      "dateCreated": "Jul 14, 2016 12:15:25 AM",
+      "dateStarted": "Jul 14, 2016 12:18:53 AM",
+      "dateFinished": "Jul 14, 2016 12:19:00 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nimport matplotlib as mpl\nmpl.use(\u0027Agg\u0027)\nimport matplotlib.pyplot as plt\nimport cStringIO\nimport base64\nimport numpy as np\nfrom netCDF4 import Dataset\nfrom mpl_toolkits.basemap import Basemap\n\ndef show(p):\n    img \u003d cStringIO.StringIO()\n    p.savefig(img, format\u003d\u0027png\u0027)\n    imgStr \u003d \"data:image/png;base64,\"\n    imgStr +\u003d base64.b64encode(img.getvalue().strip())\n    print \"%html \u003cimg src\u003d\u0027\" + imgStr + \"\u0027\u003e\" \n\ndef visualize_clusters(centroids, labels, moments, lats, lons, ptitle\u003d\u0027\u0027, cmap\u003d\u0027rainbow_r\u0027):\n    \u0027\u0027\u0027\n    Visualize the k clusters on a map.\n\n    Input:\n        centroids - locations of cluster centroids (k, 2)\n        labels - group number for each grid point (gridpoints)\n        moments - dict where values are moment numpy arrays\n                  and keys are the name of each moment (eg. \u0027Skewness\u0027)\n        lats, lons - 1 or 2D numpy arrays of lat/lon information\n        (Optional) title - Plot title (string)\n    \u0027\u0027\u0027\n    if lats.ndim \u003d\u003d 1:\n        nx, ny \u003d len(lons), len(lats)\n    else:\n        nx, ny \u003d lons.shape[1], lats.shape[0]\n\n    # Reshape so clusters are on a 2D grid\n    clusters \u003d labels.reshape(ny, nx) + 1\n    k \u003d centroids.shape[0]\n\n    # Make Plots\n    fig, plot_grid \u003d plt.subplots(nrows\u003d2, ncols\u003d2)\n    fig.set_size_inches((11, 7))\n    plt.subplots_adjust(wspace\u003d0.2, hspace\u003d0.2)\n\n    # Set up the color scaling\n    cmap \u003d plt.get_cmap(cmap)\n    norm \u003d mpl.colors.BoundaryNorm(1 + np.arange(k+1), cmap.N)\n\n    # Upper Left: Map of clusters\n    lon_min \u003d lons.min()\n    lon_max \u003d lons.max()\n    lat_min \u003d lats.min()\n    lat_max \u003d lats.max()\n    m \u003d Basemap(projection\u003d\u0027cyl\u0027, llcrnrlat\u003dlat_min, urcrnrlat\u003dlat_max,\n                llcrnrlon\u003dlon_min, urcrnrlon\u003dlon_max, resolution\u003d\u0027l\u0027)\n\n    m.ax \u003d plot_grid[0, 0]\n    if lats.ndim \u003d\u003d 1:\n        lons, lats \u003d np.meshgrid(lons, lats)\n    x, y \u003d m(lons, lats)\n    clevs \u003d 0.5 + np.arange(k+1)\n    m.drawcoastlines(linewidth\u003d1)\n    m.drawcountries(linewidth\u003d.75)\n    m.contourf(x, y, clusters, levels\u003dclevs, cmap\u003dcmap, norm\u003dnorm, alpha\u003d0.5)\n    m.ax.set_title(\u0027Clusters\u0027)\n\n    # Upper Right: Scatter Plot of clusters\n    ax \u003d plot_grid[0,1]\n    m1, m2 \u003d moments.values()\n    m1 \u003d m1.ravel()\n    m2 \u003d m2.ravel()\n    name1, name2 \u003d moments.keys()\n    clusters \u003d clusters.ravel()\n    ax.scatter(m1, m2, s\u003d.5, edgecolor\u003d\u0027none\u0027, c\u003dclusters, marker\u003d\u0027o\u0027,\n               cmap\u003dcmap, norm\u003dnorm, alpha\u003d0.5)\n    ax.set_title(\u0027Cluster Legend\u0027)\n    ax.set_aspect(\u0027equal\u0027)\n\n    # Label each cluster centroid\n    for i in 1 + np.arange(5):\n        xm \u003d m1[clusters\u003d\u003di].mean()\n        ym \u003d m2[clusters\u003d\u003di].mean()\n        ax.plot(xm, ym, marker\u003d\u0027$%d$\u0027 %(i), markersize\u003d12, color\u003d\u0027k\u0027)\n    ax.set_xlabel(name1)\n    ax.set_ylabel(name2)\n\n    # Bottom: Plot moments\n    for ax, moment, name in zip(plot_grid[1, :], moments.values(),\n                                moments.keys()):\n        m.ax \u003d ax\n        m.drawcoastlines(linewidth\u003d1)\n        m.drawcountries(linewidth\u003d.75)\n        cs \u003d m.contourf(x, y, moment, 20)\n        m.colorbar(cs, location\u003d\u0027bottom\u0027, ax\u003dax)\n        m.ax.set_title(name)\n\n    # Title and save the figure\n    fig.suptitle(ptitle)\n    show(plt)\n",
+      "dateUpdated": "Jul 14, 2016 10:51:13 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468481058648_-771193694",
+      "id": "20160714-002418_12524597",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": ""
+      },
+      "dateCreated": "Jul 14, 2016 12:24:18 AM",
+      "dateStarted": "Jul 14, 2016 10:46:05 AM",
+      "dateFinished": "Jul 14, 2016 10:46:05 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nnc \u003d Dataset(\u0027results\u0027)\nstd \u003d nc[\u0027std\u0027][:].reshape(181, 286)\nsk \u003d nc[\u0027skw\u0027][:].reshape(181, 286)\nlabels \u003d nc[\u0027prediction\u0027][:]\ncentroids \u003d np.array(zip(nc[\u0027centers_std\u0027][:], nc[\u0027centers_skw\u0027][:]))\nprint(centroids)\nlats \u003d nc[\u0027lat\u0027][:]\nlons \u003d nc[\u0027lon\u0027][:]\nmoments \u003d {\u0027Standard Deviation\u0027:std, \u0027Skewness\u0027:sk}\ntitle \u003d \u0027MERRA Jan. Surface Temperature (1979-2011)\u0027\nfname \u003d \u0027MERRA_cluster.png\u0027\nvisualize_clusters(centroids, labels, moments, lats, lons, ptitle\u003dtitle)",
+      "dateUpdated": "Jul 14, 2016 12:41:11 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468481106965_806939025",
+      "id": "20160714-002506_1202192800",
+      "result": "org.apache.zeppelin.interpreter.InterpreterException: org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused",
+      "dateCreated": "Jul 14, 2016 12:25:06 AM",
+      "dateStarted": "Jul 14, 2016 12:41:11 PM",
+      "dateFinished": "Jul 14, 2016 12:41:11 PM",
+      "status": "ERROR",
+      "errorMessage": "java.net.ConnectException: Connection refused\n\tat java.net.PlainSocketImpl.socketConnect(Native Method)\n\tat java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)\n\tat java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)\n\tat java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)\n\tat java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)\n\tat java.net.Socket.connect(Socket.java:579)\n\tat org.apache.thrift.transport.TSocket.open(TSocket.java:182)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:51)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:37)\n\tat org.apache.commons.pool2.BasePooledObjectFactory.makeObject(BasePooledObjectFactory.java:60)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.getClient(RemoteInterpreterProcess.java:139)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.getFormType(RemoteInterpreter.java:266)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.getFormType(LazyOpenInterpreter.java:104)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:198)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:169)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:322)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\n",
+      "dateUpdated": "Jul 15, 2016 11:43:09 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": false,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468481981275_799649053",
+      "id": "20160714-003941_1728410804",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch4\u003eExercise 1 - Write intermediate results to HDFS\u003c/h4\u003e\n\u003cp\u003eSince this is an advanced class, we\u0027ve decided to have exercises out that we are currently tackling at JPL.\n\u003cbr  /\u003eThe motivation behind this is to have our advanced users be active participants in open-source and contribute back to the software they use!\n\u003cbr  /\u003eThe first exercise involves writing a lambda expression to write an RDD of SciTensors to the Hadoop Distributed File System.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 12:39:41 AM",
+      "dateStarted": "Jul 14, 2016 3:09:20 AM",
+      "dateFinished": "Jul 14, 2016 3:09:20 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n####Exercise 2 - Parallelism Across all Three Dimensions\nRewrite the PDF clustering algorithm given above, but rather than splitting across the lattitude or longitude dimension\nsplit our cube of (time, lat, lon) into smaller cubes. This is particularly challenging since we are aggregating results\nalong the time dimension. \n\nHint: Use accumulators\n",
+      "dateUpdated": "Jul 15, 2016 11:43:51 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468490702543_1602092334",
+      "id": "20160714-030502_705587617",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch4\u003eExercise 2 - Parallelism Across all Three Dimensions\u003c/h4\u003e\n\u003cp\u003eRewrite the PDF clustering algorithm given above, but rather than splitting across the lattitude or longitude dimension\n\u003cbr  /\u003esplit our cube of (time, lat, lon) into smaller cubes. This is particularly challenging since we are aggregating results\n\u003cbr  /\u003ealong the time dimension.\u003c/p\u003e\n\u003cp\u003eHint: Use accumulators\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 14, 2016 3:05:02 AM",
+      "dateStarted": "Jul 14, 2016 3:08:56 AM",
+      "dateFinished": "Jul 14, 2016 3:08:56 AM",
+      "status": "ABORT",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468490936384_727298097",
+      "id": "20160714-030856_536490768",
+      "dateCreated": "Jul 14, 2016 3:08:56 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "301-2 PDF clustering using Scala",
+  "id": "2BPAM575E",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}
