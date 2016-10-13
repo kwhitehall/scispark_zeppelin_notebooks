@@ -1,4 +1,4 @@
-# SciSpark Frontend interface
+# SciSpark Notebooks
 SciSpark is a scalable scientific processing platform that makes interactive computation and exploration possible. This prototype project outlines the architecture of the scientific RDD (SRDD), and a library of linear algebra and geospatial operations. SciSpark's frontend interface leverages notebook software and is built on Apache Zeppelin. 
 This repo provisions examples of SciSpark usecases within the frontend interface and provides tutorial series on how to use the SciSpark API within the frontend.
 
