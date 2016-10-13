@@ -1,0 +1,578 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\nReading NetCDF Files with SciSpark\n\u003d\u003d\u003d",
+      "dateUpdated": "Jul 13, 2016 6:21:40 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468347837439_-1140294689",
+      "id": "20160712-112357_31497758",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch1\u003eReading NetCDF Files with SciSpark\u003c/h1\u003e\n"
+      },
+      "dateCreated": "Jul 12, 2016 11:23:57 AM",
+      "dateStarted": "Jul 13, 2016 6:21:40 PM",
+      "dateFinished": "Jul 13, 2016 6:21:40 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n##Overview\nNetCDF files are a self documented binary files used to record scientific measurement data.\nWe can read NetCDF files from various sources using SciSpark, namely OpenDAP, the Hadoop Distributed File System, and the users local file system.\nThis notebook provides a brief tutorial in how we read NetCDF files from HDFS using SciSpark.\nWe also cover a api calls to reshape arrays that have been loaded into the NetCDF file.\n\n####Useful resources\nhttp://spark.apache.org/docs/latest/programming-guide.html\nhttp://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html\nhttps://scispark.jpl.nasa.gov/\nhttp://www.unidata.ucar.edu/software/netcdf/docs/faq.html",
+      "dateUpdated": "Jul 13, 2016 6:21:40 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468347870496_2098783708",
+      "id": "20160712-112430_333509750",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch2\u003eOverview\u003c/h2\u003e\n\u003cp\u003eNetCDF files are a self documented binary files used to record scientific measurement data.\n\u003cbr  /\u003eWe can read NetCDF files from various sources using SciSpark, namely OpenDAP, the Hadoop Distributed File System, and the users local file system.\n\u003cbr  /\u003eThis notebook provides a brief tutorial in how we read NetCDF files from HDFS using SciSpark.\n\u003cbr  /\u003eWe also cover a api calls to reshape arrays that have been loaded into the NetCDF file.\u003c/p\u003e\n\u003ch4\u003eUseful resources\u003c/h4\u003e\n\u003cp\u003ehttp://spark.apache.org/docs/latest/programming-guide.html\n\u003cbr  /\u003ehttp://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html\n\u003cbr  /\u003ehttps://scispark.jpl.nasa.gov/\n\u003cbr  /\u003ehttp://www.unidata.ucar.edu/software/netcdf/docs/faq.html\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 12, 2016 11:24:30 AM",
+      "dateStarted": "Jul 13, 2016 6:21:40 PM",
+      "dateFinished": "Jul 13, 2016 6:21:40 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###The SciSparkContext\n* The ``SciSparkContext`` is a wrapper around the SparkContext. It provides high level functions to access NetCDF/HDF data\nstored on OpenDAP or HDFS. Many of these functions delegate to the core SparkContext functions which you have already seen. Since the SparkContext is already available in the zeppelin environment as \u0027sc\u0027, instantiating the SciSparkContext becomes trivial.\n```",
+      "dateUpdated": "Jul 13, 2016 6:21:40 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468348795765_1098709638",
+      "id": "20160712-113955_1400923262",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eThe SciSparkContext\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eThe \u003ccode\u003eSciSparkContext\u003c/code\u003e is a wrapper around the SparkContext. It provides high level functions to access NetCDF/HDF data\n\u003cbr  /\u003estored on OpenDAP or HDFS. Many of these functions delegate to the core SparkContext functions which you have already seen. Since the SparkContext is already available in the zeppelin environment as \u0027sc\u0027, instantiating the SciSparkContext becomes trivial.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 12, 2016 11:39:55 AM",
+      "dateStarted": "Jul 13, 2016 6:21:40 PM",
+      "dateFinished": "Jul 13, 2016 6:21:40 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.dia.core.SciSparkContext\n\nval SciSc \u003d new SciSparkContext(sc)\n//SciSc.setLocalProperty(\"array-lib\", \"breeze\")\nSciSc.setLocalProperty(\"array-lib\", \"nd4j\")",
+      "dateUpdated": "Jul 18, 2016 3:25:47 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468348602190_-1277574546",
+      "id": "20160712-113642_750635559",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "import org.dia.core.SciSparkContext\nSciSc: org.dia.core.SciSparkContext \u003d org.dia.core.SciSparkContext@21e9c50f\n"
+      },
+      "dateCreated": "Jul 12, 2016 11:36:42 AM",
+      "dateStarted": "Jul 18, 2016 3:25:47 AM",
+      "dateFinished": "Jul 18, 2016 3:26:16 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### NetcdfDFSFile() - Reading A Netcdf on a Distributed File System\n* One way to read NetCDF files is to use the NetcdfDFSFile function.\nThe function takes three parameters : \n    * The HDFS URI-path where the NetCDF files are stored.  \n    * A list of the variables we want to load from these NetCDF Files. By default NetcdfDFSFile reads all the variables in a NetCDF file\n    * The number of partitions we want to split the data into.\n\n\n* In this example we are reading merg files which are split into 48 hour intervals\n* If specific variables are chosen then the variable must exist on all NetCDF files under the HDFS directory\n ``` ",
+      "dateUpdated": "Jul 18, 2016 3:26:21 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468349287390_448201060",
+      "id": "20160712-114807_799125676",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eNetcdfDFSFile() - Reading A Netcdf on a Distributed File System\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cp\u003eOne way to read NetCDF files is to use the NetcdfDFSFile function.\n\u003cbr  /\u003eThe function takes three parameters :\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eThe HDFS URI-path where the NetCDF files are stored.\u003c/li\u003e\n\u003cli\u003eA list of the variables we want to load from these NetCDF Files. By default NetcdfDFSFile reads all the variables in a NetCDF file\u003c/li\u003e\n\u003cli\u003eThe number of partitions we want to split the data into.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eIn this example we are reading merg files which are split into 48 hour intervals\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eIf specific variables are chosen then the variable must exist on all NetCDF files under the HDFS directory\u003c/p\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 12, 2016 11:48:07 AM",
+      "dateStarted": "Jul 18, 2016 3:26:17 AM",
+      "dateFinished": "Jul 18, 2016 3:26:17 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val sRDD \u003d SciSc.NetcdfDFSFile(\"hdfs://localhost:9000/workshop_s3/201/merg/\", List(\"ch4\"), 10)\n",
+      "dateUpdated": "Jul 18, 2016 3:26:25 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468348682963_808857443",
+      "id": "20160712-113802_1178494614",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "sRDD: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[1] at map at SciSparkContext.scala:142\n"
+      },
+      "dateCreated": "Jul 12, 2016 11:38:02 AM",
+      "dateStarted": "Jul 18, 2016 3:26:25 AM",
+      "dateFinished": "Jul 18, 2016 3:26:27 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###The SRDD - Scientific RDD and the SciTensor\n* The resulting object is of type RDD[SciTensor], and represents a distributed collection of SciTensors.\n* SciTensors are an in-memory abstraction of a NetCDF file. It is primarily motivated by the flexibility of numpy arrays in Python.\n* Each NetCDF file is loaded into a SciTensor. The SciTensor bundles the NetCDF variables in a dictionary scheme.\n* We can use an RDD of SciTensors following the same functional syntax we\u0027ve seen before.",
+      "dateUpdated": "Jul 13, 2016 6:21:40 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468349737724_858219149",
+      "id": "20160712-115537_1398303396",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eThe SRDD - Scientific RDD and the SciTensor\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eThe resulting object is of type RDD[SciTensor], and represents a distributed collection of SciTensors.\u003c/li\u003e\n\u003cli\u003eSciTensors are an in-memory abstraction of a NetCDF file. It is primarily motivated by the flexibility of numpy arrays in Python.\u003c/li\u003e\n\u003cli\u003eEach NetCDF file is loaded into a SciTensor. The SciTensor bundles the NetCDF variables in a dictionary scheme.\u003c/li\u003e\n\u003cli\u003eWe can use an RDD of SciTensors following the same functional syntax we\u0027ve seen before.\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 12, 2016 11:55:37 AM",
+      "dateStarted": "Jul 13, 2016 6:21:41 PM",
+      "dateFinished": "Jul 13, 2016 6:21:41 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val reshaped \u003d sRDD.map(sciT \u003d\u003e sciT(\"ch4\").reshape( Array(4125 * 1238), \"reshaped_ch4\")) // flattens 2d array into 1d array",
+      "dateUpdated": "Jul 18, 2016 3:26:31 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468350186560_-609185797",
+      "id": "20160712-120306_711185770",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "reshaped: org.apache.spark.rdd.RDD[org.dia.core.SciTensor] \u003d MapPartitionsRDD[2] at map at \u003cconsole\u003e:34\n"
+      },
+      "dateCreated": "Jul 12, 2016 12:03:06 PM",
+      "dateStarted": "Jul 18, 2016 3:26:31 AM",
+      "dateFinished": "Jul 18, 2016 3:26:32 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Note about lazy evaluation\n* We\u0027ve so far observed a chain of two functions NetcdfDFSFile -\u003e map(reshape)\n* However, the NetCDF files at this point still have not been read in and reshaped\n* This is because RDD\u0027s are evaluated lazily. We need to make an action call (reduce, collect, take, etc.)\n* You can think of transformation calls like map, flatmap, and filter as ways to build an execution pipeline\n\nIn the following code-paragraph we take only 1 sciTensor from the RDD and observe it.",
+      "dateUpdated": "Jul 15, 2016 4:58:21 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": true,
+        "editorMode": "ace/mode/markdown"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468350910648_626056266",
+      "id": "20160712-121510_1465376507",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eNote about lazy evaluation\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eWe\u0027ve so far observed a chain of two functions NetcdfDFSFile -\u003e map(reshape)\u003c/li\u003e\n\u003cli\u003eHowever, the NetCDF files at this point still have not been read in and reshaped\u003c/li\u003e\n\u003cli\u003eThis is because RDD\u0027s are evaluated lazily. We need to make an action call (reduce, collect, take, etc.)\u003c/li\u003e\n\u003cli\u003eYou can think of transformation calls like map, flatmap, and filter as ways to build an execution pipeline\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eIn the following code-paragraph we take only 1 sciTensor from the RDD and observe it.\u003c/p\u003e\n"
+      },
+      "dateCreated": "Jul 12, 2016 12:15:10 PM",
+      "dateStarted": "Jul 13, 2016 6:21:41 PM",
+      "dateFinished": "Jul 13, 2016 6:21:41 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val sum \u003d sRDD.reduce((scTA, scTB) \u003d\u003e scTA + scTB)\nprint(sum)\nprint(sum.tensor(600-\u003e610,2000-\u003e2010))\n",
+      "dateUpdated": "Jul 18, 2016 3:27:09 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468351272550_789712466",
+      "id": "20160712-122112_1410646316",
+      "result": {
+        "code": "ERROR",
+        "type": "TEXT",
+        "msg": "org.apache.spark.SparkException: Job 1 cancelled part of cancelled job group zeppelin-20160712-122112_1410646316\n\tat org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1431)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobCancellation(DAGScheduler.scala:1370)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply$mcVI$sp(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:783)\n\tat scala.collection.mutable.HashSet.foreach(HashSet.scala:79)\n\tat org.apache.spark.scheduler.DAGScheduler.handleJobGroupCancelled(DAGScheduler.scala:783)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:1619)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1599)\n\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:1588)\n\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:48)\n\tat org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:620)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1832)\n\tat org.apache.spark.SparkContext.runJob(SparkContext.scala:1952)\n\tat org.apache.spark.rdd.RDD$$anonfun$reduce$1.apply(RDD.scala:1025)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:150)\n\tat org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:111)\n\tat org.apache.spark.rdd.RDD.withScope(RDD.scala:316)\n\tat org.apache.spark.rdd.RDD.reduce(RDD.scala:1007)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:34)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:39)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:41)\n\tat $iwC$$iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:43)\n\tat $iwC$$iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:45)\n\tat $iwC$$iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:47)\n\tat $iwC$$iwC.\u003cinit\u003e(\u003cconsole\u003e:49)\n\tat $iwC.\u003cinit\u003e(\u003cconsole\u003e:51)\n\tat \u003cinit\u003e(\u003cconsole\u003e:53)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:57)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat .\u003cinit\u003e(\u003cconsole\u003e:7)\n\tat .\u003cclinit\u003e(\u003cconsole\u003e)\n\tat $print(\u003cconsole\u003e)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:606)\n\tat org.apache.spark.repl.SparkIMain$ReadEvalPrint.call(SparkIMain.scala:1065)\n\tat org.apache.spark.repl.SparkIMain$Request.loadAndRun(SparkIMain.scala:1346)\n\tat org.apache.spark.repl.SparkIMain.loadAndRunReq$1(SparkIMain.scala:840)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:871)\n\tat org.apache.spark.repl.SparkIMain.interpret(SparkIMain.scala:819)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpretInput(SparkInterpreter.java:709)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:674)\n\tat org.apache.zeppelin.spark.SparkInterpreter.interpret(SparkInterpreter.java:667)\n\tat org.apache.zeppelin.interpreter.ClassloaderInterpreter.interpret(ClassloaderInterpreter.java:57)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:300)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:169)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler$1.run(FIFOScheduler.java:134)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\n"
+      },
+      "dateCreated": "Jul 12, 2016 12:21:12 PM",
+      "dateStarted": "Jul 18, 2016 3:26:49 AM",
+      "dateFinished": "Jul 18, 2016 3:26:55 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Exercise 1 - Calculating the Mean along the time dimension\n* Note that calculating the mean requires two action calls\n* Can we rewrite this so it only uses one reduce call?",
+      "dateUpdated": "Jul 13, 2016 6:21:41 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468350716878_-1478210445",
+      "id": "20160712-121156_1116446944",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eExercise 1 - Calculating the Mean along the time dimension\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eNote that calculating the mean requires two action calls\u003c/li\u003e\n\u003cli\u003eCan we rewrite this so it only uses one reduce call?\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 12, 2016 12:11:56 PM",
+      "dateStarted": "Jul 13, 2016 6:21:41 PM",
+      "dateFinished": "Jul 13, 2016 6:21:41 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val sum \u003d sRDD.reduce((sciTA, sciTB) \u003d\u003e sciTA + sciTB) // elementwise sums all the arrays together\nval count \u003d sRDD.count()\nval mean \u003d sum / count\nprint(mean.tensor(600-\u003e610, 2000-\u003e2010))",
+      "dateUpdated": "Jul 13, 2016 11:38:54 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468350471100_1791264759",
+      "id": "20160712-120751_2039934618",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "sum: org.dia.core.SciTensor \u003d \nVariable in use \u003d ch4\nSet(ch4)\n(SOURCE,hdfs://localhost:9000/workshop_s3/201/merg/merg_2006080121_4km-pixel.nc)\n\ncount: Long \u003d 24\nmean: org.dia.core.SciTensor \u003d \nVariable in use \u003d ch4\nSet(ch4)\n(SOURCE,hdfs://localhost:9000/workshop_s3/201/merg/merg_2006080121_4km-pixel.nc)\n\n[[295.25,295.21,295.17,295.04,295.12,295.04,294.83,294.75,294.67,294.67]\n [295.17,295.08,295.08,295.04,295.08,294.96,294.62,294.54,294.46,294.62]\n [295.04,294.96,294.92,294.96,294.96,295.00,294.79,294.58,294.71,294.71]\n [295.00,294.79,294.71,294.83,295.00,295.00,294.92,294.71,294.67,294.54]\n [294.79,294.75,294.79,295.00,295.00,294.96,294.88,294.75,294.29,294.38]\n [294.83,294.88,294.83,295.00,295.12,294.92,294.71,294.38,294.42,294.25]\n [294.83,294.83,294.79,295.04,295.04,294.79,294.54,294.21,294.17,294.04]\n [294.92,294.83,295.00,295.08,294.88,294.62,294.21,294.21,294.12,293.88]\n [295.08,295.08,295.08,295.04,294.75,294.46,294.33,294.25,294.12,294.17]\n [295.12,295.21,295.12,295.00,295.04,294.75,294.62,294.42,294.62,294.75]]"
+      },
+      "dateCreated": "Jul 12, 2016 12:07:51 PM",
+      "dateStarted": "Jul 13, 2016 11:38:54 PM",
+      "dateFinished": "Jul 13, 2016 11:39:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Exercise 2 - Calculating the Mean along the time dimension\n* Note that calculating the mean requires two action calls\n* Can we rewrite this so it only uses one reduce call?\n* Exercise left to the users",
+      "dateUpdated": "Jul 15, 2016 4:58:37 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468353341341_1952764587",
+      "id": "20160712-125541_177622355",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\u003ch3\u003eExercise 2 - Calculating the Mean along the time dimension\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eNote that calculating the mean requires two action calls\u003c/li\u003e\n\u003cli\u003eCan we rewrite this so it only uses one reduce call?\u003c/li\u003e\n\u003cli\u003eExercise left to the users\u003c/li\u003e\n\u003c/ul\u003e\n"
+      },
+      "dateCreated": "Jul 12, 2016 12:55:41 PM",
+      "dateStarted": "Jul 13, 2016 6:21:41 PM",
+      "dateFinished": "Jul 13, 2016 6:21:41 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val (sum, count) \u003d sRDD.map(sciT \u003d\u003e (sciT, 1))\n                      .reduce{case ((sciTA, cntA), (sciTB, cntB)) \u003d\u003e (sciTA + sciTB, cntA + cntB)}\nval mean \u003d sum / count\nprint(mean.tensor(600-\u003e610, 2000-\u003e2010))",
+      "dateUpdated": "Jul 13, 2016 11:42:16 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468353411043_-1358876465",
+      "id": "20160712-125651_1861932227",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "sum: org.dia.core.SciTensor \u003d \nVariable in use \u003d ch4\nSet(ch4)\n(SOURCE,hdfs://localhost:9000/workshop_s3/201/merg/merg_2006080117_4km-pixel.nc)\n\ncount: Int \u003d 24\nmean: org.dia.core.SciTensor \u003d \nVariable in use \u003d ch4\nSet(ch4)\n(SOURCE,hdfs://localhost:9000/workshop_s3/201/merg/merg_2006080117_4km-pixel.nc)\n\n[[295.25,295.21,295.17,295.04,295.12,295.04,294.83,294.75,294.67,294.67]\n [295.17,295.08,295.08,295.04,295.08,294.96,294.62,294.54,294.46,294.62]\n [295.04,294.96,294.92,294.96,294.96,295.00,294.79,294.58,294.71,294.71]\n [295.00,294.79,294.71,294.83,295.00,295.00,294.92,294.71,294.67,294.54]\n [294.79,294.75,294.79,295.00,295.00,294.96,294.88,294.75,294.29,294.38]\n [294.83,294.88,294.83,295.00,295.12,294.92,294.71,294.38,294.42,294.25]\n [294.83,294.83,294.79,295.04,295.04,294.79,294.54,294.21,294.17,294.04]\n [294.92,294.83,295.00,295.08,294.88,294.62,294.21,294.21,294.12,293.88]\n [295.08,295.08,295.08,295.04,294.75,294.46,294.33,294.25,294.12,294.17]\n [295.12,295.21,295.12,295.00,295.04,294.75,294.62,294.42,294.62,294.75]]"
+      },
+      "dateCreated": "Jul 12, 2016 12:56:51 PM",
+      "dateStarted": "Jul 13, 2016 11:42:16 PM",
+      "dateFinished": "Jul 13, 2016 11:42:45 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "sc.parallelize(0 to 1000000000).reduce((A, B) \u003d\u003e A + B)",
+      "dateUpdated": "Jul 13, 2016 6:21:41 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468395092929_-77279597",
+      "id": "20160713-003132_1591545197",
+      "result": "org.apache.thrift.transport.TTransportException",
+      "dateCreated": "Jul 13, 2016 12:31:32 AM",
+      "dateStarted": "Jul 13, 2016 6:23:30 PM",
+      "dateFinished": "Jul 13, 2016 6:32:00 PM",
+      "status": "FINISHED",
+      "errorMessage": "org.apache.thrift.transport.TTransportException\n\tat org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:132)\n\tat org.apache.thrift.transport.TTransport.readAll(TTransport.java:86)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:429)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:318)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:219)\n\tat org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.recv_interpret(RemoteInterpreterService.java:220)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.interpret(RemoteInterpreterService.java:205)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:208)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:211)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:169)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:322)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:262)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:178)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:292)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Jul 13, 2016 6:21:41 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1468403402430_-1199149456",
+      "id": "20160713-025002_1037405789",
+      "dateCreated": "Jul 13, 2016 2:50:02 AM",
+      "dateStarted": "Jul 13, 2016 6:32:00 PM",
+      "dateFinished": "Jul 13, 2016 6:32:01 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "101-3 Simple sRDD Notebook",
+  "id": "2BS9Z4KW3",
+  "angularObjects": {
+    "2BATG925A": [],
+    "2BCTKA5P2": [],
+    "2B9VMB5BB": [],
+    "2BAA8ZT1F": [],
+    "2BCYFRWUC": [],
+    "2BCC68R3T": [],
+    "2BA8C2CJ4": [],
+    "2B9AHSVAD": [],
+    "2BCZV9QGQ": [],
+    "2B9U51XQ6": [],
+    "2B9VX5KPM": [],
+    "2BAM6HXAB": [],
+    "2B9AFX9BM": [],
+    "2BBAYHPQT": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}
